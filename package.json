@@ -1,0 +1,15 @@
+{
+  "name": "the-talk-kit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8000 --bind 127.0.0.1",
+    "test": "node --test tests/engine.test.js",
+    "test:browser": "playwright test",
+    "database": "python3 database/build_database.py"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
+}

@@ -1,0 +1,1358 @@
+{
+  "scenarios": [
+    {
+      "name": "Maya",
+      "age": 13,
+      "color": "#e5e9dc",
+      "topic": "Unwanted contact",
+      "headline": "Someone online is asking for photos.",
+      "context": "A person Maya met in a game server is asking for personal photos and wants her to keep their conversations secret.",
+      "open": "Can I tell you something? Someone in my game keeps asking for pictures. Please don’t get mad.",
+      "later": [
+        "They said it was our secret. I didn’t know what to do.",
+        "I was worried you’d take my phone away. Can you help me?",
+        "Can we figure out what to do together?"
+      ],
+      "need": "To hear that telling you was the right thing.",
+      "feeling": "“Am I going to be in trouble?”",
+      "id": "maya-contact",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "characterIndex": 0,
+      "categoryId": "contact",
+      "background": "Some people online give kids attention or gifts, then ask for secrets and photos. Asking a child to keep secrets is a warning sign.",
+      "say": [
+        "“Thank you for telling me.”",
+        "“You’re not in trouble.”",
+        "“Asking you to keep secrets isn’t okay. That’s on them, not you.”"
+      ],
+      "avoid": [
+        "Asking “Why were you talking to them?”",
+        "Taking her phone as punishment.",
+        "Deleting non-explicit messages before noting the username and dates. Never save or share sexual images of a child."
+      ],
+      "replies": [
+        [
+          {
+            "text": "Why would you talk to strangers? Give me your phone.",
+            "kind": "harmful"
+          },
+          {
+            "text": "Thank you for telling me. You’re not in trouble, and I’m not mad.",
+            "kind": "good",
+            "values": ["Kindness", "Compassion"]
+          },
+          {
+            "text": "Who is this person? What’s their username?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "People who ask kids to keep secrets like that are the ones doing something wrong. This isn’t your fault.",
+            "kind": "good",
+            "values": ["Forgiveness", "Empathy"]
+          },
+          {
+            "text": "Did you send them anything? You should have known better.",
+            "kind": "harmful"
+          },
+          {
+            "text": "How long has this been going on?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "I’m not taking your phone for telling me. Let’s save the messages and report this together, and I’ll explain each step.",
+            "kind": "good",
+            "values": ["Respect", "Integrity"]
+          },
+          {
+            "text": "I won’t tell anyone about this. I promise.",
+            "kind": "promise",
+            "values": ["Integrity"]
+          },
+          {
+            "text": "No more games for you until this is sorted out.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "plan": {
+        "steps": [
+          "<strong>Stay calm and thank her.</strong> She did the right thing by telling you.",
+          "<strong>Keep non-explicit details.</strong> Note the username, dates, and relevant text messages. Do not copy sexual images of a child.",
+          "<strong>Never</strong> save or send a sexual image of a child. Just describe it when you report.",
+          "<strong>Report it</strong> to the NCMEC CyberTipline.",
+          "<strong>Block and report</strong> the account in the game.",
+          "<strong>Check in</strong> with her again in a few days."
+        ],
+        "links": [
+          [
+            "Report it: NCMEC CyberTipline",
+            "Or call 1-800-843-5678, any time.",
+            "https://report.cybertip.org/"
+          ],
+          [
+            "Remove photos: Take It Down",
+            "If photos were shared. Free and private.",
+            "https://takeitdown.ncmec.org/"
+          ],
+          [
+            "Talking tips: Thorn for Parents",
+            "Guides for talking about online safety.",
+            "https://parents.thorn.org/"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "Jayden",
+      "age": 11,
+      "color": "#eadfce",
+      "topic": "Cyberbullying",
+      "headline": "The group chat doesn’t feel safe anymore.",
+      "context": "Classmates are posting hurtful comments about Jayden in a group chat. He still wants to stay connected with his friends.",
+      "open": "Everyone in the class chat is making fun of me. I don’t want you to make it a big thing.",
+      "later": [
+        "They keep sharing it. Even when I’m at home, it’s still there.",
+        "I don’t want to lose my friends too. Can you listen first?",
+        "Can we choose someone at school to talk to together?"
+      ],
+      "need": "To feel heard, and to have a say in what happens next.",
+      "feeling": "“What if they make it worse?”",
+      "id": "jayden-bullying",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "characterIndex": 1,
+      "categoryId": "friendship",
+      "background": "Online bullying follows kids home. Many don’t tell adults because they fear losing their phone, or that you’ll make it worse.",
+      "say": [
+        "“That sounds really hurtful.”",
+        "“You don’t deserve this.”",
+        "“I won’t do anything without talking to you first.”"
+      ],
+      "avoid": [
+        "“Just leave the chat.”",
+        "Asking what he did to start it.",
+        "Calling the school or other parents before talking with him."
+      ],
+      "replies": [
+        [
+          {
+            "text": "I’m really glad you told me. That sounds awful, and you don’t deserve it.",
+            "kind": "good",
+            "values": ["Kindness", "Empathy"]
+          },
+          {
+            "text": "Just leave the group chat. It’s only the internet.",
+            "kind": "harmful"
+          },
+          {
+            "text": "What exactly are they saying?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "That sounds exhausting, like there’s no break from it. I’m listening.",
+            "kind": "good",
+            "values": ["Empathy", "Compassion"]
+          },
+          {
+            "text": "Well, what did you do to make them act like that?",
+            "kind": "harmful"
+          },
+          {
+            "text": "Can you show me the messages?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "I won’t do anything without talking to you first. Let’s decide together who could help.",
+            "kind": "good",
+            "values": ["Respect", "Integrity"]
+          },
+          {
+            "text": "I promise I’ll never say anything to the school.",
+            "kind": "promise",
+            "values": ["Integrity"]
+          },
+          {
+            "text": "I’m calling their parents tonight, whether you like it or not.",
+            "kind": "harmful",
+            "note": "Acting without him can make him stop telling you. Decide together.",
+            "alt": "I think an adult at school could help. Can we decide together who to talk to?"
+          }
+        ]
+      ],
+      "plan": {
+        "steps": [
+          "<strong>Listen first.</strong> Tell him you won’t act without talking to him.",
+          "<strong>Save proof.</strong> Screenshot the messages with names and dates.",
+          "<strong>Choose together</strong> a trusted adult at school to tell, like a teacher or counselor.",
+          "<strong>Report the posts</strong> in the app. Let him decide whether to mute or leave the chat.",
+          "<strong>Check in</strong> with him again in a few days."
+        ],
+        "links": [
+          [
+            "Bullying help: StopBullying.gov",
+            "What to do about online bullying.",
+            "https://www.stopbullying.gov/cyberbullying/what-is-it"
+          ],
+          [
+            "Call or text 988",
+            "If he talks about hurting himself. Any time.",
+            "https://988lifeline.org/"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "Lucía",
+      "age": 8,
+      "color": "#e9e2ed",
+      "topic": "Upsetting content",
+      "headline": "A video scared her. Now she can’t sleep.",
+      "context": "Autoplay led Lucía to a violent video. She is distressed and worried she did something wrong.",
+      "open": "A scary video came on. I can’t stop thinking about it. Did I do something bad?",
+      "later": [
+        "I didn’t look for it. It just started playing.",
+        "I feel scared when I close my eyes. Can you stay with me?",
+        "Can we do something calming together?"
+      ],
+      "need": "Comfort, and to know she isn’t in trouble.",
+      "feeling": "“Did I do something bad?”",
+      "id": "lucia-content",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "characterIndex": 2,
+      "categoryId": "feelings",
+      "background": "Videos can play on their own and show young kids scary things they never searched for. Kids often blame themselves and may have trouble sleeping.",
+      "say": [
+        "“You didn’t do anything wrong.”",
+        "“It makes sense to feel scared.”",
+        "“I’m right here with you.”"
+      ],
+      "avoid": [
+        "“It’s not real, stop worrying.”",
+        "Taking the tablet away as punishment.",
+        "Lots of questions about the video at bedtime."
+      ],
+      "replies": [
+        [
+          {
+            "text": "Why were you watching videos without me? No more tablet.",
+            "kind": "harmful"
+          },
+          {
+            "text": "Come here. You didn’t do anything bad. Thank you for telling me.",
+            "kind": "good",
+            "values": ["Kindness", "Forgiveness"]
+          },
+          {
+            "text": "What was the video about?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "I believe you. Videos sometimes start on their own, and that’s not your fault. It makes sense that you feel scared.",
+            "kind": "good",
+            "values": ["Empathy", "Forgiveness"]
+          },
+          {
+            "text": "It’s just a video. It’s not real, so stop being silly.",
+            "kind": "harmful"
+          },
+          {
+            "text": "Which app was it on?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "I’ll stay right here with you. Let’s take some slow breaths together, and tomorrow we can change the settings so videos don’t play on their own.",
+            "kind": "good",
+            "values": ["Compassion", "Respect"]
+          },
+          {
+            "text": "I promise you’ll never see anything scary again.",
+            "kind": "promise",
+            "values": ["Integrity"]
+          },
+          {
+            "text": "If you keep thinking about it, you’ll just make it worse.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "plan": {
+        "steps": [
+          "<strong>Comfort her.</strong> Keep bedtime calm and stay close.",
+          "<strong>Turn off autoplay</strong> and set up a kids’ profile or parental controls in the app.",
+          "<strong>Use screens together</strong> in a shared room for a while.",
+          "<strong>Talk to her pediatrician</strong> if the fear lasts more than a couple of weeks or affects sleep or school.",
+          "<strong>Check in</strong> with her again in a few days."
+        ],
+        "links": [
+          [
+            "Talking tips: Thorn for Parents",
+            "Guides for talking about online safety.",
+            "https://parents.thorn.org/"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "private-details",
+      "characterIndex": 0,
+      "categoryId": "contact",
+      "name": "Maya",
+      "age": 13,
+      "color": "#e5e9dc",
+      "topic": "Sharing personal information",
+      "headline": "Someone is asking where she lives.",
+      "context": "A new online friend asks Maya for her school name and home address. She wants to keep the friendship but feels unsure about sharing.",
+      "open": "My online friend wants to send me a present. Is it okay if I tell them where I live?",
+      "later": [
+        "They’re really nice to me. I don’t want to seem rude.",
+        "I wasn’t sure what information was private. Can we talk about it?",
+        "Can we work out what I can say without sharing my address?"
+      ],
+      "need": "A calm explanation of privacy and help setting a boundary.",
+      "feeling": "Maya might worry that asking a question will get her friendship taken away.",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "replies": [
+        [
+          {
+            "text": "Why didn’t you think before doing that? I’m taking your device away.",
+            "kind": "harmful"
+          },
+          {
+            "text": "I’m glad you checked with me before sharing. We can talk about it together.",
+            "kind": "good",
+            "values": ["Kindness", "Compassion"]
+          },
+          {
+            "text": "Can you tell me when this started?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "It can be hard to set a boundary with someone you like. Your address and school are private.",
+            "kind": "good",
+            "values": ["Empathy", "Respect"]
+          },
+          {
+            "text": "You’re making too much of this. Stop worrying about it.",
+            "kind": "harmful"
+          },
+          {
+            "text": "What happened next?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Let’s practice a message that keeps your details private, and talk about what to do if they keep asking.",
+            "kind": "good",
+            "values": ["Integrity", "Compassion"]
+          },
+          {
+            "text": "I promise this will never be a problem again.",
+            "kind": "promise"
+          },
+          {
+            "text": "I’ll decide what happens. You don’t get a say.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "background": "A new online friend asks Maya for her school name and home address. She wants to keep the friendship but feels unsure about sharing.",
+      "say": [
+        "I’m glad you checked with me before sharing. We can talk about it together.",
+        "It can be hard to set a boundary with someone you like. Your address and school are private."
+      ],
+      "avoid": [
+        "Blame, dismissal, or threats.",
+        "Promises you cannot keep.",
+        "Taking over without explaining necessary next steps."
+      ]
+    },
+    {
+      "id": "meet-online-friend",
+      "characterIndex": 1,
+      "categoryId": "contact",
+      "name": "Jayden",
+      "age": 11,
+      "color": "#eadfce",
+      "topic": "Meeting an online friend",
+      "headline": "A gaming friend wants to meet up.",
+      "context": "Someone Jayden knows only through a game has suggested meeting in person. He tells a caregiver before agreeing.",
+      "open": "My friend from the game wants to meet at the park. I haven’t said yes.",
+      "later": [
+        "We play together a lot. I feel like I know them.",
+        "I didn’t want to hide it from you. Can you help me think?",
+        "Can we make a plan that keeps me safe?"
+      ],
+      "need": "Appreciation for telling an adult before acting, followed by a clear safety plan.",
+      "feeling": "Jayden might fear being judged for trusting someone online.",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "replies": [
+        [
+          {
+            "text": "Why didn’t you think before doing that? I’m taking your device away.",
+            "kind": "harmful"
+          },
+          {
+            "text": "Thank you for telling me before agreeing. I want to understand what you know about them.",
+            "kind": "good",
+            "values": ["Kindness", "Compassion"]
+          },
+          {
+            "text": "Can you tell me when this started?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "I hear that this friendship matters to you. Knowing someone in a game doesn’t tell us everything about who they are.",
+            "kind": "good",
+            "values": ["Empathy", "Respect"]
+          },
+          {
+            "text": "You’re making too much of this. Stop worrying about it.",
+            "kind": "harmful"
+          },
+          {
+            "text": "What happened next?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Let’s pause any plans to meet and work out safe next steps together. I’ll explain my concerns.",
+            "kind": "good",
+            "values": ["Integrity", "Compassion"]
+          },
+          {
+            "text": "I promise this will never be a problem again.",
+            "kind": "promise"
+          },
+          {
+            "text": "I’ll decide what happens. You don’t get a say.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "background": "Someone Jayden knows only through a game has suggested meeting in person. He tells a caregiver before agreeing.",
+      "say": [
+        "Thank you for telling me before agreeing. I want to understand what you know about them.",
+        "I hear that this friendship matters to you. Knowing someone in a game doesn’t tell us everything about who they are."
+      ],
+      "avoid": [
+        "Blame, dismissal, or threats.",
+        "Promises you cannot keep.",
+        "Taking over without explaining necessary next steps."
+      ]
+    },
+    {
+      "id": "left-out",
+      "characterIndex": 2,
+      "categoryId": "friendship",
+      "name": "Lucía",
+      "age": 8,
+      "color": "#e9e2ed",
+      "topic": "Feeling excluded",
+      "headline": "Everyone else was invited.",
+      "context": "Lucía sees photos of a get-together she was not invited to. She feels left out and is unsure whether her friends still like her.",
+      "open": "They all went without me. Maybe nobody wants to be my friend.",
+      "later": [
+        "I keep looking at the pictures and feeling sad again.",
+        "I don’t want you to ask everyone why I wasn’t invited.",
+        "Can we think of someone kind I could spend time with?"
+      ],
+      "need": "Her disappointment taken seriously, without rushing to fix it.",
+      "feeling": "Lucía might need reassurance that her feelings matter.",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "replies": [
+        [
+          {
+            "text": "Why didn’t you think before doing that? I’m taking your device away.",
+            "kind": "harmful"
+          },
+          {
+            "text": "That really hurts. I’m glad you told me how you’re feeling.",
+            "kind": "good",
+            "values": ["Kindness", "Compassion"]
+          },
+          {
+            "text": "Can you tell me when this started?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Being left out can feel lonely. It doesn’t mean there’s something wrong with you.",
+            "kind": "good",
+            "values": ["Empathy", "Respect"]
+          },
+          {
+            "text": "You’re making too much of this. Stop worrying about it.",
+            "kind": "harmful"
+          },
+          {
+            "text": "What happened next?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Would you like company right now, or help thinking of someone kind to spend time with?",
+            "kind": "good",
+            "values": ["Integrity", "Compassion"]
+          },
+          {
+            "text": "I promise this will never be a problem again.",
+            "kind": "promise"
+          },
+          {
+            "text": "I’ll decide what happens. You don’t get a say.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "background": "Lucía sees photos of a get-together she was not invited to. She feels left out and is unsure whether her friends still like her.",
+      "say": [
+        "That really hurts. I’m glad you told me how you’re feeling.",
+        "Being left out can feel lonely. It doesn’t mean there’s something wrong with you."
+      ],
+      "avoid": [
+        "Blame, dismissal, or threats.",
+        "Promises you cannot keep.",
+        "Taking over without explaining necessary next steps."
+      ]
+    },
+    {
+      "id": "hurtful-joke",
+      "characterIndex": 0,
+      "categoryId": "friendship",
+      "name": "Maya",
+      "age": 13,
+      "color": "#e5e9dc",
+      "topic": "Peer pressure",
+      "headline": "The joke went too far.",
+      "context": "Maya joined in with a joke in a group chat. Another student was hurt, and she is unsure how to take responsibility.",
+      "open": "I laughed at something mean in the chat. Now I feel awful.",
+      "later": [
+        "I wanted to fit in. I didn’t think about how it felt for them.",
+        "I want to put it right, but I’m nervous people will turn on me.",
+        "Can you help me think of a sincere apology?"
+      ],
+      "need": "Support taking responsibility without being shamed or excused.",
+      "feeling": "Maya might worry that admitting a mistake will define how you see her.",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "replies": [
+        [
+          {
+            "text": "Why didn’t you think before doing that? I’m taking your device away.",
+            "kind": "harmful"
+          },
+          {
+            "text": "Thank you for being honest. We can take responsibility for a hurtful choice without deciding you’re a bad person.",
+            "kind": "good",
+            "values": ["Kindness", "Compassion"],
+            "note": "This response makes room for honesty while helping the child take responsibility. Support and accountability can belong in the same conversation."
+          },
+          {
+            "text": "Can you tell me when this started?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Wanting to fit in is understandable. Let’s think about how the joke affected the other person.",
+            "kind": "good",
+            "values": ["Empathy", "Respect"],
+            "note": "This response makes room for honesty while helping the child take responsibility. Support and accountability can belong in the same conversation."
+          },
+          {
+            "text": "You’re making too much of this. Stop worrying about it.",
+            "kind": "harmful"
+          },
+          {
+            "text": "What happened next?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "We can plan a sincere apology and how to respond differently next time. What would you like to say?",
+            "kind": "good",
+            "values": ["Integrity", "Compassion"],
+            "note": "This response makes room for honesty while helping the child take responsibility. Support and accountability can belong in the same conversation."
+          },
+          {
+            "text": "I promise this will never be a problem again.",
+            "kind": "promise"
+          },
+          {
+            "text": "I’ll decide what happens. You don’t get a say.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "background": "Maya joined in with a joke in a group chat. Another student was hurt, and she is unsure how to take responsibility.",
+      "say": [
+        "Thank you for being honest. We can take responsibility for a hurtful choice without deciding you’re a bad person.",
+        "Wanting to fit in is understandable. Let’s think about how the joke affected the other person."
+      ],
+      "avoid": [
+        "Blame, dismissal, or threats.",
+        "Promises you cannot keep.",
+        "Taking over without explaining necessary next steps."
+      ]
+    },
+    {
+      "id": "body-comparison",
+      "characterIndex": 1,
+      "categoryId": "feelings",
+      "name": "Jayden",
+      "age": 11,
+      "color": "#eadfce",
+      "topic": "Body comparison",
+      "headline": "He keeps comparing himself.",
+      "context": "Jayden sees edited fitness and appearance videos and has started making negative comments about his body.",
+      "open": "Everyone in those videos looks better than me. I hate how I look.",
+      "later": [
+        "I know you say I’m fine, but it doesn’t feel like it.",
+        "It’s hard to stop comparing when I keep seeing it.",
+        "Could we find things to watch that make me feel better?"
+      ],
+      "need": "Listening without dismissing his feelings or reinforcing appearance judgments.",
+      "feeling": "Jayden might feel embarrassed about sharing an insecurity.",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "replies": [
+        [
+          {
+            "text": "Why didn’t you think before doing that? I’m taking your device away.",
+            "kind": "harmful"
+          },
+          {
+            "text": "I’m glad you told me. It sounds painful to feel that way about yourself.",
+            "kind": "good",
+            "values": ["Kindness", "Compassion"]
+          },
+          {
+            "text": "Can you tell me when this started?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Those comparisons sound exhausting. I want to listen to what this feels like for you.",
+            "kind": "good",
+            "values": ["Empathy", "Respect"]
+          },
+          {
+            "text": "You’re making too much of this. Stop worrying about it.",
+            "kind": "harmful"
+          },
+          {
+            "text": "What happened next?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Let’s look for things that support how you feel, and take a break from accounts that make it harder.",
+            "kind": "good",
+            "values": ["Integrity", "Compassion"]
+          },
+          {
+            "text": "I promise this will never be a problem again.",
+            "kind": "promise"
+          },
+          {
+            "text": "I’ll decide what happens. You don’t get a say.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "background": "Jayden sees edited fitness and appearance videos and has started making negative comments about his body.",
+      "say": [
+        "I’m glad you told me. It sounds painful to feel that way about yourself.",
+        "Those comparisons sound exhausting. I want to listen to what this feels like for you."
+      ],
+      "avoid": [
+        "Blame, dismissal, or threats.",
+        "Promises you cannot keep.",
+        "Taking over without explaining necessary next steps."
+      ]
+    },
+    {
+      "id": "overwhelming-news",
+      "characterIndex": 0,
+      "categoryId": "feelings",
+      "name": "Maya",
+      "age": 13,
+      "color": "#e5e9dc",
+      "topic": "Overwhelming news",
+      "headline": "The feed won’t let her switch off.",
+      "context": "Maya has been watching distressing news clips. She feels guilty about taking a break and is having trouble settling down.",
+      "open": "I keep watching the news. If I stop, it feels like I don’t care.",
+      "later": [
+        "There’s so much happening. I don’t know what I’m supposed to do.",
+        "I want a break, but I still feel guilty.",
+        "Can we think of a way to care without watching all night?"
+      ],
+      "need": "Permission to take a break and support finding manageable ways to stay informed.",
+      "feeling": "Maya might feel responsible for problems she cannot solve alone.",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "replies": [
+        [
+          {
+            "text": "Why didn’t you think before doing that? I’m taking your device away.",
+            "kind": "harmful"
+          },
+          {
+            "text": "That sounds like a lot to carry. I’m here to listen.",
+            "kind": "good",
+            "values": ["Kindness", "Compassion"]
+          },
+          {
+            "text": "Can you tell me when this started?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Taking a break doesn’t mean you don’t care. We can care and make room for rest.",
+            "kind": "good",
+            "values": ["Empathy", "Respect"]
+          },
+          {
+            "text": "You’re making too much of this. Stop worrying about it.",
+            "kind": "harmful"
+          },
+          {
+            "text": "What happened next?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Would you like to choose a time to check the news together, then do something calming?",
+            "kind": "good",
+            "values": ["Integrity", "Compassion"]
+          },
+          {
+            "text": "I promise this will never be a problem again.",
+            "kind": "promise"
+          },
+          {
+            "text": "I’ll decide what happens. You don’t get a say.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "background": "Maya has been watching distressing news clips. She feels guilty about taking a break and is having trouble settling down.",
+      "say": [
+        "That sounds like a lot to carry. I’m here to listen.",
+        "Taking a break doesn’t mean you don’t care. We can care and make room for rest."
+      ],
+      "avoid": [
+        "Blame, dismissal, or threats.",
+        "Promises you cannot keep.",
+        "Taking over without explaining necessary next steps."
+      ]
+    },
+    {
+      "id": "end-game",
+      "characterIndex": 1,
+      "categoryId": "boundaries",
+      "name": "Jayden",
+      "age": 11,
+      "color": "#eadfce",
+      "topic": "Gaming transitions",
+      "headline": "Just one more round.",
+      "context": "Jayden is in a team game when an agreed screen-time limit arrives. A caregiver wants to revisit the plan calmly.",
+      "open": "I can’t quit now. My team needs me. You don’t understand.",
+      "later": [
+        "If I leave in the middle, they’ll be upset with me.",
+        "I know we agreed on a time. I didn’t realize how long this would take.",
+        "Can we plan how to finish a round before the limit next time?"
+      ],
+      "need": "Acknowledgment of his commitments alongside calm, consistent boundaries.",
+      "feeling": "Jayden might feel torn between a family agreement and his teammates.",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "replies": [
+        [
+          {
+            "text": "Why didn’t you think before doing that? I’m taking your device away.",
+            "kind": "harmful"
+          },
+          {
+            "text": "I can see your team matters to you. Let’s take a breath and talk about the time we agreed on.",
+            "kind": "good",
+            "values": ["Kindness", "Compassion"]
+          },
+          {
+            "text": "Can you tell me when this started?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "You wanted to be there for them. We still need a plan that respects our family agreement.",
+            "kind": "good",
+            "values": ["Empathy", "Respect"]
+          },
+          {
+            "text": "You’re making too much of this. Stop worrying about it.",
+            "kind": "harmful"
+          },
+          {
+            "text": "What happened next?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Let’s agree on a stopping point and how to plan the last round next time.",
+            "kind": "good",
+            "values": ["Integrity", "Compassion"]
+          },
+          {
+            "text": "I promise this will never be a problem again.",
+            "kind": "promise"
+          },
+          {
+            "text": "I’ll decide what happens. You don’t get a say.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "background": "Jayden is in a team game when an agreed screen-time limit arrives. A caregiver wants to revisit the plan calmly.",
+      "say": [
+        "I can see your team matters to you. Let’s take a breath and talk about the time we agreed on.",
+        "You wanted to be there for them. We still need a plan that respects our family agreement."
+      ],
+      "avoid": [
+        "Blame, dismissal, or threats.",
+        "Promises you cannot keep.",
+        "Taking over without explaining necessary next steps."
+      ]
+    },
+    {
+      "id": "in-game-purchase",
+      "characterIndex": 2,
+      "categoryId": "boundaries",
+      "name": "Lucía",
+      "age": 8,
+      "color": "#e9e2ed",
+      "topic": "In-game purchases",
+      "headline": "She bought something by mistake.",
+      "context": "Lucía tapped through an in-game purchase without realizing it used real money. She is worried about telling a caregiver.",
+      "open": "I got the sparkly pet. Then it said money. Are you going to be really angry?",
+      "later": [
+        "I thought it was game coins. I didn’t know.",
+        "I was scared to tell you, but I need help.",
+        "Can you show me how to check before I tap anything?"
+      ],
+      "need": "Reassurance for telling the truth and clear, age-appropriate purchasing rules.",
+      "feeling": "Lucía might worry that one mistake will lead to punishment.",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "replies": [
+        [
+          {
+            "text": "Why didn’t you think before doing that? I’m taking your device away.",
+            "kind": "harmful"
+          },
+          {
+            "text": "Thank you for telling me. Let’s look at what happened calmly.",
+            "kind": "good",
+            "values": ["Kindness", "Compassion"]
+          },
+          {
+            "text": "Can you tell me when this started?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "It’s confusing when a game makes buying things easy. I’ll help you understand what costs real money.",
+            "kind": "good",
+            "values": ["Empathy", "Respect"]
+          },
+          {
+            "text": "You’re making too much of this. Stop worrying about it.",
+            "kind": "harmful"
+          },
+          {
+            "text": "What happened next?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Let’s check the purchase settings together and agree that you’ll ask before buying anything.",
+            "kind": "good",
+            "values": ["Integrity", "Compassion"]
+          },
+          {
+            "text": "I promise this will never be a problem again.",
+            "kind": "promise"
+          },
+          {
+            "text": "I’ll decide what happens. You don’t get a say.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "background": "Lucía tapped through an in-game purchase without realizing it used real money. She is worried about telling a caregiver.",
+      "say": [
+        "Thank you for telling me. Let’s look at what happened calmly.",
+        "It’s confusing when a game makes buying things easy. I’ll help you understand what costs real money."
+      ],
+      "avoid": [
+        "Blame, dismissal, or threats.",
+        "Promises you cannot keep.",
+        "Taking over without explaining necessary next steps."
+      ]
+    },
+    {
+      "id": "late-night-phone",
+      "characterIndex": 0,
+      "categoryId": "boundaries",
+      "name": "Maya",
+      "age": 13,
+      "color": "#e5e9dc",
+      "topic": "Rest and routines",
+      "headline": "The phone keeps her awake.",
+      "context": "Maya stays connected late at night because she worries about missing messages. She is tired, and a caregiver opens a conversation about rest.",
+      "open": "If I put my phone away, I’ll miss everything. Everyone talks at night.",
+      "later": [
+        "I don’t want to wake up and be the only one who doesn’t know.",
+        "I am tired. I just don’t know how to leave the chat.",
+        "Can we try a bedtime plan and see how it feels?"
+      ],
+      "need": "Curiosity about what connection means to her, with shared expectations for rest.",
+      "feeling": "Maya might worry that a bedtime conversation means losing contact with friends.",
+      "review": {
+        "status": "pending",
+        "version": "1.0.0",
+        "reviewerId": null,
+        "reviewedAt": null,
+        "scope": "Scenario, response choices, feedback, and illustrative weights",
+        "sources": [
+          "https://parents.thorn.org/",
+          "https://www.stopbullying.gov/cyberbullying/what-is-it"
+        ]
+      },
+      "replies": [
+        [
+          {
+            "text": "Why didn’t you think before doing that? I’m taking your device away.",
+            "kind": "harmful"
+          },
+          {
+            "text": "I hear that staying connected matters to you. What feels hardest about leaving the chat?",
+            "kind": "good",
+            "values": ["Kindness", "Compassion"]
+          },
+          {
+            "text": "Can you tell me when this started?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "It makes sense to want to belong. Your rest matters too, and I want us to find a balance.",
+            "kind": "good",
+            "values": ["Empathy", "Respect"]
+          },
+          {
+            "text": "You’re making too much of this. Stop worrying about it.",
+            "kind": "harmful"
+          },
+          {
+            "text": "What happened next?",
+            "kind": "neutral",
+            "values": ["Respect"]
+          }
+        ],
+        [
+          {
+            "text": "Let’s try a bedtime plan together, then check in about what is and isn’t working.",
+            "kind": "good",
+            "values": ["Integrity", "Compassion"]
+          },
+          {
+            "text": "I promise this will never be a problem again.",
+            "kind": "promise"
+          },
+          {
+            "text": "I’ll decide what happens. You don’t get a say.",
+            "kind": "harmful"
+          }
+        ]
+      ],
+      "background": "Maya stays connected late at night because she worries about missing messages. She is tired, and a caregiver opens a conversation about rest.",
+      "say": [
+        "I hear that staying connected matters to you. What feels hardest about leaving the chat?",
+        "It makes sense to want to belong. Your rest matters too, and I want us to find a balance."
+      ],
+      "avoid": [
+        "Blame, dismissal, or threats.",
+        "Promises you cannot keep.",
+        "Taking over without explaining necessary next steps."
+      ]
+    }
+  ],
+  "choices": [
+    [
+      {
+        "text": "What did you do now? Give me your phone.",
+        "kind": "harmful"
+      },
+      {
+        "text": "Thank you for telling me. You’re not in trouble for asking for help.",
+        "kind": "good"
+      },
+      {
+        "text": "Okay. Tell me more about what happened.",
+        "kind": "neutral"
+      }
+    ],
+    [
+      {
+        "text": "That sounds really upsetting. This isn’t your fault. What feels hardest right now?",
+        "kind": "good"
+      },
+      {
+        "text": "Just ignore it. It’s only the internet.",
+        "kind": "harmful"
+      },
+      {
+        "text": "When did that happen?",
+        "kind": "neutral"
+      }
+    ],
+    [
+      {
+        "text": "We can figure out the next steps together. I’ll explain before I ask anyone else for help.",
+        "kind": "good"
+      },
+      {
+        "text": "I’ll never tell anyone, no matter what happens.",
+        "kind": "promise"
+      },
+      {
+        "text": "You should have known better.",
+        "kind": "harmful"
+      }
+    ]
+  ],
+  "repairChoices": [
+    {
+      "text": "I reacted out of fear. I’m sorry. You’re not in trouble for telling me. Can we start again?",
+      "kind": "repair",
+      "values": ["Self-reflection", "Compassion"]
+    },
+    {
+      "text": "I want to understand before we decide what to do. I’m here to listen.",
+      "kind": "good",
+      "values": ["Respect", "Empathy"]
+    },
+    {
+      "text": "I’m the parent. Just do what I say.",
+      "kind": "harmful"
+    }
+  ],
+  "schemaVersion": 1,
+  "contentVersion": "1.0.0",
+  "categories": [
+    {
+      "id": "contact",
+      "label": "Online contact",
+      "description": "Unwanted messages, personal information, and people they meet online."
+    },
+    {
+      "id": "friendship",
+      "label": "Friendship & belonging",
+      "description": "Group chats, peer pressure, and feeling left out."
+    },
+    {
+      "id": "feelings",
+      "label": "Content & feelings",
+      "description": "Scary content, body comparison, and things that feel overwhelming."
+    },
+    {
+      "id": "boundaries",
+      "label": "Digital boundaries",
+      "description": "Gaming, spending, and building shared expectations."
+    }
+  ],
+  "childResponses": {
+    "Why would you talk to strangers? Give me your phone.": [
+      "Wait, what?",
+      "I knew I shouldn’t have said anything."
+    ],
+    "Thank you for telling me. You’re not in trouble, and I’m not mad.": [
+      "…Really?",
+      "Okay. They said it was supposed to be our secret. I didn’t know what to do."
+    ],
+    "Who is this person? What’s their username?": [
+      "StarRunner. I don’t know their real name.",
+      "Why, are you going to message them?"
+    ],
+    "People who ask kids to keep secrets like that are the ones doing something wrong. This isn’t your fault.": [
+      "I thought I’d get in trouble.",
+      "I was scared you’d take my phone. Can you help me?"
+    ],
+    "Did you send them anything? You should have known better.": [
+      "No! I didn’t send anything.",
+      "This is exactly why I didn’t want to tell you."
+    ],
+    "How long has this been going on?": [
+      "Like two weeks? It started out nice.",
+      "They said I was really mature for my age."
+    ],
+    "I’m not taking your phone for telling me. Let’s save the messages and report this together, and I’ll explain each step.": [
+      "Okay.",
+      "Thanks for not freaking out."
+    ],
+    "I won’t tell anyone about this. I promise.": [
+      "But what if they don’t stop?",
+      "Who helps then?"
+    ],
+    "No more games for you until this is sorted out.": [
+      "So I get punished for telling you?",
+      "Great."
+    ],
+    "I’m really glad you told me. That sounds awful, and you don’t deserve it.": [
+      "They keep sharing this picture of me.",
+      "Even at home it’s still there. It doesn’t stop."
+    ],
+    "Just leave the group chat. It’s only the internet.": [
+      "You don’t get it.",
+      "Everyone at school sees it. Leaving makes it worse."
+    ],
+    "What exactly are they saying?": [
+      "Stuff about how I look.",
+      "I don’t want to say it."
+    ],
+    "That sounds exhausting, like there’s no break from it. I’m listening.": [
+      "Yeah.",
+      "I just don’t want to lose my friends too. Please don’t call anyone yet."
+    ],
+    "Well, what did you do to make them act like that?": [
+      "Nothing!",
+      "Why does everyone think it’s my fault?"
+    ],
+    "Can you show me the messages?": [
+      "…Okay.",
+      "Just don’t send them to anyone without asking me."
+    ],
+    "I won’t do anything without talking to you first. Let’s decide together who could help.": [
+      "Okay.",
+      "Maybe Ms. Rivera? She’s nice."
+    ],
+    "I promise I’ll never say anything to the school.": [
+      "Okay, but what if it gets worse?",
+      "Then what?"
+    ],
+    "I’m calling their parents tonight, whether you like it or not.": [
+      "No!",
+      "Everyone will know I told. You’re making it worse."
+    ],
+    "Why were you watching videos without me? No more tablet.": [
+      "I’m sorry…",
+      "I didn’t mean to. Please don’t be mad."
+    ],
+    "Come here. You didn’t do anything bad. Thank you for telling me.": [
+      "I didn’t look for it.",
+      "It just started playing after my cartoon."
+    ],
+    "What was the video about?": [
+      "I don’t want to say.",
+      "It was really scary."
+    ],
+    "I believe you. Videos sometimes start on their own, and that’s not your fault. It makes sense that you feel scared.": [
+      "I feel scared when I close my eyes.",
+      "Can you stay with me?"
+    ],
+    "It’s just a video. It’s not real, so stop being silly.": [
+      "But I’m still scared.",
+      "You’re not listening."
+    ],
+    "Which app was it on?": [
+      "The one with the cartoons.",
+      "It played by itself."
+    ],
+    "I’ll stay right here with you. Let’s take some slow breaths together, and tomorrow we can change the settings so videos don’t play on their own.": [
+      "Okay.",
+      "Can we do the breathing again?"
+    ],
+    "I promise you’ll never see anything scary again.": [
+      "Really?",
+      "What if it happens again?"
+    ],
+    "If you keep thinking about it, you’ll just make it worse.": [
+      "Now I’m even more scared."
+    ],
+    "I reacted out of fear. I’m sorry. You’re not in trouble for telling me. Can we start again?": [
+      "…Okay.",
+      "I was just scared you’d be mad."
+    ],
+    "I want to understand before we decide what to do. I’m here to listen.": [
+      "Okay…",
+      "I’ll try to explain."
+    ],
+    "I’m the parent. Just do what I say.": ["…Fine."]
+  },
+  "principles": [
+    "Empathy",
+    "Compassion",
+    "Respect",
+    "Forgiveness",
+    "Integrity",
+    "Kindness",
+    "Self-reflection"
+  ]
+}
