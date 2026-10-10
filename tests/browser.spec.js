@@ -108,8 +108,6 @@ test("neutral and promise responses leave space to continue", async ({
   await page.locator("#continue").click();
   await choose(page, "good");
   await page.locator("#continue").click();
-  await choose(page, "good");
-  await page.locator("#continue").click();
   await choose(page, "promise");
   await expect(page.locator(".feedback-title")).toContainText(
     "absolute promise",
@@ -287,4 +285,61 @@ test("overwhelmed pause preserves selected choice, typed draft, and feedback acr
   await expect(page.locator(".now-steps li")).toHaveCount(6);
   await page.locator("#pause-session").click();
   await expect(page.locator("#calm-seconds")).toHaveText("30");
+});
+
+test("master progression: neutral replies reach reflection without a score requirement", async ({
+  page,
+}) => {
+  await enter(page);
+  await choose(page, "neutral");
+  await page.locator("#continue").click();
+  await choose(page, "neutral");
+  await page.locator("#continue").click();
+  await choose(page, "promise");
+  await page.locator("#continue").click();
+  await expect(page.locator("main")).toHaveAttribute("data-stage", "reflect");
+  await expect(page.locator(".turn")).toHaveCount(3);
+});
+test("prerecorded audio mapping plays and stops; failures remain readable", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.Audio = class {
+      constructor(path) {
+        this.path = path;
+        window.testAudio = this;
+      }
+      play() {
+        return window.audioShouldFail
+          ? Promise.reject(Error("unavailable"))
+          : Promise.resolve();
+      }
+      pause() {
+        window.recordingStopped = true;
+      }
+      removeAttribute() {}
+    };
+  });
+  await page.route("**/data/scenarios.json", (route) => {
+    const data = structuredClone(content);
+    data.audioClips = {
+      [data.scenarios[0].open]: "assets/audio/maya/scene-1.mp3",
+    };
+    return route.fulfill({ json: data });
+  });
+  await enter(page);
+  await page.locator("#listen").click();
+  await expect(page.locator("#listen")).toHaveAttribute("aria-pressed", "true");
+  expect(await page.evaluate(() => window.testAudio.path)).toBe(
+    "assets/audio/maya/scene-1.mp3",
+  );
+  await page.locator("#pause-session").click();
+  expect(await page.evaluate(() => window.recordingStopped)).toBe(true);
+  await page.keyboard.press("Escape");
+  await page.evaluate(() => (window.audioShouldFail = true));
+  await page.locator("#listen").click();
+  await expect(page.locator("#voice-error")).toContainText(
+    "recording is unavailable",
+  );
+  await expect(page.locator(".child-quote")).toBeVisible();
 });

@@ -102,6 +102,18 @@ export function moodFor(score, kind) {
 }
 export function validateContent(data) {
   if (
+    data.audioClips &&
+    (typeof data.audioClips !== "object" ||
+      Array.isArray(data.audioClips) ||
+      Object.values(data.audioClips).some(
+        (path) =>
+          typeof path !== "string" ||
+          !/^assets\/audio\/[a-zA-Z0-9_/-]+\.(mp3|wav|ogg)$/.test(path) ||
+          path.includes(".."),
+      ))
+  )
+    throw Error("Invalid audio mapping");
+  if (
     data?.schemaVersion !== 1 ||
     !Array.isArray(data.scenarios) ||
     data.scenarios.length < 1 ||

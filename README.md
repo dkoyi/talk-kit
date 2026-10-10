@@ -36,7 +36,7 @@ On Windows, use `py -m http.server 8000 --bind 127.0.0.1` if `python3` is unavai
 
 For each response, `kind` is one of `good`, `repair`, `harmful`, `promise`, `neutral`, or `unknown`. Optional `values`, `note`, `alt`, `title`, and `delta` let reviewers specify feedback and weight overrides. `childResponses` maps an exact response text to the child's authored reply lines; otherwise the scenario's `later` lines are used for supportive replies. Update both if changing a mapped response. UI templates remain in `assets/app.js`; styles in `assets/styles.css`; weights, typed-reply classification and data validation in `assets/engine.js`.
 
-The default weights match both base versions: supportive +15, repair +18, harmful −20, absolute promise −5, neutral/uncertain 0. The illustrative meter starts at 50 and stays between 5 and 95. Three supportive/repair responses complete a deck; other replies leave space to try again. Parents can finish early. Scores and expressions are story devices, not clinical measures or grades. Attempts remain in memory only for optional reflection across retries.
+The default weights match both base versions: supportive +15, repair +18, harmful −20, absolute promise −5, neutral/uncertain 0. The illustrative meter starts at 50 and stays between 5 and 95. Three main responses complete a deck regardless of their score, preserving the latest master branch’s progression behavior. Optional repairs do not advance the main story. Parents can finish early. Scores and expressions are story devices, not clinical measures or grades. Attempts remain in memory only for optional reflection across retries.
 
 Typed replies use a small phrase checker. It can miss context, negation, sarcasm, and safety concerns; it is not an assessment tool. Ambiguous matches receive no score change. Suggested cards use their authored response classifications.
 
@@ -89,3 +89,17 @@ The uploaded curated version contained a placeholder reviewer name and text clai
 The site has no accounts, analytics, cloud chat, or conversation persistence. Refresh clears practice text and progress. Static hosts may retain access logs. External support links have their own privacy policies and are U.S.-focused. The app provides fictional educational rehearsal, not therapy or emergency support.
 
 Fonts: self-hosted `@fontsource-variable/dm-sans` and `@fontsource-variable/fraunces`, version 5.2.8, distributed under the SIL Open Font License. License notices are retained in `assets/fonts/`. No Google Fonts request is made at runtime.
+
+## Prerecorded audio and deployment
+
+The existing `assets/audio/` directory is retained. To use a recording instead of the device voice, add its relative path under `audioClips` in `data/scenarios.json`, keyed by the exact dialogue displayed on the card. For example:
+
+```json
+"audioClips": {
+  "Can I tell you something? Someone in my game keeps asking for pictures. Please don’t get mad.": "assets/audio/maya/scene-1.mp3"
+}
+```
+
+Only map recordings that exist and match the displayed line. Allowed file types are MP3, WAV and OGG. Missing/unplayable recordings produce an inline error and leave the text usable. Unmapped dialogue uses the optional device voice. This replaces the previous single-file `availableAudio` mapping and preserves its opt-in behavior. Obtain permission for any recordings you use.
+
+For Vercel, use framework **Other**, no build command, and the repository root as the output directory. For Netlify or GitHub Pages, publish the static application files (`index.html`, `assets/`, `data/`). On GitHub Pages this repository uses the `master` branch; use **Settings → Pages → Deploy from a branch → master / root**. Do not publish a private review database as part of a later production rollout.

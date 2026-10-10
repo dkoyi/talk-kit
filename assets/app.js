@@ -32,6 +32,7 @@ let content,
   customDraft = "",
   picked = null,
   revealed = false;
+let activeAudio = null;
 let breathTimer = null,
   breathDeadline = 0,
   toastTimer = null,
@@ -113,6 +114,11 @@ function reset() {
   revealed = false;
 }
 function stopVoice() {
+  if (activeAudio) {
+    activeAudio.pause();
+    activeAudio.removeAttribute("src");
+    activeAudio = null;
+  }
   voiceToken++;
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
   const button = $("#listen");
@@ -187,10 +193,10 @@ function prep() {
 function practice() {
   const last = lastTurn();
   const mood = moodFor(score, last?.kind);
-  return `${step(2)}<div class="practice-heading"><div><div class="eyebrow">A FEW WORDS CAN OPEN A DOOR</div><h1>A moment with <em>${esc(c().name)}.</em></h1></div><button class="secondary" id="restart">↺ Start over</button></div><div class="practice-shell"><aside class="character-panel theme-${c().characterIndex}"><div class="character-top"><span class="pill">${esc(c().topic)}</span></div><div class="live-character">${childArt(c().characterIndex, mood)}<span class="mood-label">${mood === "happy" ? "Feeling more connected" : mood === "calm" ? "Finding some ease" : mood === "sad" ? "Needing some space" : "Taking a little time"}</span></div><div class="character-name">${esc(c().name)}<span>Age ${c().age} · Fictional character</span></div><div class="feeling"><strong>IN THIS STORY</strong><span>${last ? esc(last.feeling) : esc(c().feeling)}</span></div><div class="openness"><span>Conversation openness</span><b>${zone()}</b><div class="meter"><span class="marker" style="left:calc(${score}% - 2px)"></span></div><div class="zones"><span>Guarded</span><span>More open</span></div></div><button class="text-button small" data-rules>How this simulation works ↗</button><p class="sim-label">Expressions and openness are illustrative. Real children respond differently.</p></aside><section class="conversation-area"><div class="deck-progress"><span><b>${Math.min(count + 1, 3)}</b> / 3 moments <span class="progress-hint">· your own pace</span></span><div class="progress-dots" aria-label="${count} of 3 supportive moments explored">${[0, 1, 2].map((i) => `<span class="${i < count ? "done" : i === count ? "current" : ""}"></span>`).join("")}</div></div><div class="flashcard ${revealed ? "feedback-side" : ""}" id="flashcard" tabindex="-1">${revealed ? feedbackCard(last) : questionCard()}</div><div class="under-card"><button class="text-button" id="reflect">Finish & reflect</button><span>There’s room to try again. Always.</span></div>${messages.length > 1 ? `<details class="transcript"><summary>Your conversation so far <span>${turns.length} ${turns.length === 1 ? "response" : "responses"}</span></summary><div class="chatlog" id="chatlog">${messages.map((m) => `<div class="bubble ${m.who === "You" ? "parent" : ""}"><span class="speaker">${esc(m.who)}</span>${esc(m.text)}</div>`).join("")}</div></details>` : ""}</section></div>`;
+  return `${step(2)}<div class="practice-heading"><div><div class="eyebrow">A FEW WORDS CAN OPEN A DOOR</div><h1>A moment with <em>${esc(c().name)}.</em></h1></div><button class="secondary" id="restart">↺ Start over</button></div><div class="practice-shell"><aside class="character-panel theme-${c().characterIndex}"><div class="character-top"><span class="pill">${esc(c().topic)}</span></div><div class="live-character">${childArt(c().characterIndex, mood)}<span class="mood-label">${mood === "happy" ? "Feeling more connected" : mood === "calm" ? "Finding some ease" : mood === "sad" ? "Needing some space" : "Taking a little time"}</span></div><div class="character-name">${esc(c().name)}<span>Age ${c().age} · Fictional character</span></div><div class="feeling"><strong>IN THIS STORY</strong><span>${last ? esc(last.feeling) : esc(c().feeling)}</span></div><div class="openness"><span>Conversation openness</span><b>${zone()}</b><div class="meter"><span class="marker" style="left:calc(${score}% - 2px)"></span></div><div class="zones"><span>Guarded</span><span>More open</span></div></div><button class="text-button small" data-rules>How this simulation works ↗</button><p class="sim-label">Expressions and openness are illustrative. Real children respond differently.</p></aside><section class="conversation-area"><div class="deck-progress"><span><b>${Math.min(count + 1, 3)}</b> / 3 moments <span class="progress-hint">· your own pace</span></span><div class="progress-dots" aria-label="${count} of 3 moments explored">${[0, 1, 2].map((i) => `<span class="${i < count ? "done" : i === count ? "current" : ""}"></span>`).join("")}</div></div><div class="flashcard ${revealed ? "feedback-side" : ""}" id="flashcard" tabindex="-1">${revealed ? feedbackCard(last) : questionCard()}</div><div class="under-card"><button class="text-button" id="reflect">Finish & reflect</button><span>There’s room to try again. Always.</span></div>${messages.length > 1 ? `<details class="transcript"><summary>Your conversation so far <span>${turns.length} ${turns.length === 1 ? "response" : "responses"}</span></summary><div class="chatlog" id="chatlog">${messages.map((m) => `<div class="bubble ${m.who === "You" ? "parent" : ""}"><span class="speaker">${esc(m.who)}</span>${esc(m.text)}</div>`).join("")}</div></details>` : ""}</section></div>`;
 }
 function questionCard() {
-  return `<div class="flashcard-top"><span class="eyebrow">${repairMode ? "A CHANCE TO BEGIN AGAIN" : "LISTEN TO THE MOMENT"}</span><button class="voice-button" id="listen" aria-pressed="false">◖ Listen</button></div><p id="voice-error" class="inline-error" role="status" hidden></p><p class="voice-caption">Optional device voice · no microphone</p><blockquote class="child-quote">“${esc(currentLine())}”</blockquote><div class="choice-header"><h2>${repairMode ? "How could you reconnect?" : "What would you say?"}</h2><span>Choose a card to explore</span></div><div class="replies" role="group" aria-label="Response choices">${options()
+  return `<div class="flashcard-top"><span class="eyebrow">${repairMode ? "A CHANCE TO BEGIN AGAIN" : "LISTEN TO THE MOMENT"}</span><button class="voice-button" id="listen" aria-pressed="false">◖ Listen</button></div><p id="voice-error" class="inline-error" role="status" hidden></p><p class="voice-caption">Optional audio · no microphone</p><blockquote class="child-quote">“${esc(currentLine())}”</blockquote><div class="choice-header"><h2>${repairMode ? "How could you reconnect?" : "What would you say?"}</h2><span>Choose a card to explore</span></div><div class="replies" role="group" aria-label="Response choices">${options()
     .map(
       (o, i) =>
         `<button class="reply ${picked === i ? "selected" : ""}" data-reply="${i}" data-kind="${o.kind}" aria-pressed="${picked === i}"><span class="choice-letter">${String.fromCharCode(65 + i)}</span><span>${esc(o.text)}</span><span class="choice-mark" aria-hidden="true">${picked === i ? "✓" : "↗"}</span></button>`,
@@ -208,7 +214,8 @@ function respond(text, kind, choice = {}) {
   score = turn.after;
   turns.push(turn);
   messages.push({ who: "You", text });
-  if (kind === "good" || kind === "repair") count++;
+  // Preserve master: each main response progresses, regardless of its score.
+  if (!repairMode) count = Math.min(3, count + 1);
   const lines = {
     harmful: "I’m worried I shouldn’t have said anything. Can we slow down?",
     unknown: "[Pause the simulation and reflect on your response.]",
@@ -216,7 +223,7 @@ function respond(text, kind, choice = {}) {
     neutral: "I’m not sure how to explain it. I need you to listen.",
   };
   let childLines = content.childResponses?.[text] || [
-    lines[kind] || c().later[Math.min(count - 1, 2)],
+    lines[kind] || c().later[Math.min(Math.max(count - 1, 0), 2)],
   ];
   if (kind === "harmful" && score < 30)
     childLines = ["I don’t want to talk about it anymore."];
@@ -498,7 +505,7 @@ function showRules() {
       )
       .join(
         "",
-      )}</dl><p>Three supportive or repair responses complete the deck. Other replies leave space to try again. You can finish and reflect at any time.</p><p class="sim-label">Typed words use a limited phrase checker. It can miss meaning, negation, and sarcasm. These weights and expressions are not clinically validated.</p><button class="primary full-width" data-close>Got it</button>`,
+      )}</dl><p>Three main responses complete the deck, regardless of their score. Optional repairs leave room to try again without advancing the story. You can finish and reflect at any time.</p><p class="sim-label">Typed words use a limited phrase checker. It can miss meaning, negation, and sarcasm. These weights and expressions are not clinically validated.</p><button class="primary full-width" data-close>Got it</button>`,
   );
 }
 function speak() {
@@ -509,6 +516,33 @@ function speak() {
     return;
   }
   error.hidden = true;
+  const clip = content.audioClips?.[currentLine()];
+  if (clip) {
+    stopVoice();
+    const token = voiceToken;
+    const fail = () => {
+      if (token !== voiceToken) return;
+      stopVoice();
+      if (error.isConnected) {
+        error.textContent =
+          "This recording is unavailable. You can keep reading the conversation.";
+        error.hidden = false;
+      }
+    };
+    try {
+      activeAudio = new Audio(clip);
+      activeAudio.onended = () => {
+        if (token === voiceToken) stopVoice();
+      };
+      activeAudio.onerror = fail;
+      button.textContent = "■ Stop audio";
+      button.setAttribute("aria-pressed", "true");
+      activeAudio.play().catch(fail);
+    } catch {
+      fail();
+    }
+    return;
+  }
   if (
     !("speechSynthesis" in window) ||
     !("SpeechSynthesisUtterance" in window)
