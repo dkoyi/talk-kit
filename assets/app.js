@@ -4,6 +4,7 @@ import {
   validateContent,
   RULES,
 } from "./engine.js";
+import { recordingFor, validateRecordings } from "./audio.js";
 
 const $ = (selector) => document.querySelector(selector);
 const esc = (value) =>
@@ -30,6 +31,7 @@ let content,
   repairMode = false,
   reacted = false;
 let activeAudio = null;
+let recordings = {};
 let breathTimer = null,
   breathDeadline = 0,
   toastTimer = null,
@@ -557,7 +559,7 @@ function speak() {
     return;
   }
   error.hidden = true;
-  const clip = content.audioClips?.[currentLine()];
+  const clip = recordingFor(recordings, c().name, currentLine(), content.audioClips);
   if (clip) {
     stopVoice();
     const token = voiceToken;
@@ -682,6 +684,15 @@ async function init() {
     if (!response.ok) throw Error("Content request failed");
     content = validateContent(await response.json());
     scenarios = content.scenarios;
+    recordings = {};
+    try {
+      const audioResponse = await fetch("./assets/audio/recordings.json");
+      if (!audioResponse.ok) throw Error("Recordings request failed");
+      recordings = validateRecordings(await audioResponse.json());
+    } catch (error) {
+      // A missing manifest must not prevent reading/practicing the conversation.
+      console.warn("Saved voices unavailable; using device voices as fallback.", error);
+    }
     render();
     hideSplash();
   } catch {
