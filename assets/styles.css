@@ -6258,3 +6258,14 @@ footer > span:last-child {
     min-height: calc(100svh / 0.9 - 84px - 44px);
   }
 }
+/* Scenario pages (Get ready, the conversation, results, Next steps) sit a step further
+   out, at about 80% overall, so the child, the answers and the reactions fit on screen.
+   0.9 (whole page) x 0.889 (these pages) = 0.8. The header stays at 90%. */
+@media (min-width: 1024px) {
+  main[data-stage="prep"],
+  main[data-stage="practice"],
+  main[data-stage="reflect"],
+  main[data-stage="plan"] {
+    zoom: 0.889;
+  }
+}
