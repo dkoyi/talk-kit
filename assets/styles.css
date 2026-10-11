@@ -3418,7 +3418,7 @@ nav button[hidden] {
 }
 .child .c-blink {
   transform-box: view-box;
-  transform-origin: 115px 99px;
+  transform-origin: 115px 102px;
   animation: blink 4.6s infinite;
 }
 .child .c-mouth-open {
@@ -3478,9 +3478,9 @@ nav button[hidden] {
 }
 @keyframes eyes-look {
   0%, 18%, 100% { transform: translateX(0); }
-  25%, 40% { transform: translateX(-3.5px); }
+  25%, 40% { transform: translateX(-2.5px); }
   50%, 62% { transform: translateX(0); }
-  70%, 85% { transform: translateX(3.5px); }
+  70%, 85% { transform: translateX(2.5px); }
 }
 @keyframes eyes-down {
   0%, 100% { transform: translate(0, 2px); }
@@ -3876,4 +3876,728 @@ dialog.calm-fullscreen #modal-content {
 }
 .openness-head b {
   white-space: nowrap;
+}
+
+/* ---------- UI refine: logo, edge-to-edge header, depth, living decor ---------- */
+:root {
+  --depth-1: 0 1px 2px #1f3a3012, 0 4px 12px #1f3a3010;
+  --depth-2: 0 2px 4px #1f3a3010, 0 12px 28px #1f3a3016, 0 32px 60px -24px #1f3a3030;
+  --depth-3: 0 4px 8px #1f3a3014, 0 22px 44px #1f3a3022, 0 44px 80px -28px #1f3a3040;
+  --edge: clamp(16px, 3vw, 40px);
+}
+/* The full stop sits after the whole name, never on the last letter. */
+.brand-dot,
+.splash-brand .brand-dot {
+  margin-left: 1px;
+}
+/* Logo hugs the left edge, buttons hug the right; the rule stops short of both sides. */
+header {
+  max-width: none;
+  margin: 0;
+  padding: 16px var(--edge);
+  min-height: 84px;
+  border-bottom: 0;
+  box-shadow: none;
+  clip-path: none;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: saturate(1.2) blur(10px);
+}
+header::after {
+  content: "";
+  position: absolute;
+  left: var(--edge);
+  right: var(--edge);
+  bottom: 0;
+  height: 1px;
+  border-radius: 1px;
+  background: var(--line);
+}
+
+/* The +15 / -20 under the meter pops in, holds, then fades away. */
+.meter-delta {
+  animation: delta-life 2.8s ease-out forwards;
+}
+@keyframes delta-life {
+  0% { opacity: 0; transform: translateX(-50%) translateY(14px) scale(0.4); }
+  12% { opacity: 1; transform: translateX(-50%) scale(1.12); }
+  20%, 72% { opacity: 1; transform: translateX(-50%); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(0.9); }
+}
+
+/* Depth: layered soft shadows so cards sit above the page. */
+.panel,
+.flashcard,
+.card,
+.hero-demo {
+  box-shadow: var(--depth-2);
+}
+.scenario-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--depth-3);
+}
+.reply {
+  box-shadow: 0 3px 0 #dfe3d9, var(--depth-1);
+  transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
+}
+/* No lift on hover: moving the hit area under a resting pointer makes it flicker. */
+.reply:hover {
+  box-shadow: 0 4px 0 #cfd8c9, var(--depth-2);
+}
+.reply:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #cfd8c9;
+}
+.category-tabs button {
+  box-shadow: var(--depth-1);
+}
+.character-panel.mood-happy {
+  box-shadow: 0 0 0 4px #b9dcae, var(--depth-3);
+}
+.character-panel.mood-calm {
+  box-shadow: 0 0 0 4px #d6e6cf, var(--depth-2);
+}
+.character-panel.mood-worried {
+  box-shadow: 0 0 0 4px #f0dcb4, var(--depth-2);
+}
+.character-panel.mood-sad {
+  box-shadow: 0 0 0 4px #efc0b2, var(--depth-3);
+}
+
+/* Home hero: a bigger, sharper card that floats among swaying sprigs. */
+.hero-stage {
+  min-height: 540px;
+  isolation: isolate;
+}
+.hero-demo {
+  width: min(360px, 100%);
+  transform: none;
+  animation: card-float 6s ease-in-out infinite;
+}
+.demo-character {
+  width: 230px;
+  height: 200px;
+  border-radius: 120px 120px 28px 28px;
+}
+.demo-character svg {
+  width: 230px;
+  height: 205px;
+}
+.back-card {
+  width: min(340px, 88%);
+  height: 450px;
+  top: 30px;
+}
+.back-card.one {
+  left: 6%;
+  animation: back-sway-a 9s ease-in-out infinite;
+}
+.back-card.two {
+  right: 6%;
+  animation: back-sway-b 9s ease-in-out infinite;
+}
+.top-tag {
+  --r: 7deg;
+}
+.bottom-tag {
+  --r: -5deg;
+}
+.floating-tag {
+  animation: tag-bob 4.5s ease-in-out infinite;
+}
+.bottom-tag {
+  animation-delay: -2.2s;
+}
+.spark {
+  color: #6fa27a;
+  animation: spark-spin 16s linear infinite;
+}
+.blob {
+  position: absolute;
+  z-index: -1;
+  border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%;
+  animation: blob-morph 14s ease-in-out infinite alternate;
+}
+.blob-one {
+  width: 300px;
+  height: 300px;
+  left: -10px;
+  bottom: -10px;
+  background: #dcebd3;
+}
+.blob-two {
+  width: 200px;
+  height: 200px;
+  right: -20px;
+  top: -10px;
+  background: #e9f1df;
+  animation-duration: 11s;
+}
+.sprig {
+  position: absolute;
+  z-index: 0;
+  width: 150px;
+  height: 212px;
+  transform-origin: 50% 100%;
+  animation: sprig-sway 6s ease-in-out infinite;
+}
+.sprig-left {
+  left: -24px;
+  bottom: -14px;
+}
+.sprig-right {
+  right: -24px;
+  top: -30px;
+  animation-delay: -3s;
+}
+.sprig-leaf {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  animation: leaf-flutter 3.2s ease-in-out infinite alternate;
+  animation-delay: calc(var(--d, 0s) * -1);
+}
+.twinkle {
+  position: absolute;
+  z-index: 3;
+  width: 22px;
+  height: 22px;
+  color: #4f8f68;
+  animation: twinkle 2.8s ease-in-out infinite;
+}
+.tw-one {
+  left: 14%;
+  top: 4%;
+}
+.tw-two {
+  right: 4%;
+  bottom: 22%;
+  width: 16px;
+  height: 16px;
+  animation-delay: -1s;
+}
+.tw-three {
+  left: 2%;
+  top: 46%;
+  width: 14px;
+  height: 14px;
+  color: #8fbf86;
+  animation-delay: -1.8s;
+}
+.section-head {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 4px;
+  position: relative;
+}
+.sprig-head {
+  position: relative;
+  width: 46px;
+  height: 66px;
+  left: auto;
+  margin-bottom: 4px;
+  animation-duration: 5s;
+}
+.tw-head {
+  position: relative;
+  align-self: flex-start;
+  margin-top: 6px;
+}
+/* Scenario cards: a bigger child drawn at its natural size, so it stays crisp. */
+.scenario-card .portrait {
+  height: 240px;
+}
+.scenario-card .portrait svg {
+  width: 230px;
+  height: 205px;
+  transform: translateY(18px);
+}
+.scenario-card .portrait svg.tw-card {
+  width: 20px;
+  height: 20px;
+}
+.tw-card {
+  top: 16px;
+  right: 18px;
+  left: auto;
+  color: var(--theme-dark, #4f8f68);
+  opacity: 0.8;
+}
+.scenario-card:nth-child(2) .tw-card {
+  animation-delay: -0.9s;
+}
+.scenario-card:nth-child(3) .tw-card {
+  animation-delay: -1.8s;
+}
+@keyframes card-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes back-sway-a {
+  0%, 100% { transform: rotate(-9deg); }
+  50% { transform: rotate(-6deg) translateY(-6px); }
+}
+@keyframes back-sway-b {
+  0%, 100% { transform: rotate(10deg); }
+  50% { transform: rotate(13deg) translateY(-4px); }
+}
+@keyframes tag-bob {
+  0%, 100% { transform: rotate(var(--r, 0deg)) translateY(0); }
+  50% { transform: rotate(var(--r, 0deg)) translateY(-9px); }
+}
+@keyframes spark-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes blob-morph {
+  0% { border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%; transform: scale(1); }
+  100% { border-radius: 58% 42% 45% 55% / 40% 56% 44% 60%; transform: scale(1.06) rotate(8deg); }
+}
+@keyframes sprig-sway {
+  0%, 100% { transform: scaleX(var(--flip, 1)) rotate(-3deg); }
+  50% { transform: scaleX(var(--flip, 1)) rotate(3deg); }
+}
+@keyframes leaf-flutter {
+  from { transform: rotate(-8deg); }
+  to { transform: rotate(8deg); }
+}
+@keyframes twinkle {
+  0%, 100% { transform: scale(0.55) rotate(0deg); opacity: 0.35; }
+  50% { transform: scale(1.1) rotate(45deg); opacity: 1; }
+}
+
+/* Get ready: the name belongs to the coloured top; the story starts below it. */
+.scenario-intro {
+  background: var(--paper);
+  overflow: hidden;
+}
+.intro-hero {
+  margin: -28px -28px 24px;
+  padding: 22px 28px 20px;
+  background: var(--theme);
+  text-align: center;
+}
+.scenario-intro .intro-hero .portrait {
+  height: 205px;
+  margin: 0;
+  background: transparent;
+}
+.scenario-intro .intro-hero .portrait svg {
+  width: 230px;
+  height: 205px;
+}
+.intro-name {
+  margin-top: 10px;
+  font: 400 32px/1.1 Fraunces, Georgia, serif;
+  color: var(--ink);
+}
+.intro-name span {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #fffdf8cc;
+  color: var(--theme-dark, #4b5f45);
+  font: 700 14px/1.4 "DM Sans", sans-serif;
+  vertical-align: middle;
+}
+
+/* Practice: "1 / 3" spans both columns, so the child card and the question card line up. */
+.practice-shell > .deck-progress {
+  grid-column: 1 / -1;
+  margin: 0 4px -10px;
+}
+.character-age {
+  text-align: center;
+  font-size: 14px;
+  color: #67705c;
+}
+@media (min-width: 721px) {
+  .character-panel {
+    --pad-y: 19px;
+    --pad-x: 23px;
+    padding: var(--pad-y) var(--pad-x);
+    background: #f5f5ee;
+  }
+  /* Name sits inside the coloured top; the lighter part begins with the age. */
+  .character-hero {
+    margin: calc(var(--pad-y) * -1) calc(var(--pad-x) * -1) 0;
+    padding: var(--pad-y) var(--pad-x) 16px;
+    background: var(--theme);
+  }
+  .character-hero .character-name {
+    margin: 16px 0 0;
+  }
+  .character-age {
+    margin: 12px 0 18px;
+  }
+}
+@media (min-width: 721px) and (max-width: 1230px) {
+  .character-panel {
+    --pad-y: 18px;
+    --pad-x: 18px;
+  }
+}
+@media (min-width: 721px) and (max-width: 950px) {
+  .character-panel {
+    --pad-y: 14px;
+    --pad-x: 14px;
+  }
+}
+@media (max-width: 950px) {
+  .hero-stage {
+    overflow-x: clip;
+  }
+}
+@media (max-width: 720px) {
+  .character-hero {
+    display: contents;
+  }
+  .character-age {
+    text-align: left;
+    margin: 0 0 4px;
+  }
+  .intro-hero {
+    margin: -22px -22px 20px;
+    padding: 18px 22px 16px;
+  }
+  .scenario-intro .intro-hero .portrait {
+    height: 190px;
+  }
+  .intro-name {
+    font-size: 28px;
+  }
+  .hero-stage {
+    min-height: 500px;
+  }
+  .hero-demo {
+    width: min(320px, 84vw);
+  }
+  .demo-character {
+    width: 210px;
+    height: 182px;
+  }
+  .demo-character svg {
+    width: 210px;
+    height: 187px;
+  }
+  .back-card {
+    height: 420px;
+  }
+  .sprig {
+    width: 110px;
+    height: 156px;
+  }
+  .sprig-left {
+    left: -14px;
+  }
+  .sprig-right {
+    right: -14px;
+  }
+  .blob-one {
+    width: 220px;
+    height: 220px;
+  }
+  .sprig-head {
+    width: 40px;
+    height: 57px;
+  }
+  .scenario-card .portrait {
+    height: 230px;
+  }
+}
+/* With motion off, the score change simply stays visible instead of fading. */
+@media (prefers-reduced-motion: reduce) {
+  .meter-delta {
+    opacity: 1;
+  }
+}
+
+/* ---------- Expert review button, centred steps, About and review pages ---------- */
+nav .review-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+nav .review-nav .icon {
+  width: 20px;
+  height: 20px;
+  color: var(--green);
+}
+.how {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 230px));
+  justify-content: center;
+  gap: clamp(20px, 6vw, 80px);
+  text-align: center;
+}
+.how > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.how .how-number {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  margin: 0 0 12px;
+  border-radius: 50%;
+  background: #e3eedb;
+  box-shadow: var(--depth-1);
+}
+.page-title {
+  max-width: 760px;
+  margin-bottom: 30px;
+}
+.page-title h1 {
+  font-size: 47px;
+  margin: 10px 0 12px;
+}
+.page-title .lead {
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0 0 14px;
+}
+.review-status {
+  margin-top: 12px;
+  font-size: 16px;
+}
+.info-grid,
+.review-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+.info-card {
+  position: relative;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--paper);
+  box-shadow: var(--depth-2);
+}
+.info-card h2,
+.info-callout h2 {
+  margin: 12px 0 6px;
+  font-size: 24px;
+}
+.info-card p,
+.info-callout p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.info-icon {
+  width: 52px;
+  height: 52px;
+  padding: 12px;
+  border-radius: 16px;
+  background: #e3eedb;
+  color: var(--green);
+  stroke-width: 1.8;
+}
+.review-num {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  font: 400 34px Fraunces, Georgia, serif;
+  color: #b9cdb0;
+}
+.info-callout {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: #e8f1e1;
+  border: 1px solid #cfe0c6;
+}
+.info-callout > div {
+  flex: 1 1 280px;
+}
+.info-callout h2 {
+  margin-top: 0;
+}
+.look-for {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.footer-links {
+  display: inline-flex;
+  gap: 18px;
+}
+.footer-links button {
+  background: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--green);
+}
+@media (max-width: 720px) {
+  nav #review-nav {
+    display: none;
+  }
+  .how {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .how .how-number {
+    width: 64px;
+    height: 64px;
+  }
+  .how strong {
+    font-size: 16px;
+  }
+  .page-title h1 {
+    font-size: 38px;
+  }
+  .page-title .lead {
+    font-size: 18px;
+  }
+  .info-callout .primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ---------- Living background: a fixed layer of leaves behind every page ---------- */
+.bg-decor {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bg-blob {
+  position: absolute;
+  border-radius: 46% 54% 52% 48% / 50% 44% 56% 50%;
+  animation: blob-morph 18s ease-in-out infinite alternate;
+}
+.bg-blob-a {
+  width: 420px;
+  height: 420px;
+  left: -180px;
+  top: 30%;
+  background: #e6efdd;
+}
+.bg-blob-b {
+  width: 360px;
+  height: 360px;
+  right: -150px;
+  top: -80px;
+  background: #e9f1e1;
+  animation-duration: 15s;
+}
+.bg-blob-c {
+  width: 300px;
+  height: 300px;
+  right: -110px;
+  bottom: -90px;
+  background: #e2ecd8;
+  animation-duration: 21s;
+}
+.fern {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  opacity: 0.55;
+}
+.bg-fern-a {
+  left: -36px;
+  bottom: -40px;
+}
+.bg-fern-b {
+  right: -40px;
+  top: 70px;
+  transform: scale(-1, -1);
+  width: 210px;
+  height: 210px;
+  opacity: 0.4;
+}
+.fern-leaf {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  animation: fern-sway 5s ease-in-out infinite alternate;
+  animation-delay: calc(var(--d, 0s) * -1);
+}
+.bg-decor .sprig {
+  width: 96px;
+  height: 136px;
+  opacity: 0.45;
+}
+.bg-sprig-a {
+  left: 1.5%;
+  top: 22%;
+}
+.bg-sprig-b {
+  right: 2%;
+  bottom: 24%;
+  animation-delay: -2s;
+}
+.bg-decor .twinkle {
+  opacity: 0.6;
+}
+.bg-tw-a {
+  left: 6%;
+  top: 14%;
+}
+.bg-tw-b {
+  right: 7%;
+  top: 46%;
+  width: 16px;
+  height: 16px;
+  animation-delay: -1.2s;
+}
+.bg-tw-c {
+  left: 4%;
+  bottom: 30%;
+  width: 14px;
+  height: 14px;
+  animation-delay: -2s;
+}
+.bg-tw-d {
+  right: 14%;
+  bottom: 8%;
+  width: 18px;
+  height: 18px;
+  animation-delay: -0.6s;
+}
+@keyframes fern-sway {
+  from { transform: rotate(-4deg); }
+  to { transform: rotate(4deg); }
+}
+/* Phones: smaller and fainter, so text over it stays easy to read. */
+@media (max-width: 720px) {
+  .fern {
+    width: 160px;
+    height: 160px;
+    opacity: 0.35;
+  }
+  .bg-fern-b {
+    width: 130px;
+    height: 130px;
+    top: 90px;
+    opacity: 0.25;
+  }
+  .bg-decor .sprig,
+  .bg-tw-b,
+  .bg-tw-d {
+    display: none;
+  }
+  .bg-blob-a {
+    width: 260px;
+    height: 260px;
+    left: -150px;
+  }
+}
+@media (min-width: 951px) {
+  .info-grid,
+  .review-steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

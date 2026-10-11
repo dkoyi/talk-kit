@@ -2,7 +2,7 @@
   "scenarios": [
     {
       "name": "Maya",
-      "age": 13,
+      "age": 14,
       "color": "#e5e9dc",
       "topic": "Unwanted contact",
       "headline": "Someone online is asking for photos.",
@@ -28,7 +28,7 @@
         ]
       },
       "characterIndex": 0,
-      "voice": { "provider": "elevenlabs", "voiceId": "jBpfuIE2acCO8z3wKNLl", "name": "Gigi" },
+      "voice": { "provider": "elevenlabs", "voiceId": "cgSgspJ2msm6clMCkdW9", "name": "Jessica" },
       "categoryId": "contact",
       "background": "Some people online give kids attention or gifts, then ask for secrets and photos. Asking a child to keep secrets is a warning sign.",
       "say": [
@@ -110,11 +110,6 @@
             "Remove photos: Take It Down",
             "If photos were shared. Free and private.",
             "https://takeitdown.ncmec.org/"
-          ],
-          [
-            "Talking tips: Thorn for Parents",
-            "Guides for talking about online safety.",
-            "https://parents.thorn.org/"
           ]
         ]
       }
@@ -147,7 +142,7 @@
         ]
       },
       "characterIndex": 1,
-      "voice": { "provider": "elevenlabs", "voiceId": "SOYHLrjzK2X1ezoPC6cr", "name": "Harry" },
+      "voice": { "provider": "elevenlabs", "voiceId": "TX3LPaxmHKxFdv7VOQHJ", "name": "Liam" },
       "categoryId": "friendship",
       "background": "Online bullying follows kids home. Many don’t tell adults because they fear losing their phone, or that you’ll make it worse.",
       "say": [
@@ -236,7 +231,7 @@
     },
     {
       "name": "Lucía",
-      "age": 8,
+      "age": 12,
       "color": "#e9e2ed",
       "topic": "Upsetting content",
       "headline": "A video scared her. Now she can’t sleep.",
@@ -262,7 +257,7 @@
         ]
       },
       "characterIndex": 2,
-      "voice": { "provider": "elevenlabs", "voiceId": "zrHiDhphv9ZnVXBqCLjz", "name": "Mimi" },
+      "voice": { "provider": "elevenlabs", "voiceId": "FGY2WhTYpPnrIDTdsKH5", "name": "Laura" },
       "categoryId": "feelings",
       "background": "Videos can play on their own and show young kids scary things they never searched for. Kids often blame themselves and may have trouble sleeping.",
       "say": [
@@ -333,22 +328,16 @@
           "<strong>Talk to her pediatrician</strong> if the fear lasts more than a couple of weeks or affects sleep or school.",
           "<strong>Check in</strong> with her again in a few days."
         ],
-        "links": [
-          [
-            "Talking tips: Thorn for Parents",
-            "Guides for talking about online safety.",
-            "https://parents.thorn.org/"
-          ]
-        ]
+        "links": []
       }
     },
     {
       "id": "private-details",
       "characterIndex": 0,
-      "voice": { "provider": "elevenlabs", "voiceId": "jBpfuIE2acCO8z3wKNLl", "name": "Gigi" },
+      "voice": { "provider": "elevenlabs", "voiceId": "cgSgspJ2msm6clMCkdW9", "name": "Jessica" },
       "categoryId": "contact",
       "name": "Maya",
-      "age": 13,
+      "age": 14,
       "color": "#e5e9dc",
       "topic": "Sharing personal information",
       "headline": "Someone is asking where she lives.",
@@ -435,7 +424,7 @@
     {
       "id": "meet-online-friend",
       "characterIndex": 1,
-      "voice": { "provider": "elevenlabs", "voiceId": "SOYHLrjzK2X1ezoPC6cr", "name": "Harry" },
+      "voice": { "provider": "elevenlabs", "voiceId": "TX3LPaxmHKxFdv7VOQHJ", "name": "Liam" },
       "categoryId": "contact",
       "name": "Jayden",
       "age": 11,
@@ -525,10 +514,10 @@
     {
       "id": "left-out",
       "characterIndex": 2,
-      "voice": { "provider": "elevenlabs", "voiceId": "zrHiDhphv9ZnVXBqCLjz", "name": "Mimi" },
+      "voice": { "provider": "elevenlabs", "voiceId": "FGY2WhTYpPnrIDTdsKH5", "name": "Laura" },
       "categoryId": "friendship",
       "name": "Lucía",
-      "age": 8,
+      "age": 12,
       "color": "#e9e2ed",
       "topic": "Feeling excluded",
       "headline": "Everyone else was invited.",
@@ -615,10 +604,10 @@
     {
       "id": "hurtful-joke",
       "characterIndex": 0,
-      "voice": { "provider": "elevenlabs", "voiceId": "jBpfuIE2acCO8z3wKNLl", "name": "Gigi" },
+      "voice": { "provider": "elevenlabs", "voiceId": "cgSgspJ2msm6clMCkdW9", "name": "Jessica" },
       "categoryId": "friendship",
       "name": "Maya",
-      "age": 13,
+      "age": 14,
       "color": "#e5e9dc",
       "topic": "Peer pressure",
       "headline": "The joke went too far.",
@@ -708,7 +697,7 @@
     {
       "id": "body-comparison",
       "characterIndex": 1,
-      "voice": { "provider": "elevenlabs", "voiceId": "SOYHLrjzK2X1ezoPC6cr", "name": "Harry" },
+      "voice": { "provider": "elevenlabs", "voiceId": "TX3LPaxmHKxFdv7VOQHJ", "name": "Liam" },
       "categoryId": "feelings",
       "name": "Jayden",
       "age": 11,
@@ -798,10 +787,10 @@
     {
       "id": "overwhelming-news",
       "characterIndex": 0,
-      "voice": { "provider": "elevenlabs", "voiceId": "jBpfuIE2acCO8z3wKNLl", "name": "Gigi" },
+      "voice": { "provider": "elevenlabs", "voiceId": "cgSgspJ2msm6clMCkdW9", "name": "Jessica" },
       "categoryId": "feelings",
       "name": "Maya",
-      "age": 13,
+      "age": 14,
       "color": "#e5e9dc",
       "topic": "Overwhelming news",
       "headline": "The feed won’t let her switch off.",
@@ -888,7 +877,7 @@
     {
       "id": "end-game",
       "characterIndex": 1,
-      "voice": { "provider": "elevenlabs", "voiceId": "SOYHLrjzK2X1ezoPC6cr", "name": "Harry" },
+      "voice": { "provider": "elevenlabs", "voiceId": "TX3LPaxmHKxFdv7VOQHJ", "name": "Liam" },
       "categoryId": "boundaries",
       "name": "Jayden",
       "age": 11,
@@ -978,10 +967,10 @@
     {
       "id": "in-game-purchase",
       "characterIndex": 2,
-      "voice": { "provider": "elevenlabs", "voiceId": "zrHiDhphv9ZnVXBqCLjz", "name": "Mimi" },
+      "voice": { "provider": "elevenlabs", "voiceId": "FGY2WhTYpPnrIDTdsKH5", "name": "Laura" },
       "categoryId": "boundaries",
       "name": "Lucía",
-      "age": 8,
+      "age": 12,
       "color": "#e9e2ed",
       "topic": "In-game purchases",
       "headline": "She bought something by mistake.",
@@ -1068,10 +1057,10 @@
     {
       "id": "late-night-phone",
       "characterIndex": 0,
-      "voice": { "provider": "elevenlabs", "voiceId": "jBpfuIE2acCO8z3wKNLl", "name": "Gigi" },
+      "voice": { "provider": "elevenlabs", "voiceId": "cgSgspJ2msm6clMCkdW9", "name": "Jessica" },
       "categoryId": "boundaries",
       "name": "Maya",
-      "age": 13,
+      "age": 14,
       "color": "#e5e9dc",
       "topic": "Rest and routines",
       "headline": "The phone keeps her awake.",

@@ -43,7 +43,10 @@
       </button>
       </div>
       <nav aria-label="Main navigation">
-        <button id="how-nav">How it works</button>
+        <button class="review-nav" id="review-nav">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+          Expert review
+        </button>
         <button class="aboutnav" id="about-nav">About</button>
         <button class="urgent" id="now-nav">
           Get help <span aria-hidden="true">↗</span>
@@ -62,6 +65,9 @@
     </main>
     <footer>
       <span><b>The Talk Kit</b></span
+      ><span class="footer-links"
+        ><button id="footer-about">About us</button
+        ><button id="footer-review">Expert review</button></span
       ><span>Practice only · Not emergency help</span>
     </footer>
     <div class="toast" id="toast" role="status" hidden></div>
@@ -70,8 +76,8 @@
     </dialog>
     <noscript
       ><p class="notice">
-        Turn on JavaScript to use the practice cards. For support, visit
-        <a href="https://parents.thorn.org/">Thorn for Parents</a>.
+        Turn on JavaScript to use the practice cards. In danger right now?
+        Call 911 (US) or your local emergency number.
       </p></noscript
     >
   </body>
