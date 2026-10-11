@@ -6417,3 +6417,53 @@ footer > span:last-child {
   font-weight: 700;
   line-height: 1.4;
 }
+
+/* "How this works": a clear, tappable link on the Get ready card and under the meter. */
+.rules-link,
+.character-panel > .text-button.rules-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #e3eedb;
+  color: var(--green);
+  font-size: 17px;
+  font-weight: 700;
+  text-align: left;
+  box-shadow: inset 0 0 0 1.5px #b9d2b6, 0 3px 0 #cfe0c6;
+}
+.rules-link:hover {
+  background: #d6e8cb;
+}
+.scenario-intro .rules-link {
+  margin-top: 16px;
+}
+@media (max-width: 720px) {
+  .rules-link,
+  .character-panel > .text-button.rules-link {
+    font-size: 15px;
+    padding: 6px 14px;
+  }
+}
+/* "What would you say?" reads as the question to answer, a step above the options. */
+.choice-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
+@media (max-width: 720px) {
+  .choice-header h2 {
+    font-size: 19px;
+  }
+}
+.panel.scenario-intro .text-button.rules-link {
+  font-size: 17px;
+  padding: 8px 16px;
+}
+@media (max-width: 720px) {
+  .panel.scenario-intro .text-button.rules-link {
+    font-size: 15px;
+    padding: 6px 14px;
+  }
+}
