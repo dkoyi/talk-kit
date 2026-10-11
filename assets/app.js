@@ -110,41 +110,38 @@ const currentLine = () => {
   return lines.join(" ") || c().open;
 };
 
-// Expression parts per mood. Eyes sit at (95,101) and (135,101); the left eye is drawn,
-// the right is mirrored around x=115.
+// Expression parts per mood. Eyes are soft dark ovals at (95,102) and (135,102); the
+// lids are drawn for the left eye and mirrored (s = -1) for the right.
 const MOODS = {
   sad: {
     brows: ["M84 89Q93 87 102 80", "M128 80Q137 87 146 89"],
-    lid: (x, s) =>
-      `M${x - 12 * s} 88L${x + 12 * s} 88L${x + 12 * s} ${94}L${x - 12 * s} ${101}Z`,
-    lash: (x, s) => `M${x - 10 * s} 100.5L${x + 10 * s} 94.5`,
+    lid: (x, s) => `M${x - 10 * s} 91H${x + 10 * s}V96L${x - 10 * s} 101Z`,
+    lidEdge: (x, s) => `M${x - 8 * s} 100.4L${x + 8 * s} 96.4`,
     mouth:
-      '<path d="M102 136Q115 122 128 136" fill="none" stroke="#6d2f27" stroke-width="3.4" stroke-linecap="round"/><path d="M108 137q7 3 14 0" fill="none" stroke="#6d2f27" stroke-width="1.6" stroke-linecap="round" opacity=".45"/>',
+      '<path d="M102 136Q115 123 128 136" fill="none" stroke="#6d2f27" stroke-width="3.4" stroke-linecap="round"/>',
     blush: 0.18,
   },
   worried: {
     brows: ["M84 86Q93 82 102 81", "M128 81Q137 82 146 86"],
-    lid: (x, s) =>
-      `M${x - 12 * s} 88L${x + 12 * s} 88L${x + 12 * s} 95L${x - 12 * s} 96Z`,
-    lash: (x, s) => `M${x - 10 * s} 95.5Q${x} 93.5 ${x + 10 * s} 95`,
+    lid: (x, s) => `M${x - 10 * s} 91H${x + 10 * s}V97.4L${x - 10 * s} 98Z`,
+    lidEdge: (x, s) => `M${x - 8 * s} 97.9L${x + 8 * s} 97.4`,
     mouth:
       '<path d="M104 131q5.5-5 11-1t11-1" fill="none" stroke="#6d2f27" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>',
     blush: 0.22,
   },
   calm: {
     brows: ["M84 85Q93 79 102 82", "M128 82Q137 79 146 85"],
-    lash: (x, s) => `M${x - 10 * s} 99Q${x} 86 ${x + 10 * s} 99`,
     mouth:
       '<path d="M103 127Q115 137 127 127" fill="none" stroke="#6d2f27" stroke-width="3.2" stroke-linecap="round"/>',
     blush: 0.32,
   },
   happy: {
     brows: ["M83 82Q93 74 103 79", "M127 79Q137 74 147 82"],
-    lash: (x, s) => `M${x - 10 * s} 99Q${x} 85 ${x + 10 * s} 99`,
-    cheek: true,
-    // A wide open grin with a row of top teeth, so the joy is unmistakable.
+    // Smiling, half-moon eyes read as warm and friendly at any size.
+    smileEyes: true,
+    // A wide grin full of teeth, top and bottom, so the joy is unmistakable.
     mouth: (id) =>
-      `<clipPath id="${id}"><path d="M95 122Q115 156 135 122Q115 128 95 122Z"/></clipPath><path d="M95 122Q115 156 135 122Q115 128 95 122Z" fill="#7a2a26"/><g clip-path="url(#${id})"><ellipse cx="115" cy="145" rx="13" ry="7" fill="#ec8a80"/><path d="M93 116h44v13Q115 134 93 129Z" fill="#fff"/><path d="M106 125.6v5M115 126.2v5.6M124 125.6v5" stroke="#e6ddd3" stroke-width="1"/></g><path d="M95 122Q115 156 135 122Q115 128 95 122Z" fill="none" stroke="#6d2f27" stroke-width="2.4" stroke-linejoin="round"/>`,
+      `<clipPath id="${id}"><path d="M95 122Q115 154 135 122Q115 127 95 122Z"/></clipPath><path d="M95 122Q115 154 135 122Q115 127 95 122Z" fill="#fffdf9"/><g clip-path="url(#${id})" fill="none"><path d="M93 131Q115 137 137 131" stroke="#cdbfb2" stroke-width="1.6"/><path d="M105 118v28M115 118v30M125 118v28" stroke="#e6ddd3" stroke-width="1.2"/></g><path d="M95 122Q115 154 135 122Q115 127 95 122Z" fill="none" stroke="#6d2f27" stroke-width="2.4" stroke-linejoin="round"/>`,
     blush: 0.5,
   },
 };
@@ -187,15 +184,13 @@ const childArt = (i, mood = "worried") => {
   const h = HAIR[i];
   const m = MOODS[mood];
   const id = `tk-mouth-${++artSeq}`;
-  const eye = (x, s) =>
-    `<ellipse cx="${x}" cy="101" rx="9.5" ry="${mood === "sad" ? 10 : 11}" fill="#fff" stroke="${k.shade}" stroke-width="1"/>`;
-  const iris = (x) =>
-    `<circle cx="${x}" cy="102" r="6.3" fill="${k.iris}"/><circle cx="${x}" cy="102" r="3.2" fill="#1b1512"/><circle cx="${x + 2.2}" cy="99.4" r="2.1" fill="#fff"/><circle cx="${x - 2}" cy="104.6" r="1" fill="#fff" opacity=".8"/>`;
+  const eye = (x) =>
+    m.smileEyes
+      ? `<path d="M${x - 8} 104Q${x} 93.5 ${x + 8} 104" fill="none" stroke="#2b1d16" stroke-width="3.6" stroke-linecap="round"/>`
+      : `<ellipse cx="${x}" cy="102" rx="6.8" ry="8.2" fill="#2b1d16"/><ellipse cx="${x}" cy="104" rx="4.4" ry="5" fill="${k.iris}" opacity=".6"/><circle cx="${x + 2.3}" cy="${m.lid ? 101 : 98.8}" r="2.6" fill="#fff"/><circle cx="${x - 2.1}" cy="105.8" r="1.2" fill="#fff" opacity=".85"/>`;
   const lid = (x, s) =>
-    m.lid ? `<path d="${m.lid(x, s)}" fill="${k.skin}"/>` : "";
-  const cheek = (x) =>
-    m.cheek
-      ? `<ellipse cx="${x}" cy="113" rx="14" ry="7" fill="${k.skin}"/>`
+    m.lid
+      ? `<path d="${m.lid(x, s)}" fill="${k.skin}"/><path d="${m.lidEdge(x, s)}" fill="none" stroke="${k.shade}" stroke-width="1.8" stroke-linecap="round"/>`
       : "";
   const shirtDetail = [
     `<path d="M98 152Q115 170 132 152" fill="none" stroke="#5e7358" stroke-width="5" stroke-linecap="round"/><path d="M106 162v16M124 162v16" stroke="#eef2e6" stroke-width="2.4" stroke-linecap="round"/><circle cx="106" cy="179" r="2.2" fill="#eef2e6"/><circle cx="124" cy="179" r="2.2" fill="#eef2e6"/>`,
@@ -208,7 +203,7 @@ const childArt = (i, mood = "worried") => {
   const curls = (h.curls || [])
     .map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${k.hair}"/>`)
     .join("");
-  return `<svg class="child mood-${mood}" viewBox="0 0 230 205" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" role="img" aria-label="${["Maya", "Jayden", "Lucía"][i]}: illustrative ${mood} expression" data-mood="${mood}"><circle cx="115" cy="100" r="83" fill="#fff" opacity=".35"/><g class="c-body"><path d="M52 205C52 168 80 151 115 151S178 168 178 205Z" fill="${k.shirt}"/><path d="M103 128h24v22q-12 9-24 0Z" fill="${k.shade}"/>${shirtDetail}</g><g class="c-head">${pigtails}${h.back ? `<path d="${h.back}" fill="${k.hair}"/>` : ""}<circle cx="68" cy="106" r="9" fill="${k.skin}" stroke="${k.shade}" stroke-width="1.5"/><circle cx="162" cy="106" r="9" fill="${k.skin}" stroke="${k.shade}" stroke-width="1.5"/><path d="M68 98C68 66 90 52 115 52S162 66 162 98C162 128 144 150 115 150S68 128 68 98Z" fill="${k.skin}" stroke="${k.shade}" stroke-width="1.6"/>${curls}<path d="${h.front}" fill="${k.hair}"/><path d="${h.shine}" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".16"/><path class="c-brows" d="${m.brows.join("")}" stroke="${k.hair}" stroke-width="4.5" fill="none" stroke-linecap="round"/><g class="c-blink">${eye(95)}${eye(135)}<g class="c-eyes">${iris(95)}${iris(135)}</g>${lid(95, 1)}${lid(135, -1)}${cheek(95)}${cheek(135)}<path d="${m.lash(95, 1)}${m.lash(135, -1)}" fill="none" stroke="#2a1f1a" stroke-width="2.6" stroke-linecap="round"/></g><ellipse class="c-blush" cx="82" cy="121" rx="9" ry="5" fill="#e0806a" opacity="${m.blush}"/><ellipse class="c-blush" cx="148" cy="121" rx="9" ry="5" fill="#e0806a" opacity="${m.blush}"/><path d="M112 113q-1.5 5 2 6.5q2.5 .8 4.5-1" stroke="${k.shade}" stroke-width="2.2" fill="none" stroke-linecap="round"/><g class="c-mouth">${typeof m.mouth === "function" ? m.mouth(id) : m.mouth}</g><ellipse class="c-mouth-open" cx="115" cy="130" rx="7" ry="5.5" fill="#7a2a26"/><path class="c-tear" d="M88 112q-4 8 0 11q4-3 0-11" fill="#7fb8dc"/><path class="c-tear c-tear-2" d="M142 112q-4 8 0 11q4-3 0-11" fill="#7fb8dc"/></g></svg>`;
+  return `<svg class="child mood-${mood}" viewBox="0 0 230 205" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" role="img" aria-label="${["Maya", "Jayden", "Lucía"][i]}: illustrative ${mood} expression" data-mood="${mood}"><circle cx="115" cy="100" r="83" fill="#fff" opacity=".35"/><g class="c-body"><path d="M52 205C52 168 80 151 115 151S178 168 178 205Z" fill="${k.shirt}"/><path d="M103 128h24v22q-12 9-24 0Z" fill="${k.shade}"/>${shirtDetail}</g><g class="c-head">${pigtails}${h.back ? `<path d="${h.back}" fill="${k.hair}"/>` : ""}<circle cx="68" cy="106" r="9" fill="${k.skin}" stroke="${k.shade}" stroke-width="1.5"/><circle cx="162" cy="106" r="9" fill="${k.skin}" stroke="${k.shade}" stroke-width="1.5"/><path d="M68 98C68 66 90 52 115 52S162 66 162 98C162 128 144 150 115 150S68 128 68 98Z" fill="${k.skin}" stroke="${k.shade}" stroke-width="1.6"/>${curls}<path d="${h.front}" fill="${k.hair}"/><path d="${h.shine}" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".16"/><path class="c-brows" d="${m.brows.join("")}" stroke="${k.hair}" stroke-width="4.5" fill="none" stroke-linecap="round"/><g class="c-blink"><g class="c-eyes">${eye(95)}${eye(135)}</g>${lid(95, 1)}${lid(135, -1)}</g><ellipse class="c-blush" cx="82" cy="121" rx="9" ry="5" fill="#e0806a" opacity="${m.blush}"/><ellipse class="c-blush" cx="148" cy="121" rx="9" ry="5" fill="#e0806a" opacity="${m.blush}"/><path d="M112 113q-1.5 5 2 6.5q2.5 .8 4.5-1" stroke="${k.shade}" stroke-width="2.2" fill="none" stroke-linecap="round"/><g class="c-mouth">${typeof m.mouth === "function" ? m.mouth(id) : m.mouth}</g><ellipse class="c-mouth-open" cx="115" cy="130" rx="7" ry="5.5" fill="#7a2a26"/><path class="c-tear" d="M88 112q-4 8 0 11q4-3 0-11" fill="#7fb8dc"/><path class="c-tear c-tear-2" d="M142 112q-4 8 0 11q4-3 0-11" fill="#7fb8dc"/></g></svg>`;
 };
 // Decorative green sprigs and sparkles that sway and twinkle around the page.
 const LEAF = "M0 0C9-12 27-13 38 0C27 13 9 12 0 0Z";
@@ -229,6 +224,22 @@ const sprig = (cls, flip = false) =>
     .join("")}</svg>`;
 const twinkle = (cls) =>
   `<svg class="twinkle ${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z" fill="currentColor"/></svg>`;
+// Big leaves fanning out of a corner, for the page background.
+const fern = (cls) =>
+  `<svg class="fern ${cls}" viewBox="0 0 220 220" aria-hidden="true">${[
+    [-14, "#2f6b52", 0],
+    [-40, "#4f8f68", 0.7],
+    [-66, "#6fa27a", 1.4],
+    [-88, "#8fbf86", 2.1],
+  ]
+    .map(
+      ([a, f, d]) =>
+        `<g transform="translate(14 206) rotate(${a})"><g class="fern-leaf" style="--d:${d}s"><path d="M0 0C40-30 128-34 176 0C128 34 40 30 0 0Z" fill="${f}"/><path d="M8 0H160" stroke="#fffdf8" stroke-width="2" stroke-linecap="round" opacity=".35"/></g></g>`,
+    )
+    .join("")}</svg>`;
+// A fixed layer behind everything: it never takes space, scrolls or catches taps.
+const backdrop = () =>
+  `<div class="bg-decor" aria-hidden="true"><span class="bg-blob bg-blob-a"></span><span class="bg-blob bg-blob-b"></span><span class="bg-blob bg-blob-c"></span>${fern("bg-fern-a")}${fern("bg-fern-b")}${sprig("bg-sprig-a")}${sprig("bg-sprig-b", true)}${twinkle("bg-tw-a")}${twinkle("bg-tw-b")}${twinkle("bg-tw-c")}${twinkle("bg-tw-d")}</div>`;
 function step(n) {
   return `<ol class="steps" aria-label="Practice progress">${["Choose", "Prepare", "Practice", "Reflect"].map((v, i) => `<li ${i === n ? 'aria-current="step"' : ""} class="${i === n ? "active" : ""} ${i < n ? "complete" : ""}"><span>${i < n ? "✓" : i + 1}</span>${v}</li>`).join("")}</ol>`;
 }
@@ -290,6 +301,7 @@ const BACK = {
   reflect: "practice",
   plan: "reflect",
   about: "home",
+  review: "home",
 };
 function reviewBadge() {
   return '<button class="review-badge" data-review><span aria-hidden="true">◇</span> Expert review pending <span aria-hidden="true">↗</span></button>';
@@ -301,14 +313,14 @@ const CATEGORY_ICONS = {
   boundaries: "clock",
 };
 function home() {
-  return `<section class="hero new-hero"><div class="hero-copy"><h1>Practice the<br><em>hard talks.</em></h1><p>Kids face tricky things online. Practice what to say before it happens.</p><div class="hero-actions"><button class="primary" id="start">Let’s start <span aria-hidden="true">↓</span></button><button class="text-button" id="how-button">How it works <span aria-hidden="true">↓</span></button></div><div class="privacy">${icon("lock")} Free · No sign-up</div></div><div class="hero-stage" aria-label="An example practice card"><span class="blob blob-one" aria-hidden="true"></span><span class="blob blob-two" aria-hidden="true"></span>${sprig("sprig-left")}${sprig("sprig-right", true)}${twinkle("tw-one")}${twinkle("tw-two")}${twinkle("tw-three")}<span class="floating-tag top-tag">${icon("happy")} Safe to try</span><span class="spark spark-one" aria-hidden="true">✳</span><div class="back-card one"></div><div class="back-card two"></div><div class="hero-demo"><div class="demo-top"><span class="pill">MAYA, 13</span></div><div class="demo-character">${childArt(0, "happy")}</div><blockquote>“Can I tell you<br>something?”</blockquote><div class="demo-response"><span aria-hidden="true">♡</span> “Of course. I’m listening.”</div></div><span class="floating-tag bottom-tag"><span aria-hidden="true">↺</span> Try again anytime</span></div></section><section id="situations" class="situation-section"><div class="section-head"><div><h2>Pick a moment</h2></div>${sprig("sprig-head")}${twinkle("tw-head")}</div><div class="category-tabs" role="group" aria-label="Conversation topics">${content.categories.map((cat) => `<button data-category="${esc(cat.id)}" aria-pressed="${cat.id === activeCategory}">${icon(CATEGORY_ICONS[cat.id] || "chat", "cat-icon")} ${esc(cat.label)}</button>`).join("")}</div><div class="cards">${scenarios
+  return `<section class="hero new-hero"><div class="hero-copy"><h1>Practice the<br><em>hard talks.</em></h1><p>Kids face tricky things online. Practice what to say before it happens.</p><div class="hero-actions"><button class="primary" id="start">Let’s start <span aria-hidden="true">↓</span></button><button class="text-button" id="how-button">How it works <span aria-hidden="true">↓</span></button></div><div class="privacy">${icon("lock")} Free · No sign-up</div></div><div class="hero-stage" aria-label="An example practice card"><span class="blob blob-one" aria-hidden="true"></span><span class="blob blob-two" aria-hidden="true"></span>${sprig("sprig-left")}${sprig("sprig-right", true)}${twinkle("tw-one")}${twinkle("tw-two")}${twinkle("tw-three")}<span class="floating-tag top-tag">${icon("happy")} Safe to try</span><span class="spark spark-one" aria-hidden="true">✳</span><div class="back-card one"></div><div class="back-card two"></div><div class="hero-demo"><div class="demo-top"><span class="pill">MAYA, 14</span></div><div class="demo-character">${childArt(0, "happy")}</div><blockquote>“Can I tell you<br>something?”</blockquote><div class="demo-response"><span aria-hidden="true">♡</span> “Of course. I’m listening.”</div></div><span class="floating-tag bottom-tag"><span aria-hidden="true">↺</span> Try again anytime</span></div></section><section id="situations" class="situation-section"><div class="section-head"><div><h2>Pick a moment</h2></div>${sprig("sprig-head")}${twinkle("tw-head")}</div><div class="category-tabs" role="group" aria-label="Conversation topics">${content.categories.map((cat) => `<button data-category="${esc(cat.id)}" aria-pressed="${cat.id === activeCategory}">${icon(CATEGORY_ICONS[cat.id] || "chat", "cat-icon")} ${esc(cat.label)}</button>`).join("")}</div><div class="cards">${scenarios
     .map((s, i) => ({ s, i }))
     .filter(({ s }) => s.categoryId === activeCategory)
     .map(
       ({ s, i }) =>
         `<article class="card scenario-card theme-${s.characterIndex}"><div class="portrait"><span class="topic">${esc(s.topic)}</span>${twinkle("tw-card")}${childArt(s.characterIndex)}</div><div class="card-content"><div class="character-meta"><span>${esc(s.name)} <span class="age">· ${s.age}</span></span></div><h3>${esc(s.headline)}</h3><button class="deck-button" data-select="${i}">Start <span aria-hidden="true">↗</span></button></div></article>`,
     )
-    .join("")}</div><div class="review-note">${reviewBadge()}</div></section><section class="how" id="how"><div><h2>How it works</h2></div>${[
+    .join("")}</div></section><section class="how" id="how" aria-label="How it works">${[
     ["eye", "Pick a moment"],
     ["chat", "Choose what to say"],
     ["happy", "See how they feel"],
@@ -435,7 +447,34 @@ function resources() {
   return `<h1 style="font-size:47px">Get <em>help.</em></h1><div class="summary"><section class="panel"><h3>${icon("chat")} What to say</h3><div class="script">“Thank you for telling me. You’re not in trouble. I’m here. What do you need right now?”</div><div class="notice">This site can’t send reports or call anyone. The links open other websites.</div></section><section><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.missingkids.org/gethelpnow/cybertipline"><strong>NCMEC CyberTipline ↗</strong><span>Report online sexual exploitation of a child.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.stopbullying.gov/cyberbullying/what-is-it"><strong>StopBullying.gov ↗</strong><span>Help with cyberbullying.</span></a><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
 }
 function about() {
-  return `<h1 style="font-size:47px">About <em>this site.</em></h1><div class="summary"><section class="panel about-list"><p>${icon("book")} Made-up stories, for practice only.</p><p>${icon("lock")} No sign-up. Nothing is saved or sent.</p><p>${icon("happy")} The face and meter are a story, not a grade.</p><p>${icon("pencil")} Typed replies use a simple word check, not AI.</p></section><section class="panel about-list"><p>${icon("shield")} Not therapy or emergency help.</p><button class="review-badge" data-review>◇ Expert review pending ↗</button></section></div>`;
+  return `<div class="page-title"><h1>About <em>us.</em></h1><p class="lead">We’re the Talk Kit team. Kids meet tricky things online: strangers, bullying, scary videos. We want every parent and caregiver to feel ready to talk about them, so kids keep coming to you.</p></div><div class="info-grid">${[
+    ["heart", "Our goal", "Help you stay calm, listen and keep your child talking when something goes wrong online."],
+    ["chat", "How it works", "Pick a moment, choose what to say, and see how the child might feel. Inspired by the CDC’s Free Mind “Real Talk” cards."],
+    ["people", "Who it’s for", "Parents, grandparents and caregivers. No tech skills needed."],
+    ["book", "Made-up stories", "Every child and story is made up. The feedback is written by people, not AI."],
+    ["lock", "Private", "No sign-up. Nothing you do here is saved or sent."],
+    ["alert", "Not therapy", "Practice only. Not therapy, a test or emergency help."],
+  ]
+    .map(
+      ([n, t, d]) =>
+        `<section class="info-card">${icon(n, "info-icon")}<h2>${t}</h2><p>${d}</p></section>`,
+    )
+    .join("")}</div><section class="panel info-callout">${icon("shield", "info-icon")}<div><h2>Expert review</h2><p>We’re asking licensed professionals who work with children to check every story.</p></div><button class="primary" id="about-review">See how review works <span aria-hidden="true">→</span></button></section>`;
+}
+// The expert review process. Honest about status: nothing is signed off yet.
+function review() {
+  return `<div class="page-title"><h1>Expert <em>review.</em></h1><p class="lead">Licensed professionals who work with children and families check our stories, answers and feedback.</p><span class="status-pending">◇ In progress</span><p class="muted review-status">Reviews are still underway. No reviewer credentials or approvals have been verified yet, so treat every story as practice only.</p></div><ol class="review-steps">${[
+    ["shield", "Check the license", "We confirm each reviewer is a licensed therapist, psychologist, counselor or social worker, and that the license is active."],
+    ["book", "Read every story", "They go through each child’s lines, every answer choice and all the feedback."],
+    ["check", "Check the advice", "Is it safe, kind, right for the child’s age and in line with current child-safety guidance?"],
+    ["pencil", "Fix what they flag", "We rewrite anything they question, then they check it again."],
+    ["calendar", "Show who reviewed it", "Each story will show the reviewer’s name, license and date once it’s signed off."],
+  ]
+    .map(
+      ([n, t, d], i) =>
+        `<li class="info-card"><span class="review-num">${i + 1}</span>${icon(n, "info-icon")}<h2>${t}</h2><p>${d}</p></li>`,
+    )
+    .join("")}</ol><section class="panel info-callout"><div><h2>What reviewers look for</h2><div class="look-for">${["Safe advice", "No blame", "Right for the age", "Kind words", "Clear next steps"].map((x) => `<span class="tag">✓ ${x}</span>`).join("")}</div></div></section>`;
 }
 function render() {
   stopVoice();
@@ -450,6 +489,8 @@ function render() {
             ? reflect()
             : stage === "about"
               ? about()
+              : stage === "review"
+                ? review()
               : stage === "plan"
                 ? plan()
                 : resources());
@@ -458,7 +499,7 @@ function render() {
   const inside = stage !== "home";
   $("#nav-back").hidden = !inside;
   $("#nav-home").hidden = !inside;
-  $("#how-nav").hidden = inside;
+  $("#review-nav").hidden = inside;
   $("#about-nav").hidden = inside;
   document.body.classList.toggle("inside", inside);
   $("#pause-session").hidden = stage !== "practice";
@@ -538,6 +579,7 @@ function bind() {
   });
   on("#new", () => go("home", "#situations"));
   on("#resources-button", () => go("resources"));
+  on("#about-review", () => go("review"));
   on("#plan-button", () => go("plan"));
 }
 const motion = () =>
@@ -732,13 +774,11 @@ $("#nav-back").onclick = () => {
   if (!content) return;
   const to = stage === "resources" ? returnStage : BACK[stage] || "home";
   // Leaving a scenario lands back on the scenario cards, not the top of the page.
-  go(to, to === "home" && stage !== "about" ? "#situations" : null);
+  go(to, to === "home" && !["about", "review"].includes(stage) ? "#situations" : null);
 };
-$("#how-nav").onclick = () => {
-  if (!content) return;
-  if (stage !== "home") go("home");
-  $("#how").scrollIntoView({ behavior: motion() });
-};
+$("#review-nav").onclick = () => content && go("review");
+$("#footer-review").onclick = () => content && go("review");
+$("#footer-about").onclick = () => content && go("about");
 $("#about-nav").onclick = () => content && go("about");
 $("#now-nav").onclick = () => {
   if (content) go("resources");
@@ -780,6 +820,7 @@ async function init() {
     hideSplash();
   }
 }
+document.body.insertAdjacentHTML("afterbegin", backdrop());
 decorate(document.body);
 init();
 

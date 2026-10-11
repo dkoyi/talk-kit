@@ -113,12 +113,11 @@ test("review status, rule explanation, keyboard dialog behavior", async ({
   page,
 }) => {
   await page.goto("/");
-  await page.locator("[data-review]").click();
-  await expect(page.locator("#modal-content")).toContainText(
+  await page.locator("#review-nav").click();
+  await expect(page.locator("main")).toHaveAttribute("data-stage", "review");
+  await expect(page.locator("main")).toContainText(
     "No reviewer credentials or approvals have been verified",
   );
-  await page.keyboard.press("Escape");
-  await expect(page.locator("[data-review]")).toBeFocused();
   await enter(page);
   await page.locator("[data-rules]").click();
   await expect(page.locator(".rule-list")).toContainText("+18");
@@ -319,7 +318,7 @@ test("Back and Home are visible on every screen except home", async ({
   await expect(page.locator("#nav-home")).toBeHidden();
   await expect(page.locator("header")).toHaveCount(1);
   await page.locator('[data-select="0"]').click();
-  await expect(page.locator("#how-nav")).toBeHidden();
+  await expect(page.locator("#review-nav")).toBeHidden();
   await expect(page.locator("#nav-back")).toBeVisible();
   await expect(page.locator("#nav-home")).toBeVisible();
   await page.locator("#begin").click();
