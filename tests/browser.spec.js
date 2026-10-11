@@ -34,7 +34,7 @@ for (const [index, scenario] of content.scenarios.entries()) {
     await expect(page.locator(".turn")).toHaveCount(3);
     await expect(page.locator("main")).toHaveAttribute("data-stage", "reflect");
     await page.locator("#resources-button").click();
-    await expect(page.locator("a.resource")).toHaveCount(3);
+    await expect(page.locator("a.resource")).toHaveCount(2);
     expect(errors).toEqual([]);
   });
 }

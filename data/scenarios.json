@@ -110,11 +110,6 @@
             "Remove photos: Take It Down",
             "If photos were shared. Free and private.",
             "https://takeitdown.ncmec.org/"
-          ],
-          [
-            "Talking tips: Thorn for Parents",
-            "Guides for talking about online safety.",
-            "https://parents.thorn.org/"
           ]
         ]
       }
@@ -333,13 +328,7 @@
           "<strong>Talk to her pediatrician</strong> if the fear lasts more than a couple of weeks or affects sleep or school.",
           "<strong>Check in</strong> with her again in a few days."
         ],
-        "links": [
-          [
-            "Talking tips: Thorn for Parents",
-            "Guides for talking about online safety.",
-            "https://parents.thorn.org/"
-          ]
-        ]
+        "links": []
       }
     },
     {
