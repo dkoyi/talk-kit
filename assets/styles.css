@@ -5925,3 +5925,264 @@ dialog.calm-fullscreen #modal-content {
   transform: translateY(2px);
   box-shadow: 0 1px 0 rgba(18, 38, 32, 0.35);
 }
+
+/* ---------- Next steps: the child peeks out from behind the steps card ---------- */
+/* The card is a wall. The child stands behind its left edge and leans out, so the head,
+   neck and a shoulder show; the shirt fades out below as if it continues behind the card. */
+.peek-wrap {
+  position: relative;
+}
+.peek-wrap > .panel {
+  position: relative;
+  z-index: 1;
+}
+.peek {
+  position: absolute;
+  z-index: 0;
+  width: 200px;
+  height: 178px;
+  top: 30px;
+  left: -90px;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 96%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 96%);
+  animation: peek-out-left 0.8s cubic-bezier(0.3, 1.5, 0.5, 1) 0.4s both;
+}
+/* The whole child leans from the hips, so shoulder, neck and head move together. */
+.peek-kid {
+  width: 100%;
+  height: 100%;
+  transform-origin: 100px 178px;
+  transform: rotate(-27deg);
+  animation: peek-lean 3s ease-in-out 1.2s infinite alternate;
+  filter: drop-shadow(-6px 8px 10px #1f3a3030);
+}
+.peek-kid > svg.child {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.peek svg.child > circle:first-child {
+  display: none;
+}
+.peek-hands {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(2px 3px 3px #1f3a3040);
+  animation: peek-hands-in 0.45s ease-out 0.9s both;
+}
+.peek-hands svg {
+  display: block;
+  overflow: visible;
+}
+.peek-hands .hands-side {
+  width: 48px;
+  height: 150px;
+}
+.peek-hands .hands-top {
+  display: none;
+  width: 150px;
+  height: 46px;
+}
+@media (min-width: 951px) {
+  /* Room on the left of the card for the child to lean into. */
+  .peek-wrap {
+    margin-left: 110px;
+  }
+  .peek-hands {
+    top: 96px;
+    left: -20px;
+  }
+}
+/* Phones and tablets: the card is full width, so the child pops up over its top-left edge. */
+@media (max-width: 950px) {
+  .peek-wrap {
+    margin-top: 64px;
+  }
+  .peek {
+    width: 150px;
+    height: 134px;
+    top: -88px;
+    left: 20px;
+    -webkit-mask-image: none;
+    mask-image: none;
+    animation-name: peek-out-top;
+  }
+  .peek-kid {
+    transform-origin: 75px 120px;
+    transform: rotate(0deg);
+    animation-name: peek-sway-top;
+  }
+  .peek-hands {
+    top: -28px;
+    left: 20px;
+  }
+  .peek-hands .hands-side {
+    display: none;
+  }
+  .peek-hands .hands-top {
+    display: block;
+  }
+}
+@keyframes peek-out-left {
+  from { transform: translateX(90px); }
+  to { transform: none; }
+}
+@keyframes peek-out-top {
+  from { transform: translateY(80px); }
+  to { transform: none; }
+}
+@keyframes peek-lean {
+  from { transform: rotate(-22deg); }
+  to { transform: rotate(-31deg); }
+}
+@keyframes peek-sway-top {
+  from { transform: rotate(-6deg); }
+  to { transform: rotate(6deg); }
+}
+@keyframes peek-hands-in {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Footer: the "About us · Expert review" links sit in the true centre on every page. */
+footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+}
+footer > span:last-child {
+  justify-self: end;
+  text-align: right;
+}
+.footer-links {
+  justify-content: center;
+}
+@media (max-width: 720px) {
+  footer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: 6px;
+  }
+  footer > span:last-child {
+    justify-self: center;
+    text-align: center;
+  }
+}
+
+/* Peek, refined: lean further out so the face is clear, a longer shirt behind the card,
+   and hands closer together with the top one at chin and chest height. */
+.peek {
+  height: 280px;
+  left: -100px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+}
+.peek-kid {
+  position: relative;
+  height: 178px;
+  transform: rotate(-30deg);
+}
+/* The torso continues below the drawing, so the lean never shows a cut-off edge. */
+.peek-kid::after {
+  content: "";
+  position: absolute;
+  left: 45px;
+  top: 172px;
+  width: 110px;
+  height: 120px;
+  border-radius: 0 0 18px 18px;
+  background: var(--shirt);
+}
+.peek-hands .hands-side {
+  height: 94px;
+}
+@keyframes peek-lean {
+  from { transform: rotate(-26deg); }
+  to { transform: rotate(-34deg); }
+}
+@media (min-width: 951px) {
+  .peek-hands {
+    top: 160px;
+  }
+}
+@media (max-width: 950px) {
+  .peek {
+    height: 134px;
+    left: 20px;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .peek-kid {
+    height: 134px;
+    transform: rotate(0deg);
+  }
+  .peek-kid::after {
+    left: 34px;
+    top: 128px;
+    width: 82px;
+    height: 60px;
+  }
+}
+
+/* Peek order: the hands grip the edge first, then the child slides out, then the sway begins. */
+.peek-hands {
+  animation: peek-hands-grip 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) 0.3s both;
+}
+.peek {
+  animation-delay: 0.8s;
+}
+.peek-kid {
+  animation-delay: 1.7s;
+}
+@keyframes peek-hands-grip {
+  from { opacity: 0; transform: translateX(14px); }
+  to { opacity: 1; transform: none; }
+}
+@media (max-width: 950px) {
+  .peek-hands {
+    animation-name: peek-hands-grip-top;
+  }
+}
+@keyframes peek-hands-grip-top {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+/* Start fully hidden behind the card, so only the hands show at first. */
+@keyframes peek-out-left {
+  from { transform: translateX(130px); }
+  to { transform: none; }
+}
+@keyframes peek-out-top {
+  from { transform: translateY(110px); }
+  to { transform: none; }
+}
+/* A gentler lean (about 20 degrees) with the child standing a little further from the card. */
+@media (min-width: 951px) {
+  .peek-wrap {
+    margin-left: 124px;
+  }
+  .peek {
+    left: -122px;
+  }
+  .peek-kid {
+    transform: rotate(-20deg);
+  }
+}
+@keyframes peek-lean {
+  from { transform: rotate(-16deg); }
+  to { transform: rotate(-24deg); }
+}
+/* Lean a little further out from the card (about 26 degrees). */
+@media (min-width: 951px) {
+  .peek-kid {
+    transform: rotate(-26deg);
+  }
+}
+@keyframes peek-lean {
+  from { transform: rotate(-22deg); }
+  to { transform: rotate(-30deg); }
+}

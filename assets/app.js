@@ -156,9 +156,9 @@ const MOODS = {
 };
 // Per-character look: skin, shade, shirt, hair, iris.
 const KIDS = [
-  { skin: "#c58d67", shade: "#a8714f", shirt: "#75896e", hair: "#453b32", iris: "#5b3b25" },
-  { skin: "#956547", shade: "#7a4e36", shirt: "#c29a72", hair: "#303d39", iris: "#3a271b" },
-  { skin: "#e1b492", shade: "#c9946f", shirt: "#9b8ea5", hair: "#615043", iris: "#6b4a2b" },
+  { skin: "#c58d67", shade: "#a8714f", shirt: "#75896e", hair: "#453b32", iris: "#5b3b25", she: "she", her: "her" },
+  { skin: "#956547", shade: "#7a4e36", shirt: "#c29a72", hair: "#303d39", iris: "#3a271b", she: "he", her: "him" },
+  { skin: "#e1b492", shade: "#c9946f", shirt: "#9b8ea5", hair: "#615043", iris: "#6b4a2b", she: "she", her: "her" },
 ];
 const HAIR = [
   // Maya: shoulder-length hair with a side-swept fringe.
@@ -906,13 +906,44 @@ function compare() {
   if (history.length < 2) return "";
   return `<p class="tk-compare">${icon("sprout")}<span>First try: ${history[0]}</span><span aria-hidden="true">·</span><strong>This time: ${history.at(-1)}</strong></p>`;
 }
+// The child's hands gripping the edge of the steps card. One hand is drawn once, with
+// its fingers pointing along +x (they curl over the edge onto the card) and its thumb
+// pointing along +y. Each hand is then placed on its own and mirrored, so the two are
+// a true left/right pair with both thumbs turned inward, toward each other.
+function peekHand(skin, shade) {
+  const paint = `fill="${skin}" stroke="${shade}" stroke-width="1.3" stroke-linejoin="round"`;
+  // Each finger bends at the knuckle: a short base over the edge, then the tip folded
+  // down onto the card. Drawn little finger first, so each tip rests over the one below.
+  const finger = ([y, base, tip, bend]) =>
+    `<g transform="translate(20 ${y})"><rect x="0" y="0" width="${base + 3}" height="6.8" rx="3.4" ${paint}/><rect x="${base - 1}" y="0" width="${tip}" height="6.6" rx="3.3" transform="rotate(${bend} ${base} 3.4)" ${paint}/><path d="M${base} 1.4v4" stroke="${shade}" stroke-width="1" stroke-linecap="round" opacity=".55"/></g>`;
+  return `<ellipse cx="16" cy="32" rx="7.2" ry="4.4" transform="rotate(34 16 32)" ${paint}/><rect x="3" y="1" width="23" height="29" rx="11" ${paint}/>${[
+    [23, 5, 6, 42],
+    [16, 6.5, 7.5, 38],
+    [9, 7, 8, 36],
+    [2, 6.5, 7, 34],
+  ]
+    .map(finger)
+    .join("")}<path d="M8 9q4-2 8 0M8 16q4-2 8 0M8 23q4-2 8 0" fill="none" stroke="${shade}" stroke-width="1" stroke-linecap="round" opacity=".4"/>`;
+}
+function peekHands(i) {
+  const { skin, shade } = KIDS[i];
+  const hand = peekHand(skin, shade);
+  // Side (desktop): the card's left edge is at x=20; the upper hand's thumb points down,
+  // the lower hand is flipped top-to-bottom so its thumb points up.
+  const side = `<svg class="hands-side" viewBox="0 0 48 94"><g transform="translate(-2 0)">${hand}</g><g transform="translate(-2 94) scale(1 -1)">${hand}</g></svg>`;
+  // Top (phones): the card's top edge is at y=28; fingers hang down over it, and the two
+  // hands sit either side of the head with their thumbs pointing toward it.
+  const top = `<svg class="hands-top" viewBox="0 0 150 46"><g transform="rotate(90) scale(1 -1)">${hand}</g><g transform="translate(150 0) rotate(90)">${hand}</g></svg>`;
+  return `<div class="peek-hands" aria-hidden="true">${side}${top}</div>`;
+}
 function plan() {
+  const { she, her } = KIDS[c().characterIndex];
   const pl = c().plan || {
     steps: [
-      "Thank them for telling you, and make room to listen.",
-      "Ask what support they would like, while explaining any necessary safety steps.",
-      "Agree on one manageable next step together.",
-      "Check in again. Seek qualified support if distress persists or affects daily life.",
+      `<strong>Thank ${c().name}</strong> for telling you, and make room to listen.`,
+      `<strong>Ask what support ${she} would like</strong>, while explaining any safety steps you need to take.`,
+      "<strong>Agree on one small next step</strong> together.",
+      `<strong>Check in with ${her} again</strong> in a few days. Seek qualified support if the worry lasts or affects daily life.`,
     ],
     links: [
       [
@@ -922,5 +953,5 @@ function plan() {
       ],
     ],
   };
-  return `${step(3)}<h1 style="font-size:47px">Next <em>steps.</em></h1><div class="summary"><section class="panel"><ol class="now-steps">${pl.steps.map((x) => `<li>${esc(x).replace(/&lt;(\/?strong)&gt;/g, "<$1>")}</li>`).join("")}</ol></section><section>${pl.links.length ? "<h3>Helpful links</h3>" : ""}${pl.links.map(([title, description, url]) => `<a class="resource" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(title)} ↗</strong><span>${esc(description)}</span></a>`).join("")}<button class="secondary" id="resources-button">Get help now ↗</button><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
+  return `${step(3)}<h1 style="font-size:47px">Next <em>steps.</em></h1><div class="summary plan-summary"><div class="peek-wrap theme-${c().characterIndex}"><div class="peek" aria-hidden="true" style="--shirt:${KIDS[c().characterIndex].shirt}"><div class="peek-kid">${childArt(c().characterIndex, "happy")}</div></div><section class="panel"><ol class="now-steps">${pl.steps.map((x) => `<li>${esc(x).replace(/&lt;(\/?strong)&gt;/g, "<$1>")}</li>`).join("")}</ol></section>${peekHands(c().characterIndex)}</div><section>${pl.links.length ? "<h3>Helpful links</h3>" : ""}${pl.links.map(([title, description, url]) => `<a class="resource" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(title)} ↗</strong><span>${esc(description)}</span></a>`).join("")}<button class="secondary" id="resources-button">Get help now ↗</button><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
 }

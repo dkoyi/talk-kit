@@ -440,3 +440,16 @@ test("Home sits at the far right of the header", async ({ page }) => {
   );
   expect(last).toBe("nav-home");
 });
+
+test("Next steps shows the story's own child, peeking, with the right pronouns", async ({ page }) => {
+  // Jayden's "meet an online friend" story uses the general steps.
+  await enter(page, 4);
+  for (let n = 0; n < 6 && !(await page.locator("#continue").count()); n++)
+    await page.locator(".reply").first().click();
+  await page.locator("#continue").click();
+  await page.locator("#plan-button").click();
+  await expect(page.locator(".peek svg.child")).toHaveAttribute("aria-label", /^Jayden/);
+  await expect(page.locator(".peek svg.child")).toHaveAttribute("data-mood", "happy");
+  await expect(page.locator(".now-steps")).toContainText("Check in with him again");
+  await expect(page.locator(".now-steps")).not.toContainText(/them/);
+});
