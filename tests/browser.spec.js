@@ -133,7 +133,7 @@ test("review status, rule explanation, keyboard dialog behavior", async ({
   await enter(page);
   await page.locator("[data-rules]").click();
   await expect(page.locator(".rule-list")).toContainText("+10");
-  await expect(page.locator("#modal-content")).toContainText(
+  await expect(page.locator("#modal-content")).not.toContainText(
     "Not clinically validated",
   );
 });

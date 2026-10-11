@@ -715,7 +715,7 @@ function showRules() {
       )
       .join(
         "",
-      )}</dl><p class="sim-label">Just a practice tool. Not clinically validated.</p><button class="primary full-width" data-close>Got it</button>`,
+      )}</dl><button class="primary full-width" data-close>Got it</button>`,
   );
 }
 function speak({ automatic = false } = {}) {
