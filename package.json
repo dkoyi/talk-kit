@@ -6,8 +6,7 @@
   "scripts": {
     "start": "python3 -m http.server 8000 --bind 127.0.0.1",
     "test": "node --test tests/engine.test.js",
-    "test:browser": "playwright test",
-    "database": "python3 database/build_database.py"
+    "test:browser": "playwright test"
   },
   "devDependencies": {
     "@playwright/test": "1.56.1"

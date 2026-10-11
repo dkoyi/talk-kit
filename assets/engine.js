@@ -9,22 +9,6 @@ export const RULES = Object.freeze({
   unknown: 0,
 });
 export const clampScore = (score) => Math.max(5, Math.min(95, score));
-export function classify(text) {
-  const low = text.toLowerCase();
-  const good =
-    /thank you for telling|thanks for telling|not your fault|not to blame|here to listen|not in trouble|sorry i reacted/.test(
-      low,
-    );
-  const bad =
-    /you should have known better|what did you do now|give me your phone|only the internet|your own fault/.test(
-      low,
-    );
-  // Contradictory or negated phrases are uncertain, as in the base prototype.
-  if (good && !bad && !/\b(not|never|don't|do not) thank/.test(low))
-    return "good";
-  if (bad && !good) return "harmful";
-  return "unknown";
-}
 export function evaluate(text, kind, scenario, score, choice = {}) {
   if (!Object.hasOwn(RULES, kind)) kind = "unknown";
   let title,
@@ -113,6 +97,19 @@ export function validateContent(data) {
       ))
   )
     throw Error("Invalid audio mapping");
+  // ElevenLabs audio tags per spoken line, e.g. ["nervous", "whispers"].
+  if (
+    data.audioTags &&
+    (typeof data.audioTags !== "object" ||
+      Array.isArray(data.audioTags) ||
+      Object.values(data.audioTags).some(
+        (tags) =>
+          !Array.isArray(tags) ||
+          !tags.length ||
+          tags.some((t) => typeof t !== "string" || !/^[a-z][a-z ]*$/.test(t)),
+      ))
+  )
+    throw Error("Invalid audio tags");
   if (
     data?.schemaVersion !== 1 ||
     !Array.isArray(data.scenarios) ||
@@ -145,6 +142,13 @@ export function validateContent(data) {
     ])
       if (typeof s[k] !== "string" || !s[k].trim())
         throw Error("Incomplete scenario");
+    // Optional ElevenLabs voice for generating this character's recordings.
+    if (
+      s.voice &&
+      (s.voice.provider !== "elevenlabs" ||
+        !/^[A-Za-z0-9]{20}$/.test(s.voice.voiceId || ""))
+    )
+      throw Error("Invalid voice");
     if (s.replies && (!Array.isArray(s.replies) || s.replies.length !== 3))
       throw Error("Incomplete response deck");
     if (

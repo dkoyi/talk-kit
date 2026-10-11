@@ -14,8 +14,21 @@
     <script type="module" src="assets/app.js"></script>
   </head>
   <body>
+    <div id="splash" class="splash" role="status" aria-label="Loading The Talk Kit">
+      <div class="splash-inner">
+        <div class="splash-faces"><svg class="splash-face" style="animation-delay:0s" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="28" fill="#fffdf8"/><circle cx="30" cy="32" r="18" fill="#c58d67"/><path d="M12 30c0-16 36-16 36 0-6-6-12-8-18-12-5 6-11 10-18 12z" fill="#453b32"/><circle cx="24" cy="32" r="2" fill="#263a34"/><circle cx="36" cy="32" r="2" fill="#263a34"/><path d="M24 39q6 5 12 0" stroke="#775445" stroke-width="2" fill="none" stroke-linecap="round"/></svg><svg class="splash-face" style="animation-delay:0.15s" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="28" fill="#fffdf8"/><circle cx="30" cy="32" r="18" fill="#956547"/><path d="M12 30c0-16 36-16 36 0-6-6-12-8-18-12-5 6-11 10-18 12z" fill="#303d39"/><circle cx="24" cy="32" r="2" fill="#263a34"/><circle cx="36" cy="32" r="2" fill="#263a34"/><path d="M24 39q6 5 12 0" stroke="#775445" stroke-width="2" fill="none" stroke-linecap="round"/></svg><svg class="splash-face" style="animation-delay:0.3s" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="28" fill="#fffdf8"/><circle cx="30" cy="32" r="18" fill="#e1b492"/><path d="M12 30c0-16 36-16 36 0-6-6-12-8-18-12-5 6-11 10-18 12z" fill="#615043"/><circle cx="24" cy="32" r="2" fill="#263a34"/><circle cx="36" cy="32" r="2" fill="#263a34"/><path d="M24 39q6 5 12 0" stroke="#775445" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="splash-brand"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 40 40" width="32" height="32"><path d="M10 17q10 18 20 0" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></span>the talk kit<span class="brand-dot">.</span></div>
+        <p class="splash-tag">Practice the hard talks.</p>
+        <div class="splash-bar" aria-hidden="true"><span></span></div>
+      </div>
+    </div>
+    <noscript><style>.splash { display: none; }</style></noscript>
     <a class="skip-link" href="#app">Skip to main content</a>
     <header>
+      <div class="header-left">
+      <button class="nav-back" id="nav-back" hidden>
+        <span aria-hidden="true">←</span> Back
+      </button>
       <button class="brand" id="home" aria-label="The Talk Kit home">
         <span class="brand-icon" aria-hidden="true"
           ><svg viewBox="0 0 40 40" width="32" height="32" aria-hidden="true">
@@ -26,35 +39,33 @@
               fill="none"
               stroke-linecap="round"
             /></svg></span
-        >the talk kit<span class="brand-dot">.</span>
+        ><span class="brand-name">the talk kit<span class="brand-dot">.</span></span>
       </button>
+      </div>
       <nav aria-label="Main navigation">
         <button id="how-nav">How it works</button>
-        <button class="aboutnav" id="about-nav">Our approach</button>
+        <button class="aboutnav" id="about-nav">About</button>
         <button class="urgent" id="now-nav">
-          Find support <span aria-hidden="true">↗</span>
+          Get help <span aria-hidden="true">↗</span>
+        </button>
+        <button class="nav-home" id="nav-home" hidden>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/></svg>
+          Home
         </button>
       </nav>
     </header>
     <button id="pause-session" class="pause-session" hidden>
-      <span aria-hidden="true">◷</span
-      ><span>Feeling overwhelmed? <b>Take a pause</b></span>
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19l8-8"/></svg
+      ><span><b>Take a pause</b></span>
     </button>
     <main id="app" tabindex="-1">
-      <div class="loading">
-        <span class="brand-icon">◡</span>
-        <p>Making a little room for conversation…</p>
-      </div>
     </main>
     <footer>
-      <span
-        ><b>The Talk Kit.</b> Small conversations. Meaningful connections.</span
-      ><span
-        >Fictional learning prototype · Not therapy or emergency support</span
-      >
+      <span><b>The Talk Kit</b></span
+      ><span>Practice only · Not emergency help</span>
     </footer>
     <div class="toast" id="toast" role="status" hidden></div>
-    <dialog id="modal" aria-labelledby="modal-title">
+    <dialog id="modal" aria-labelledby="modal-title" tabindex="-1">
       <div id="modal-content"></div>
     </dialog>
     <noscript
