@@ -77,6 +77,13 @@ const ICONS = {
   shield: '<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M12 9v6M9 12h6"/>',
   trend: '<path d="M4 17l6-6 4 4 6-7"/><path d="M15 8h5v5"/>',
   home: '<path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/>',
+  thanks:
+    '<path d="M20 15a2 2 0 0 1-2 2H8l-4 3.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M12 13.5s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8z"/>',
+  checkin:
+    '<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/><path d="M9 15l2 2 4-4"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  retry: '<path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4.5h4.5"/>',
+  pick: '<rect x="3" y="7" width="13" height="13" rx="2.5"/><path d="M8 4h10.5A2.5 2.5 0 0 1 21 6.5V17"/>',
 };
 const icon = (name, cls = "") =>
   `<svg class="icon ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -434,18 +441,48 @@ function respond(text, kind, choice = {}) {
   }
   speak({ automatic: true });
 }
-function chart() {
-  let scores = [50, ...turns.map((t) => t.after)];
-  let pts = scores
-    .map(
-      (s, i) => `${35 + i * (430 / Math.max(scores.length - 1, 1))},${130 - s}`,
-    )
+// The openness journey: coloured zones, a line that draws itself, and one badge per answer.
+const ZONES = [
+  ["good", "Talking with you"],
+  ["open", "Opening up"],
+  ["risky", "Guarded"],
+  ["hurt", "Shut down"],
+];
+function journey() {
+  const name = esc(c().name);
+  const scores = [50, ...turns.map((t) => t.after)];
+  const x = (i) => 8 + (i * 84) / Math.max(scores.length - 1, 1);
+  const y = (s) => 100 - s;
+  const line = scores
+    .map((s, i) => {
+      if (!i) return `M${x(0)} ${y(s)}`;
+      const mx = (x(i - 1) + x(i)) / 2;
+      return `C${mx} ${y(scores[i - 1])} ${mx} ${y(s)} ${x(i)} ${y(s)}`;
+    })
     .join(" ");
-  return `<svg class="chart" viewBox="0 0 500 160" role="img" aria-label="Illustrative conversation openness across ${turns.length} practice responses"><path d="M35 35H465M35 80H465M35 125H465" stroke="#dde4d5"/><polyline points="${pts}" fill="none" stroke="#48745b" stroke-width="3"/>${scores.map((s, i) => `<circle cx="${35 + i * (430 / Math.max(scores.length - 1, 1))}" cy="${130 - s}" r="4" fill="#48745b"/>`).join("")}<text x="35" y="149" font-size="14" fill="#73816f">Start</text><text x="440" y="149" font-size="14" fill="#73816f">End</text></svg>`;
+  const steps = turns
+    .map((t, i) => {
+      const d = t.after - t.before;
+      return `After answer ${i + 1}, ${name} ${d > 0 ? "opened up more" : d < 0 ? "pulled back" : "stayed the same"}.`;
+    })
+    .join(" ");
+  return `<figure class="tk-journey"><div class="tk-plot" role="img" aria-labelledby="journey-desc"><div class="tk-zones" aria-hidden="true">${ZONES.map(([k, label]) => `<div class="z-${k}"><span>${label}</span></div>`).join("")}</div><svg class="tk-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="${line}" vector-effect="non-scaling-stroke"/></svg><span class="tk-dot-start" style="--x:${x(0)}%;--y:${y(50)}%"></span>${turns.map((t, i) => `<span class="tk-dot tk-badge is-${t.kind}" style="--x:${x(i + 1)}%;--y:${y(t.after)}%;--i:${i}">${resultIcon(t.kind)}</span>`).join("")}</div><div class="tk-axis" aria-hidden="true"><span>Start</span><span>End</span></div><figcaption class="sr-only" id="journey-desc">How open ${name} felt, step by step. ${name} started in the middle. ${steps} At the end: ${zone()}.</figcaption></figure>${compare()}`;
 }
 function reflect() {
-  let vals = [...new Set(turns.flatMap((t) => t.values))];
-  return `${step(3)}<h1 style="font-size:47px;margin:12px 0">Well <em>done!</em></h1><p class="muted">Here’s how it went with ${esc(c().name)}.</p><div class="summary"><section class="panel"><h3>How ${esc(c().name)} opened up</h3>${chart()}${compare()}${turns.length ? turns.map((t, i) => `<div class="turn"><strong>${resultIcon(t.kind)} “${esc(t.text)}”</strong><p>${esc(t.title)}</p></div>`).join("") : '<p class="muted">No replies yet.</p>'}</section><aside><section class="panel"><h3>Values you showed</h3>${content.principles.map((v) => `<span class="tag ${vals.includes(v) ? "" : "off"}">${vals.includes(v) ? "✓ " : ""}${esc(v)}</span>`).join("")}<h3>Next time</h3>${[["heart", "Say thank you"], ["ear", "Listen first"], ["people", "Decide together"], ["calendar", "Check in later"]].map(([n, s]) => `<label class="check"><input type="checkbox">${icon(n)} ${s}</label>`).join("")}<button class="primary" id="plan-button">Next steps →</button><button class="text-button" id="resources-button">Get help ↗</button></section><div style="display:flex;gap:10px;margin-top:15px"><button class="secondary" id="again">↺ Try again</button><button class="secondary" id="new">Pick another</button></div></aside></div>`;
+  const vals = [...new Set(turns.flatMap((t) => t.values))];
+  const name = esc(c().name);
+  const mood = moodFor(score, lastTurn()?.kind);
+  // A hard conversation gets honest, gentle wording and a clear next try, not a party.
+  const cheer = score >= 50;
+  const worst = turns.reduce((w, t) => (!w || t.after - t.before < w.after - w.before ? t : w), null);
+  const coach =
+    !cheer && worst?.alternative
+      ? `<section class="tk-card tk-coach"><span class="tk-coach-icon">${icon("bulb")}</span><div><h2 class="tk-card-title">Try this next time</h2><p class="tk-quote">“${esc(worst.alternative)}”</p><p class="tk-coach-note">Stay calm, thank ${name} for telling you, then listen.</p></div></section>`
+      : "";
+  const again = `<button class="tk-btn ${cheer ? "tk-btn-secondary" : "tk-btn-primary"}" id="again">${icon("retry")} Try again</button>`;
+  const next = `<button class="tk-btn ${cheer ? "tk-btn-primary" : "tk-btn-secondary"}" id="plan-button">Next steps ${icon("arrow")}</button>`;
+  const pick = `<button class="tk-btn tk-btn-secondary" id="new">${icon("pick")} Pick another</button>`;
+  return `${step(3)}<div class="tk-results"><header class="tk-card tk-hero"><div class="tk-child theme-${c().characterIndex}">${childArt(c().characterIndex, mood)}${cheer ? `<div class="burst" aria-hidden="true">${Array.from({ length: 16 }, (_, k) => `<span style="--a:${k * 22.5}deg;--c:${["#265c4c", "#2fa84f", "#edb586", "#e8a317"][k % 4]}"></span>`).join("")}</div>` : ""}</div><div class="tk-hero-text"><p class="tk-chip">${icon("check")} Practice done</p><h1 class="tk-display">${cheer ? "Well done!" : "Good try."}</h1><p class="tk-sub">${cheer ? `Here’s how ${name} opened up.` : `${name} found it hard to open up this time. Let’s see why.`}</p></div></header>${coach}<div class="tk-grid"><div class="tk-col"><section class="tk-card"><h2 class="tk-card-title">${name}’s openness</h2>${journey()}</section><section class="tk-card"><h2 class="tk-card-title">Your ${turns.length} answers</h2><ol class="tk-answers">${turns.map((t) => `<li class="turn tk-answer"><span class="tk-badge is-${t.kind}">${resultIcon(t.kind)}</span><div><p class="tk-verdict is-${t.kind}">${esc(t.title)}</p><p class="tk-quote">“${esc(t.text)}”</p>${t.kind === "harmful" || t.kind === "promise" ? `<p class="tk-also">${icon("bulb")} <span>Instead: “${esc(t.alternative)}”</span></p>` : ""}</div></li>`).join("")}</ol></section></div><div class="tk-col"><section class="tk-card"><h2 class="tk-card-title">Values you showed</h2><ul class="tk-tags">${content.principles.map((v, i) => (vals.includes(v) ? `<li class="tk-tag is-on" style="--i:${i}">${icon("check")}${esc(v)}</li>` : `<li class="tk-tag is-off" style="--i:${i}">${esc(v)}<span class="sr-only">, not this time</span></li>`)).join("")}</ul></section><section class="tk-card"><h2 class="tk-card-title">Next time</h2><ul class="tk-todos">${[["thanks", "Say thank you"], ["ear", "Listen first"], ["people", "Decide together"], ["checkin", "Check in later"]].map(([n, s]) => `<li><label class="tk-todo"><span class="tk-todo-icon">${icon(n)}</span><span class="tk-todo-label">${s}</span><input type="checkbox" class="tk-tick"></label></li>`).join("")}</ul></section><div class="tk-card tk-actions" role="group" aria-label="What next">${cheer ? next : again}<div class="tk-actions-row">${cheer ? again : next}${pick}</div><button class="tk-btn tk-btn-quiet" id="resources-button">Get help ↗</button></div></div></div></div>`;
 }
 function resources() {
   return `<h1 style="font-size:47px">Get <em>help.</em></h1><div class="summary"><section class="panel"><h3>${icon("chat")} What to say</h3><div class="script">“Thank you for telling me. You’re not in trouble. I’m here. What do you need right now?”</div><div class="notice">This site can’t send reports or call anyone. The links open other websites.</div></section><section><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.missingkids.org/gethelpnow/cybertipline"><strong>NCMEC CyberTipline ↗</strong><span>Report online sexual exploitation of a child.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.stopbullying.gov/cyberbullying/what-is-it"><strong>StopBullying.gov ↗</strong><span>Help with cyberbullying.</span></a><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
@@ -872,7 +909,7 @@ function decorate(root) {
 function compare() {
   const history = attempts[c().id] || [];
   if (history.length < 2) return "";
-  return `<div class="feedback"><strong>${icon("trend")} Compared to last time</strong>First try: ${history[0]} · This time: ${history.at(-1)}</div>`;
+  return `<p class="tk-compare">${icon("sprout")}<span>First try: ${history[0]}</span><span aria-hidden="true">·</span><strong>This time: ${history.at(-1)}</strong></p>`;
 }
 function plan() {
   const pl = c().plan || {
