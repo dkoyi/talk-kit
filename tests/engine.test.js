@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { recordingFor, validateRecordings } from "../assets/audio.js";
 import {
   RULES,
   evaluate,
@@ -72,4 +73,55 @@ test("every line a child speaks has ElevenLabs audio tags", () => {
   const altered = structuredClone(content);
   altered.audioTags[content.scenarios[0].open] = ["[Nervous]"];
   assert.throws(() => validateContent(altered));
+});
+
+const recordings = JSON.parse(
+  readFileSync(new URL("../assets/audio/recordings.json", import.meta.url)),
+);
+
+test("every saved recording has a valid mapping and non-empty audio file", () => {
+  assert.equal(validateRecordings(recordings), recordings);
+  for (const [character, lines] of Object.entries(recordings)) {
+    for (const [text, path] of Object.entries(lines)) {
+      assert.equal(recordingFor(recordings, character, text), path);
+      assert.ok(readFileSync(new URL(`../${path}`, import.meta.url)).length > 0);
+    }
+  }
+});
+
+test("all 12 scenarios have recordings for openings, responses, later lines and repairs", () => {
+  const fallbacks = [
+    "I’m worried I shouldn’t have said anything. Can we slow down?",
+    "What if we need someone else to help?",
+    "I’m not sure how to explain it. I need you to listen.",
+    "I don’t want to talk about it anymore.",
+  ];
+  for (const scenario of content.scenarios) {
+    const texts = [scenario.open, ...scenario.later, ...fallbacks];
+    for (const choice of [...scenario.replies.flat(), ...content.repairChoices]) {
+      const childLines = content.childResponses[choice.text];
+      if (childLines) texts.push(childLines.join(" "));
+    }
+    for (const text of texts)
+      assert.ok(recordingFor(recordings, scenario.name, text), `${scenario.id}: ${text}`);
+  }
+});
+
+test("shared dialogue selects each child's voice and keeps legacy fallback", () => {
+  const text = "What if we need someone else to help?";
+  const paths = ["Maya", "Jayden", "Lucía"].map((character) =>
+    recordingFor(recordings, character, text, { [text]: "assets/audio/old.mp3" }),
+  );
+  assert.equal(new Set(paths).size, 3);
+  assert.ok(paths.every((path) => path !== "assets/audio/old.mp3"));
+  assert.equal(recordingFor({}, "Maya", text, { [text]: "assets/audio/old.mp3" }), "assets/audio/old.mp3");
+  assert.equal(recordingFor({}, "Maya", text), undefined);
+});
+
+test("recordings manifest rejects malformed and external paths", () => {
+  for (const invalid of [null, [], { Maya: [] }, { Maya: { line: 42 } },
+    { Maya: { line: "https://example.com/voice.mp3" } },
+    { Maya: { line: "assets/audio/../secret.mp3" } }])
+    assert.throws(() => validateRecordings(invalid));
+  assert.deepEqual(validateRecordings({}), {});
 });

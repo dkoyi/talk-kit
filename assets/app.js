@@ -4,6 +4,7 @@ import {
   validateContent,
   RULES,
 } from "./engine.js";
+import { recordingFor, validateRecordings } from "./audio.js";
 
 const $ = (selector) => document.querySelector(selector);
 const esc = (value) =>
@@ -30,6 +31,7 @@ let content,
   repairMode = false,
   reacted = false;
 let activeAudio = null;
+let recordings = {};
 let breathTimer = null,
   breathDeadline = 0,
   toastTimer = null,
@@ -293,6 +295,7 @@ function go(next, anchor = null) {
     h.classList.add("focus-destination");
     h.focus({ preventScroll: true });
   }
+  if (stage === "practice") speak({ automatic: true });
 }
 // Where "Back" leads from each screen. Resources returns to wherever it was opened.
 const BACK = {
@@ -429,6 +432,7 @@ function respond(text, kind, choice = {}) {
     for (let el = result; el; el = el.offsetParent) top += el.offsetTop;
     window.scrollTo({ top: Math.max(0, top), behavior: motion() });
   }
+  speak({ automatic: true });
 }
 function chart() {
   let scores = [50, ...turns.map((t) => t.after)];
@@ -554,6 +558,7 @@ function bind() {
       render();
       $("#flashcard").focus();
       toast("Starting fresh.");
+      speak({ automatic: true });
     });
   });
   document.querySelectorAll("[data-reply]").forEach(
@@ -679,7 +684,7 @@ function showRules() {
       )}</dl><p class="sim-label">Just a practice tool. Not clinically validated.</p><button class="primary full-width" data-close>Got it</button>`,
   );
 }
-function speak() {
+function speak({ automatic = false } = {}) {
   const button = $("#listen");
   const error = $("#voice-error");
   if (button.getAttribute("aria-pressed") === "true") {
@@ -687,16 +692,18 @@ function speak() {
     return;
   }
   error.hidden = true;
-  const clip = content.audioClips?.[currentLine()];
+  const clip = recordingFor(recordings, c().name, currentLine(), content.audioClips);
   if (clip) {
     stopVoice();
     const token = voiceToken;
-    const fail = () => {
+    const fail = (reason) => {
       if (token !== voiceToken) return;
       stopVoice();
       if (error.isConnected) {
         error.textContent =
-          "This recording is unavailable. You can keep reading the conversation.";
+          automatic && reason?.name === "NotAllowedError"
+            ? "Your browser blocked automatic playback. Tap Listen to hear this line."
+            : "This recording is unavailable. You can keep reading the conversation.";
         error.hidden = false;
       }
     };
@@ -710,8 +717,8 @@ function speak() {
       button.setAttribute("aria-pressed", "true");
       $(".live-character")?.classList.add("speaking");
       activeAudio.play().catch(fail);
-    } catch {
-      fail();
+    } catch (reason) {
+      fail(reason);
     }
     return;
   }
@@ -810,6 +817,15 @@ async function init() {
     if (!response.ok) throw Error("Content request failed");
     content = validateContent(await response.json());
     scenarios = content.scenarios;
+    recordings = {};
+    try {
+      const audioResponse = await fetch("./assets/audio/recordings.json");
+      if (!audioResponse.ok) throw Error("Recordings request failed");
+      recordings = validateRecordings(await audioResponse.json());
+    } catch (error) {
+      // A missing manifest must not prevent reading/practicing the conversation.
+      console.warn("Saved voices unavailable; using device voices as fallback.", error);
+    }
     render();
     hideSplash();
   } catch {
