@@ -25,8 +25,8 @@ test("12 complete situations across four categories, with pending reviews", () =
 });
 test("authored weights and bounds preserve the original behavior", () => {
   assert.deepEqual(RULES, {
-    good: 15,
-    repair: 18,
+    good: 20,
+    repair: 10,
     harmful: -20,
     promise: -5,
     neutral: 0,
@@ -34,7 +34,7 @@ test("authored weights and bounds preserve the original behavior", () => {
   });
   const s = content.scenarios[0];
   assert.equal(evaluate("test", "harmful", s, 50).after, 30);
-  assert.equal(evaluate("test", "repair", s, 30).after, 48);
+  assert.equal(evaluate("test", "repair", s, 30).after, 40);
   assert.equal(evaluate("test", "good", s, 90).after, 95);
   assert.equal(evaluate("test", "harmful", s, 10).after, 5);
   assert.equal(evaluate("test", "unknown", s, 50).after, 50);

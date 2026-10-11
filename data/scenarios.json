@@ -116,7 +116,7 @@
     },
     {
       "name": "Jayden",
-      "age": 11,
+      "age": 17,
       "color": "#eadfce",
       "topic": "Cyberbullying",
       "headline": "The group chat doesn’t feel safe anymore.",
@@ -427,7 +427,7 @@
       "voice": { "provider": "elevenlabs", "voiceId": "TX3LPaxmHKxFdv7VOQHJ", "name": "Liam" },
       "categoryId": "contact",
       "name": "Jayden",
-      "age": 11,
+      "age": 17,
       "color": "#eadfce",
       "topic": "Meeting an online friend",
       "headline": "A gaming friend wants to meet up.",
@@ -700,7 +700,7 @@
       "voice": { "provider": "elevenlabs", "voiceId": "TX3LPaxmHKxFdv7VOQHJ", "name": "Liam" },
       "categoryId": "feelings",
       "name": "Jayden",
-      "age": 11,
+      "age": 17,
       "color": "#eadfce",
       "topic": "Body comparison",
       "headline": "He keeps comparing himself.",
@@ -880,7 +880,7 @@
       "voice": { "provider": "elevenlabs", "voiceId": "TX3LPaxmHKxFdv7VOQHJ", "name": "Liam" },
       "categoryId": "boundaries",
       "name": "Jayden",
-      "age": 11,
+      "age": 17,
       "color": "#eadfce",
       "topic": "Gaming transitions",
       "headline": "Just one more round.",
@@ -1209,6 +1209,11 @@
   "contentVersion": "1.0.0",
   "categories": [
     {
+      "id": "feelings",
+      "label": "Content & feelings",
+      "description": "Scary content, body comparison, and things that feel overwhelming."
+    },
+    {
       "id": "contact",
       "label": "Online contact",
       "description": "Unwanted messages, personal information, and people they meet online."
@@ -1217,11 +1222,6 @@
       "id": "friendship",
       "label": "Friendship & belonging",
       "description": "Group chats, peer pressure, and feeling left out."
-    },
-    {
-      "id": "feelings",
-      "label": "Content & feelings",
-      "description": "Scary content, body comparison, and things that feel overwhelming."
     },
     {
       "id": "boundaries",

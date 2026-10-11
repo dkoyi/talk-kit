@@ -1,8 +1,8 @@
-// These weights preserve the original prototype's authored rules. They are not
+// Story weights: kind answers +20, making it right +10, blame -20. They are not
 // clinically validated scores or measurements of a child's trust.
 export const RULES = Object.freeze({
-  good: 15,
-  repair: 18,
+  good: 20,
+  repair: 10,
   harmful: -20,
   promise: -5,
   neutral: 0,

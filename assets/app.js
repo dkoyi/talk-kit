@@ -15,7 +15,7 @@ const esc = (value) =>
         c
       ],
   );
-let activeCategory = "contact",
+let activeCategory = "feelings",
   currentOptions = null,
   recorded = false,
   returnStage = "home";
@@ -313,9 +313,6 @@ const BACK = {
   about: "home",
   review: "home",
 };
-function reviewBadge() {
-  return '<button class="review-badge" data-review><span aria-hidden="true">◇</span> Expert review pending <span aria-hidden="true">↗</span></button>';
-}
 const CATEGORY_ICONS = {
   contact: "chat",
   friendship: "people",
@@ -382,15 +379,15 @@ function practiceCard() {
     : "";
   const child = `<div class="flashcard-top"><span class="eyebrow">${esc(c().name.toUpperCase())}${repairMode ? " · MAKE IT RIGHT" : ""}</span><button class="voice-button" id="listen" aria-pressed="false">${icon("speaker")} Listen</button></div><p id="voice-error" class="inline-error" role="status" hidden></p><blockquote class="child-quote">“${esc(currentLine())}”</blockquote>`;
   if (finished)
-    return `${reaction}${child}<button class="primary full-width" id="continue">See how it went <span aria-hidden="true">→</span></button>${last.kind === "harmful" || last.kind === "promise" ? '<button class="secondary full-width repair-now" id="repair">↺ Try making it right</button>' : ""}`;
-  return `${reaction}${child}<div class="choice-header"><h2>${repairMode ? "How can you make it right?" : "What would you say?"}</h2><span>Tap an answer</span></div><div class="replies" role="group" aria-label="Response choices">${options()
+    return `${reaction}${child}<button class="primary full-width" id="continue">See how it went <span aria-hidden="true">→</span></button>`;
+  return `${reaction}${child}<div class="choice-header"><h2>${repairMode ? "One more try: how can you make it right?" : "What would you say?"}</h2><span class="attempt-pill${repairMode ? " last" : ""}" aria-label="Attempt ${repairMode ? 2 : 1} of 2"><i class="pip on"></i><i class="pip${repairMode ? " on" : ""}"></i>Attempt ${repairMode ? 2 : 1} of 2</span></div><div class="replies" role="group" aria-label="Response choices">${options()
     .map(
       (o, i) =>
         `<button class="reply" data-reply="${i}" data-kind="${o.kind}"><span class="choice-letter">${String.fromCharCode(65 + i)}</span><span>${esc(o.text)}</span><span class="choice-mark" aria-hidden="true">→</span></button>`,
     )
     .join(
       "",
-    )}</div>${!repairMode && (last?.kind === "harmful" || last?.kind === "promise") ? '<button class="text-button repair-link" id="repair">↺ Practice making it right</button>' : ""}`;
+    )}</div>`;
 }
 const RESULT_ICONS = {
   good: "star",
@@ -408,8 +405,10 @@ function respond(text, kind, choice = {}) {
   score = turn.after;
   turns.push(turn);
   messages.push({ who: "You", text });
-  // Preserve master: each main response progresses, regardless of its score.
-  if (!repairMode) count = Math.min(3, count + 1);
+  // Two attempts per question: a hurtful or risky first answer gets one "make it
+  // right" try; after that (or after any other answer) the next question comes.
+  const retry = !repairMode && (kind === "harmful" || kind === "promise");
+  if (!retry) count = Math.min(3, count + 1);
   const lines = {
     harmful: "I’m worried I shouldn’t have said anything. Can we slow down?",
     unknown: "[Pause the simulation and reflect on your response.]",
@@ -422,8 +421,7 @@ function respond(text, kind, choice = {}) {
   if (kind === "harmful" && score < 30)
     childLines = ["I don’t want to talk about it anymore."];
   for (const line of childLines) messages.push({ who: c().name, text: line });
-  // A hurtful reply goes straight to repair choices, as the original continue step did.
-  repairMode = kind === "harmful" && count < 3;
+  repairMode = retry;
   currentOptions = null;
   reacted = true;
   render();
@@ -433,7 +431,9 @@ function respond(text, kind, choice = {}) {
   const result = matchMedia("(max-width: 720px)").matches
     ? $(".character-panel")
     : $(".reaction");
-  if (result) {
+  const box = result?.getBoundingClientRect();
+  const headerBottom = $("header").getBoundingClientRect().bottom;
+  if (result && (box.top < headerBottom || box.top > innerHeight * 0.55)) {
     // Layout position (ignores the pop-in animation's transform).
     let top = -$("header").offsetHeight - 16;
     for (let el = result; el; el = el.offsetParent) top += el.offsetTop;
@@ -474,15 +474,10 @@ function reflect() {
   const mood = moodFor(score, lastTurn()?.kind);
   // A hard conversation gets honest, gentle wording and a clear next try, not a party.
   const cheer = score >= 50;
-  const worst = turns.reduce((w, t) => (!w || t.after - t.before < w.after - w.before ? t : w), null);
-  const coach =
-    !cheer && worst?.alternative
-      ? `<section class="tk-card tk-coach"><span class="tk-coach-icon">${icon("bulb")}</span><div><h2 class="tk-card-title">Try this next time</h2><p class="tk-quote">“${esc(worst.alternative)}”</p><p class="tk-coach-note">Stay calm, thank ${name} for telling you, then listen.</p></div></section>`
-      : "";
-  const again = `<button class="tk-btn ${cheer ? "tk-btn-secondary" : "tk-btn-primary"}" id="again">${icon("retry")} Try again</button>`;
+    const again = `<button class="tk-btn ${cheer ? "tk-btn-secondary" : "tk-btn-primary"}" id="again">${icon("retry")} Try again</button>`;
   const next = `<button class="tk-btn ${cheer ? "tk-btn-primary" : "tk-btn-secondary"}" id="plan-button">Next steps ${icon("arrow")}</button>`;
   const pick = `<button class="tk-btn tk-btn-secondary" id="new">${icon("pick")} Pick another</button>`;
-  return `${step(3)}<div class="tk-results"><header class="tk-card tk-hero"><div class="tk-child theme-${c().characterIndex}">${childArt(c().characterIndex, mood)}${cheer ? `<div class="burst" aria-hidden="true">${Array.from({ length: 16 }, (_, k) => `<span style="--a:${k * 22.5}deg;--c:${["#265c4c", "#2fa84f", "#edb586", "#e8a317"][k % 4]}"></span>`).join("")}</div>` : ""}</div><div class="tk-hero-text"><p class="tk-chip">${icon("check")} Practice done</p><h1 class="tk-display">${cheer ? "Well done!" : "Good try."}</h1><p class="tk-sub">${cheer ? `Here’s how ${name} opened up.` : `${name} found it hard to open up this time. Let’s see why.`}</p></div></header>${coach}<div class="tk-grid"><div class="tk-col"><section class="tk-card"><h2 class="tk-card-title">${name}’s openness</h2>${journey()}</section><section class="tk-card"><h2 class="tk-card-title">Your ${turns.length} answers</h2><ol class="tk-answers">${turns.map((t) => `<li class="turn tk-answer"><span class="tk-badge is-${t.kind}">${resultIcon(t.kind)}</span><div><p class="tk-verdict is-${t.kind}">${esc(t.title)}</p><p class="tk-quote">“${esc(t.text)}”</p>${t.kind === "harmful" || t.kind === "promise" ? `<p class="tk-also">${icon("bulb")} <span>Instead: “${esc(t.alternative)}”</span></p>` : ""}</div></li>`).join("")}</ol></section></div><div class="tk-col"><section class="tk-card"><h2 class="tk-card-title">Values you showed</h2><ul class="tk-tags">${content.principles.map((v, i) => (vals.includes(v) ? `<li class="tk-tag is-on" style="--i:${i}">${icon("check")}${esc(v)}</li>` : `<li class="tk-tag is-off" style="--i:${i}">${esc(v)}<span class="sr-only">, not this time</span></li>`)).join("")}</ul></section><section class="tk-card"><h2 class="tk-card-title">Next time</h2><ul class="tk-todos">${[["thanks", "Say thank you"], ["ear", "Listen first"], ["people", "Decide together"], ["checkin", "Check in later"]].map(([n, s]) => `<li><label class="tk-todo"><span class="tk-todo-icon">${icon(n)}</span><span class="tk-todo-label">${s}</span><input type="checkbox" class="tk-tick"></label></li>`).join("")}</ul></section><div class="tk-card tk-actions" role="group" aria-label="What next">${cheer ? next : again}<div class="tk-actions-row">${cheer ? again : next}${pick}</div><button class="tk-btn tk-btn-quiet" id="resources-button">Get help ↗</button></div></div></div></div>`;
+  return `${step(3)}<div class="tk-results"><header class="tk-card tk-hero"><div class="tk-child-wrap"><div class="tk-child theme-${c().characterIndex}">${childArt(c().characterIndex, mood)}</div>${cheer ? `<div class="burst" aria-hidden="true">${Array.from({ length: 16 }, (_, k) => `<span style="--a:${k * 22.5}deg;--c:${["#265c4c", "#2fa84f", "#edb586", "#e8a317"][k % 4]}"></span>`).join("")}</div>` : ""}</div><div class="tk-hero-text"><p class="tk-chip">${icon("check")} Practice done</p><h1 class="tk-display">${cheer ? "Well done!" : "Good try."}</h1><p class="tk-sub">${cheer ? `Here’s how ${name} opened up.` : `${name} found it hard to open up this time. Let’s see why.`}</p></div></header><div class="tk-grid"><div class="tk-col"><section class="tk-card"><h2 class="tk-card-title">${name}’s openness</h2>${journey()}</section><section class="tk-card"><h2 class="tk-card-title">Your ${turns.length} answers</h2><ol class="tk-answers">${turns.map((t) => `<li class="turn tk-answer"><span class="tk-badge is-${t.kind}">${resultIcon(t.kind)}</span><div><p class="tk-verdict is-${t.kind}">${esc(t.title)}</p><p class="tk-quote">“${esc(t.text)}”</p>${t.kind === "harmful" || t.kind === "promise" ? `<p class="tk-also">${icon("bulb")} <span>Instead: “${esc(t.alternative)}”</span></p>` : ""}</div></li>`).join("")}</ol></section></div><div class="tk-col"><section class="tk-card"><h2 class="tk-card-title">Values you showed</h2><ul class="tk-tags">${content.principles.map((v, i) => (vals.includes(v) ? `<li class="tk-tag is-on" style="--i:${i}">${icon("check")}${esc(v)}</li>` : `<li class="tk-tag ${cheer ? "is-off" : "is-missed"}" style="--i:${i}">${cheer ? "" : icon("cross")}${esc(v)}<span class="sr-only">, not this time</span></li>`)).join("")}</ul></section><div class="tk-card tk-actions" role="group" aria-label="What next">${cheer ? next : again}<div class="tk-actions-row">${cheer ? again : next}${pick}</div><button class="tk-btn tk-btn-quiet" id="resources-button">Get help ↗</button></div><section class="tk-card"><h2 class="tk-card-title">Next time</h2><ul class="tk-todos">${[["thanks", "Say thank you"], ["ear", "Listen first"], ["people", "Decide together"], ["checkin", "Check in later"]].map(([n, s]) => `<li><label class="tk-todo"><span class="tk-todo-icon">${icon(n)}</span><span class="tk-todo-label">${s}</span><input type="checkbox" class="tk-tick"></label></li>`).join("")}</ul></section></div></div></div>`;
 }
 function resources() {
   return `<h1 style="font-size:47px">Get <em>help.</em></h1><div class="summary"><section class="panel"><h3>${icon("chat")} What to say</h3><div class="script">“Thank you for telling me. You’re not in trouble. I’m here. What do you need right now?”</div><div class="notice">This site can’t send reports or call anyone. The links open other websites.</div></section><section><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.missingkids.org/gethelpnow/cybertipline"><strong>NCMEC CyberTipline ↗</strong><span>Report online sexual exploitation of a child.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.stopbullying.gov/cyberbullying/what-is-it"><strong>StopBullying.gov ↗</strong><span>Help with cyberbullying.</span></a><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
@@ -490,9 +485,8 @@ function resources() {
 function about() {
   return `<div class="page-title"><h1>About <em>us.</em></h1><p class="lead">We’re the Talk Kit team. Kids meet tricky things online: strangers, bullying, scary videos. We want every parent and caregiver to feel ready to talk about them, so kids keep coming to you.</p></div><div class="info-grid">${[
     ["heart", "Our goal", "Help you stay calm, listen and keep your child talking when something goes wrong online."],
-    ["chat", "How it works", "Pick a moment, choose what to say, and see how the child might feel. Inspired by the CDC’s Free Mind “Real Talk” cards."],
+    ["chat", "How it works", "Pick a moment, choose what to say, and see how the child might feel."],
     ["people", "Who it’s for", "Parents, grandparents and caregivers. No tech skills needed."],
-    ["book", "Made-up stories", "Every child and story is made up. The feedback is written by people, not AI."],
     ["lock", "Private", "No sign-up. Nothing you do here is saved or sent."],
     ["alert", "Not therapy", "Practice only. Not therapy, a test or emergency help."],
   ]
@@ -502,9 +496,9 @@ function about() {
     )
     .join("")}</div><section class="panel info-callout">${icon("shield", "info-icon")}<div><h2>Expert review</h2><p>We’re asking licensed professionals who work with children to check every story.</p></div><button class="primary" id="about-review">See how review works <span aria-hidden="true">→</span></button></section>`;
 }
-// The expert review process. Honest about status: nothing is signed off yet.
+// How expert review works: the steps, described as a process.
 function review() {
-  return `<div class="page-title"><h1>Expert <em>review.</em></h1><p class="lead">Licensed professionals who work with children and families check our stories, answers and feedback.</p><span class="status-pending">◇ In progress</span><p class="muted review-status">Reviews are still underway. No reviewer credentials or approvals have been verified yet, so treat every story as practice only.</p></div><ol class="review-steps">${[
+  return `<div class="page-title"><h1>Expert <em>review.</em></h1><p class="lead">How licensed professionals who work with children and families review our stories, answers and feedback.</p></div><ol class="review-steps">${[
     ["shield", "Check the license", "We confirm each reviewer is a licensed therapist, psychologist, counselor or social worker, and that the license is active."],
     ["book", "Read every story", "They go through each child’s lines, every answer choice and all the feedback."],
     ["check", "Check the advice", "Is it safe, kind, right for the child’s age and in line with current child-safety guidance?"],
@@ -540,10 +534,8 @@ function render() {
   const inside = stage !== "home";
   $("#nav-back").hidden = !inside;
   $("#nav-home").hidden = !inside;
-  $("#review-nav").hidden = inside;
-  $("#about-nav").hidden = inside;
   document.body.classList.toggle("inside", inside);
-  $("#pause-session").hidden = stage !== "practice";
+  $("#pause-session").hidden = stage === "prep";
   document.body.classList.toggle("in-session", !$("#pause-session").hidden);
   decorate($("#app"));
   bind();
@@ -571,9 +563,6 @@ function bind() {
         go("prep");
       }),
   );
-  document
-    .querySelectorAll("[data-review]")
-    .forEach((b) => (b.onclick = showReview));
   document
     .querySelectorAll("[data-rules]")
     .forEach((b) => (b.onclick = showRules));
@@ -608,12 +597,6 @@ function bind() {
       }),
   );
   on("#continue", () => go("reflect"));
-  on("#repair", () => {
-    repairMode = true;
-    currentOptions = null;
-    render();
-    $(".reply").focus();
-  });
   on("#listen", speak);
   on("#again", () => {
     reset();
@@ -663,49 +646,61 @@ $("#modal").addEventListener("click", (e) => {
       closeModal();
   }
 });
+// The pause: a painted dawn lake with a sun that breathes (4s in, 6s out, three times).
+const PAUSE_SCENE = `<svg class="pause-scene" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><defs><linearGradient id="pz-sky" x1="0" y1="0" x2="0" y2="590" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d6e4e0"/><stop offset=".45" stop-color="#e9eee2"/><stop offset=".78" stop-color="#f4e4cd"/><stop offset="1" stop-color="#f5d4b0"/></linearGradient><radialGradient id="pz-glow" cx="720" cy="575" r="640" gradientTransform="matrix(1 0 0 .5 0 287.5)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f7c493" stop-opacity=".9"/><stop offset=".35" stop-color="#f6cfa6" stop-opacity=".45"/><stop offset="1" stop-color="#f6d8b8" stop-opacity="0"/></radialGradient><linearGradient id="pz-lake" x1="0" y1="590" x2="0" y2="900" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4f7a6b"/><stop offset=".06" stop-color="#3e685a"/><stop offset=".3" stop-color="#325b4d"/><stop offset="1" stop-color="#22443a"/></linearGradient><filter id="pz-paint" x="-5%" y="-20%" width="110%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".010 .045" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="9"/></filter><filter id="pz-soft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="10"/></filter><filter id="pz-blur2" x="-5%" y="-20%" width="110%" height="140%"><feGaussianBlur stdDeviation="2.5"/></filter><filter id="pz-grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="9" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 .2  0 0 0 0 .25  0 0 0 0 .2  0 0 0 .55 0"/></filter></defs><rect width="1440" height="590" fill="url(#pz-sky)"/><rect width="1440" height="620" fill="url(#pz-glow)"/><g fill="#fffaf2" opacity=".55" filter="url(#pz-soft)"><ellipse cx="300" cy="190" rx="210" ry="16"/><ellipse cx="420" cy="214" rx="150" ry="10"/><ellipse cx="1150" cy="150" rx="230" ry="14"/><ellipse cx="1040" cy="176" rx="130" ry="9"/></g><g filter="url(#pz-paint)"><path fill="#c8d8c1" d="M-20 548 C 120 506 250 508 380 528 C 520 550 610 500 760 506 C 900 512 1000 552 1140 534 C 1260 518 1350 516 1460 538 V 600 H -20 Z"/><path fill="#a9c3a5" d="M-20 566 C 100 538 200 540 320 560 C 420 576 520 566 610 578 C 700 590 820 584 920 572 C 1030 560 1100 536 1230 538 C 1330 540 1400 552 1460 560 V 600 H -20 Z"/><path fill="#7ea58a" d="M-20 600 V 572 C 70 556 170 562 250 580 C 290 589 320 595 350 600 Z"/><path fill="#6a957c" d="M1460 600 V 552 C 1380 548 1290 558 1200 580 C 1170 588 1140 595 1110 600 Z"/><g fill="#557f69"><circle cx="1300" cy="556" r="16"/><circle cx="1322" cy="550" r="20"/><circle cx="1348" cy="556" r="15"/><circle cx="1385" cy="548" r="18"/><circle cx="1410" cy="552" r="14"/><circle cx="70" cy="570" r="13"/><circle cx="92" cy="564" r="17"/><circle cx="114" cy="570" r="12"/></g></g><rect y="590" width="1440" height="310" fill="url(#pz-lake)"/><g filter="url(#pz-blur2)" opacity=".38"><path fill="#2c5548" d="M-20 590 V 612 C 100 640 200 636 320 618 C 420 604 520 612 610 604 C 700 594 820 600 920 610 C 1030 620 1100 642 1230 640 C 1330 638 1400 628 1460 620 V 590 Z"/><path fill="#22463b" d="M-20 590 V 618 C 70 634 170 628 250 610 C 290 601 320 595 350 590 Z M1460 590 V 636 C 1380 640 1290 630 1200 610 C 1170 602 1140 595 1110 590 Z"/></g><rect y="588" width="1440" height="4" fill="#dbe6d2" opacity=".28" filter="url(#pz-blur2)"/><rect width="1440" height="900" filter="url(#pz-grain)" opacity=".14"/></svg>`;
+const PAUSE_AMBIENT = `<div class="pause-ambient" aria-hidden="true"><span class="speck" style="--x:16%;--y:30%;--s:4px;--d:13s;--delay:-2s"></span><span class="speck" style="--x:26%;--y:46%;--s:3px;--d:11s;--delay:-6s"></span><span class="speck" style="--x:35%;--y:22%;--s:3px;--d:15s;--delay:-9s"></span><span class="speck" style="--x:64%;--y:26%;--s:4px;--d:12s;--delay:-4s"></span><span class="speck" style="--x:72%;--y:44%;--s:3px;--d:14s;--delay:-11s"></span><span class="speck" style="--x:83%;--y:34%;--s:5px;--d:16s;--delay:-7s"></span><span class="speck" style="--x:44%;--y:54%;--s:3px;--d:12s;--delay:-3s"></span><span class="speck" style="--x:57%;--y:52%;--s:4px;--d:13s;--delay:-8s"></span><span class="speck" style="--x:9%;--y:52%;--s:3px;--d:15s;--delay:-12s"></span><span class="speck" style="--x:92%;--y:56%;--s:3px;--d:11s;--delay:-5s"></span><span class="shimmer" style="--x:14%;--y:72%;--w:60px;--d:8s;--delay:-1s"></span><span class="shimmer" style="--x:28%;--y:80%;--w:38px;--d:7s;--delay:-4s"></span><span class="shimmer" style="--x:70%;--y:74%;--w:70px;--d:9s;--delay:-2s"></span><span class="shimmer" style="--x:82%;--y:84%;--w:44px;--d:7.5s;--delay:-5s"></span><span class="shimmer" style="--x:40%;--y:90%;--w:52px;--d:8.5s;--delay:-6s"></span><span class="shimmer" style="--x:60%;--y:93%;--w:34px;--d:7s;--delay:-3s"></span><span class="shimmer" style="--x:6%;--y:88%;--w:40px;--d:9s;--delay:-7s"></span><span class="shimmer" style="--x:90%;--y:70%;--w:36px;--d:8s;--delay:-0.5s"></span><span class="breath-reflection"></span><span class="ripples"><span class="ripple"></span><span class="ripple"></span><span class="ripple"></span></span><svg class="birds" viewBox="0 0 72 28"><path d="M4 14q5-6 10 0q5-6 10 0"/><path d="M34 6q4-5 8 0q4-5 8 0"/><path d="M50 20q3.5-4 7 0q3.5-4 7 0"/></svg></div>`;
+const CUE_IN = "Breathe in gently…";
+const CUE_OUT = "Breathe out slowly…";
 function showCalm() {
   openModal(
-    `<div class="calm-scene" aria-hidden="true"><div class="calm-picture"></div><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span></div><div class="calm-panel"><div class="calm-sky"><h2 id="modal-title">Take a pause.</h2><div class="breathing-orbit breathing"><div class="breathing-circle"><span id="calm-seconds" role="timer" aria-label="Seconds remaining">30</span><small>seconds</small></div></div></div><div class="calm-lake"><h3 id="calm-cue" class="calm-cue" aria-live="polite">Breathe in gently…</h3><p id="calm-status" role="status">Follow the circle. Your progress is saved.</p><div class="modal-actions"><button class="primary" id="calm-return" data-close>End pause</button><button class="secondary" id="calm-start" hidden>↺ Again</button></div></div></div>`,
+    `<div class="pause is-running">${PAUSE_SCENE}${PAUSE_AMBIENT}<section class="pause-sky"><h2 class="pause-title" id="modal-title">Take a pause</h2><div class="breath"><span class="breath-halo" aria-hidden="true"></span><span class="breath-ring" aria-hidden="true"></span><span class="breath-core" aria-hidden="true"></span><p class="countdown" role="timer" aria-atomic="true"><span class="countdown-num" id="calm-seconds">30</span><span class="sr-only"> seconds left</span></p><span class="breath-done" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div></section><section class="pause-lake"><p class="cue-line" id="calm-cue" aria-live="polite" aria-atomic="true">${CUE_IN}</p><p class="status-line" id="calm-status">Follow the circle. Your progress is saved.</p><div class="pause-actions"><button class="pause-btn btn-end" id="calm-return" data-close>End pause</button><button class="pause-btn btn-again" id="calm-start" hidden>${icon("retry")} Again</button></div></section></div>`,
     "calm-fullscreen",
   );
+  const root = $(".pause");
+  const cueEl = $("#calm-cue");
+  // Which words belong at a moment of the 10-second breath.
+  const cueAt = (t) => (t % 10 < 4 ? CUE_IN : CUE_OUT);
   const start = () => {
     clearInterval(breathTimer);
     breathDeadline = Date.now() + 30000;
+    // Restart the CSS breath so the sun, halo and ripples begin together.
+    root.classList.remove("is-running", "is-done");
+    void root.offsetWidth;
+    root.classList.add("is-running");
     $("#calm-start").hidden = true;
+    $("#calm-return").className = "pause-btn btn-end";
     $("#calm-return").textContent = "End pause";
-    $("#calm-status").textContent =
-      "Follow the circle. Your progress is saved.";
-    $(".breathing-orbit").classList.add("breathing");
+    $("#calm-status").textContent = "Follow the circle. Your progress is saved.";
+    cueEl.classList.remove("is-fading");
+    cueEl.textContent = CUE_IN;
     const tick = () => {
-      const left = Math.max(0, Math.ceil((breathDeadline - Date.now()) / 1000));
+      const msLeft = Math.max(0, breathDeadline - Date.now());
+      const left = Math.ceil(msLeft / 1000);
       $("#calm-seconds").textContent = left;
-      const cue =
-        left === 0
-          ? "Your pause is complete."
-          : (30 - left) % 10 < 4
-            ? "Breathe in gently…"
-            : "Breathe out slowly…";
-      if ($("#calm-cue").textContent !== cue) $("#calm-cue").textContent = cue;
       if (left === 0) {
         clearInterval(breathTimer);
         breathTimer = null;
-        $(".breathing-orbit").classList.remove("breathing");
-        $("#calm-status").textContent =
-          "Go on when you’re ready.";
-        $("#calm-return").textContent = "I’m ready →";
+        root.classList.remove("is-running");
+        root.classList.add("is-done");
+        cueEl.classList.remove("is-fading");
+        cueEl.textContent = "Your pause is complete.";
+        $("#calm-status").textContent = "Your progress is saved.";
+        $("#calm-return").className = "pause-btn btn-ready";
+        $("#calm-return").innerHTML = `I’m ready ${icon("arrow")}`;
         $("#calm-start").hidden = false;
+        return;
       }
+      // The words fade out just before the breath turns, swap, then fade back in.
+      const elapsed = 30 - msLeft / 1000;
+      const shown = cueAt(elapsed + 0.05);
+      if (cueEl.textContent !== shown) cueEl.textContent = shown;
+      cueEl.classList.toggle("is-fading", cueAt(elapsed + 0.4) !== shown);
     };
     tick();
-    breathTimer = setInterval(tick, 200);
+    breathTimer = setInterval(tick, 100);
   };
   on("#calm-start", start);
   start();
-}
-function showReview() {
-  openModal(
-    `<h2 id="modal-title">Expert review</h2><span class="status-pending">◇ Pending</span><p>We plan to have licensed therapists check every story. No reviewer credentials or approvals have been verified yet.</p><div class="review-process"><div><b>1 · Check the expert’s license</b></div><div><b>2 · Review each story</b></div><div><b>3 · Show who reviewed it</b></div></div><p class="sim-label">Version ${esc(content.contentVersion)}</p><button class="primary full-width" data-close>Got it</button>`,
-  );
 }
 function showRules() {
   openModal(
@@ -927,5 +922,5 @@ function plan() {
       ],
     ],
   };
-  return `${step(3)}<h1 style="font-size:47px">Next <em>steps.</em></h1><div class="summary"><section class="panel"><ol class="now-steps">${pl.steps.map((x) => `<li>${esc(x).replace(/&lt;(\/?strong)&gt;/g, "<$1>")}</li>`).join("")}</ol>${reviewBadge()}</section><section>${pl.links.length ? "<h3>Helpful links</h3>" : ""}${pl.links.map(([title, description, url]) => `<a class="resource" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(title)} ↗</strong><span>${esc(description)}</span></a>`).join("")}<button class="secondary" id="resources-button">Get help now ↗</button><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
+  return `${step(3)}<h1 style="font-size:47px">Next <em>steps.</em></h1><div class="summary"><section class="panel"><ol class="now-steps">${pl.steps.map((x) => `<li>${esc(x).replace(/&lt;(\/?strong)&gt;/g, "<$1>")}</li>`).join("")}</ol></section><section>${pl.links.length ? "<h3>Helpful links</h3>" : ""}${pl.links.map(([title, description, url]) => `<a class="resource" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(title)} ↗</strong><span>${esc(description)}</span></a>`).join("")}<button class="secondary" id="resources-button">Get help now ↗</button><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
 }

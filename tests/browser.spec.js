@@ -89,7 +89,19 @@ test("neutral and promise responses leave space to continue", async ({
   await expect(page.locator(".feedback-title")).toContainText(
     "absolute promise",
   );
-  await expect(page.locator("#repair")).toBeVisible();
+  await expect(page.locator(".attempt-pill")).toHaveText("Attempt 2 of 2");
+  await expect(page.locator('[data-kind="repair"]').first()).toBeVisible();
+});
+test("each question allows two attempts, then moves on", async ({ page }) => {
+  await enter(page);
+  await expect(page.locator(".attempt-pill")).toHaveText("Attempt 1 of 2");
+  await choose(page, "harmful");
+  await expect(page.locator(".deck-progress b")).toHaveText("1");
+  await expect(page.locator(".attempt-pill")).toHaveText("Attempt 2 of 2");
+  // A second hurtful answer no longer loops: the next question comes.
+  await page.locator('[data-kind="harmful"]').first().click();
+  await expect(page.locator(".deck-progress b")).toHaveText("2");
+  await expect(page.locator(".attempt-pill")).toHaveText("Attempt 1 of 2");
 });
 test("relaxation timer finishes, can repeat, and cancels on Escape", async ({
   page,
@@ -116,11 +128,11 @@ test("review status, rule explanation, keyboard dialog behavior", async ({
   await page.locator("#review-nav").click();
   await expect(page.locator("main")).toHaveAttribute("data-stage", "review");
   await expect(page.locator("main")).toContainText(
-    "No reviewer credentials or approvals have been verified",
+    "Check the license",
   );
   await enter(page);
   await page.locator("[data-rules]").click();
-  await expect(page.locator(".rule-list")).toContainText("+18");
+  await expect(page.locator(".rule-list")).toContainText("+10");
   await expect(page.locator("#modal-content")).toContainText(
     "Not clinically validated",
   );
@@ -226,11 +238,14 @@ for (const width of [360, 390, 768, 1440])
       ),
     ).toBe(true);
   });
-test("pause: card button before practice, pill only during practice, feedback preserved", async ({
+test("pause: card button on Get ready, pill on every other screen, feedback preserved", async ({
   page,
 }) => {
   await page.clock.install();
   await page.goto("/");
+  // The pause pill is on every screen except "Get ready", which has its own breathing card.
+  await expect(page.locator("#pause-session")).toBeVisible();
+  await page.locator('[data-category="contact"]').click();
   await page.locator('[data-select="0"]').click();
   await expect(page.locator("#pause-session")).toBeHidden();
   await page.locator("#breathe").click();
@@ -249,10 +264,10 @@ test("pause: card button before practice, pill only during practice, feedback pr
   await page.locator('[data-kind="good"]').click();
   await page.locator('[data-kind="good"]').click();
   await page.locator("#continue").click();
-  await expect(page.locator("#pause-session")).toBeHidden();
+  await expect(page.locator("#pause-session")).toBeVisible();
   await page.locator("#plan-button").click();
   await expect(page.locator(".now-steps li")).toHaveCount(6);
-  await expect(page.locator("#pause-session")).toBeHidden();
+  await expect(page.locator("#pause-session")).toBeVisible();
 });
 
 test("master progression: neutral replies reach reflection without a score requirement", async ({
@@ -262,9 +277,11 @@ test("master progression: neutral replies reach reflection without a score requi
   await choose(page, "neutral");
   await choose(page, "neutral");
   await choose(page, "promise");
+  // A risky promise gets one "make it right" attempt before the end.
+  await page.locator('[data-kind="repair"]').first().click();
   await page.locator("#continue").click();
   await expect(page.locator("main")).toHaveAttribute("data-stage", "reflect");
-  await expect(page.locator(".turn")).toHaveCount(3);
+  await expect(page.locator(".turn")).toHaveCount(4);
 });
 test("prerecorded audio mapping plays and stops; failures remain readable", async ({
   page,
@@ -317,8 +334,9 @@ test("Back and Home are visible on every screen except home", async ({
   await expect(page.locator("#nav-back")).toBeHidden();
   await expect(page.locator("#nav-home")).toBeHidden();
   await expect(page.locator("header")).toHaveCount(1);
+  await page.locator('[data-category="contact"]').click();
   await page.locator('[data-select="0"]').click();
-  await expect(page.locator("#review-nav")).toBeHidden();
+  await expect(page.locator("#review-nav")).toBeVisible();
   await expect(page.locator("#nav-back")).toBeVisible();
   await expect(page.locator("#nav-home")).toBeVisible();
   await page.locator("#begin").click();
@@ -352,8 +370,10 @@ test("loading screen shows on page load only, not when returning home", async ({
   await page.goto("/");
   await expect(page.locator("#splash")).toBeVisible();
   await expect(page.locator("#splash")).toHaveCount(0, { timeout: 5000 });
+  await page.locator('[data-category="contact"]').click();
   await page.locator('[data-select="0"]').click();
   await page.locator("#nav-home").click();
+  await page.locator('[data-category="contact"]').click();
   await page.locator('[data-select="0"]').click();
   await page.locator("#home").click();
   await expect(page.locator("#splash")).toHaveCount(0);
@@ -407,7 +427,7 @@ test("children animate and react: talking, celebration, rain, banner, meter scor
   await choose(page, "good");
   await expect(page.locator(".burst span").first()).toBeAttached();
   await expect(page.locator(".burst-banner.kind-good")).toContainText("Nice!");
-  await expect(page.locator(".meter-delta.up")).toHaveText("+15");
+  await expect(page.locator(".meter-delta.up")).toHaveText("+20");
   await choose(page, "harmful");
   await expect(page.locator(".rain .cloud")).toBeAttached();
   await expect(page.locator(".burst-banner.kind-harmful")).toContainText("Ouch");
