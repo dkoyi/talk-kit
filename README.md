@@ -23,7 +23,7 @@ On Windows, use `py -m http.server 8000 --bind 127.0.0.1` if `python3` is unavai
 - 12 editable situations across Online contact, Friendship & belonging, Content & feelings, and Digital boundaries.
 - Three fictional characters with four SVG expressions that respond to the illustrative conversation state.
 - Shuffled response cards: select, explore feedback, then continue. Feedback stays visible until the parent chooses to move on.
-- Scenario-specific preparation, original curated responses and child dialogue, repair practice, optional typed replies, seven human values, reflection and next-step plans.
+- Scenario-specific preparation, original curated responses and child dialogue, repair practice, seven human values, reflection and next-step plans.
 - A persistent **Take a pause** action during preparation, practice, feedback, reflection, next steps, and support. On mobile it becomes a sticky bar above the content.
 - A full-screen pause over a calm landscape (`assets/calm-scene.svg`) with a 30-second countdown that begins when opened, with 4-second inhale / 6-second exhale cues over three cycles. Following the cues is optional. End early, press Escape, or wait and continue when ready. It never submits an answer, changes the score, or clears a draft/selection. Timing uses a deadline to account for background-tab throttling. Reduced-motion settings disable the breathing animation; the countdown and cues remain.
 - Optional **Listen** playback using installed English device voices. Only `localService` voices are selected. It requests no microphone access and stops on navigation or opening a dialog. Browser voices differ; clear inline fallback text appears when no voice is available. This is speech playback, not speech recognition, voice cloning, or an AI conversation service.
@@ -34,11 +34,10 @@ On Windows, use `py -m http.server 8000 --bind 127.0.0.1` if `python3` is unavai
 
 `data/scenarios.json` is the website's content source. Each scenario has an `id`, `categoryId`, `characterIndex` (0: Maya, 1: Jayden, 2: Lucía), context, opening dialogue, preparation tips, three sets of response choices, and pending-review metadata. The original three also have detailed next-step plans. Shared repairs, categories, principles, and authored child responses are in the same file.
 
-For each response, `kind` is one of `good`, `repair`, `harmful`, `promise`, `neutral`, or `unknown`. Optional `values`, `note`, `alt`, `title`, and `delta` let reviewers specify feedback and weight overrides. `childResponses` maps an exact response text to the child's authored reply lines; otherwise the scenario's `later` lines are used for supportive replies. Update both if changing a mapped response. UI templates remain in `assets/app.js`; styles in `assets/styles.css`; weights, typed-reply classification and data validation in `assets/engine.js`.
+For each response, `kind` is one of `good`, `repair`, `harmful`, `promise`, `neutral`, or `unknown`. Optional `values`, `note`, `alt`, `title`, and `delta` let reviewers specify feedback and weight overrides. `childResponses` maps an exact response text to the child's authored reply lines; otherwise the scenario's `later` lines are used for supportive replies. Update both if changing a mapped response. UI templates remain in `assets/app.js`; styles in `assets/styles.css`; weights and data validation in `assets/engine.js`.
 
 The default weights match both base versions: supportive +15, repair +18, harmful −20, absolute promise −5, neutral/uncertain 0. The illustrative meter starts at 50 and stays between 5 and 95. Three main responses complete a deck regardless of their score, preserving the latest master branch’s progression behavior. Optional repairs do not advance the main story. Parents can finish early. Scores and expressions are story devices, not clinical measures or grades. Attempts remain in memory only for optional reflection across retries.
 
-Typed replies use a small phrase checker. It can miss context, negation, sarcasm, and safety concerns; it is not an assessment tool. Ambiguous matches receive no score change. Suggested cards use their authored response classifications.
 
 After changing content, refresh the browser and run the tests below. The loader rejects malformed response decks and non-pending review statuses in this demo. Edit `contentVersion` when preparing a new reviewed release.
 
@@ -59,7 +58,7 @@ If Chromium is already installed:
 CHROMIUM_PATH=/usr/bin/chromium npm run test:browser
 ```
 
-The browser suite starts its own server on port 8013. It exercises all 12 decks, branching/repair, typed-reply errors and escaping, the countdown and state preservation, review dialogs, voice fallbacks/cancellation, content-load recovery, and 360/390/768/1440px layouts. Voice playback is tested with browser API doubles; actual sound and available device voices require checking in the browser/device you will demo. Tests do not establish clinical effectiveness or professional review.
+The browser suite starts its own server on port 8013. It exercises all 12 decks, branching/repair, answer escaping, the countdown and state preservation, review dialogs, voice fallbacks/cancellation, content-load recovery, and 360/390/768/1440px layouts. Voice playback is tested with browser API doubles; actual sound and available device voices require checking in the browser/device you will demo. Tests do not establish clinical effectiveness or professional review.
 
 ## Scope and provenance
 
@@ -80,6 +79,16 @@ Each scenario in `data/scenarios.json` has a `voice` field naming the ElevenLabs
 | Lucía, 8 | Mimi (young, childish) | `zrHiDhphv9ZnVXBqCLjz` |
 
 These are ElevenLabs premade voices; none is labelled as a child, so these are the closest fits. Confirm each ID in your ElevenLabs account (Voices → ⋯ → Copy voice ID) before generating audio, as ElevenLabs is replacing some legacy default voices.
+
+Every line a child speaks also has ElevenLabs v3 audio tags in `audioTags`, keyed by the exact line (lines are shared between scenarios, so they are keyed by text like `audioClips`). For example:
+
+```json
+"audioTags": {
+  "Can I tell you something? Someone in my game keeps asking for pictures. Please don’t get mad.": ["nervous", "hesitant", "pleading"]
+}
+```
+
+When generating a clip, prefix the line with its tags in brackets, e.g. `[nervous] [hesitant] [pleading] Can I tell you something?…`, using the character's `voiceId` and a v3 model. The loader rejects tags that aren't lowercase words, and the engine tests check that no spoken line is missing tags. The five fallback lines in `assets/app.js` are tagged too.
 
 The website never calls ElevenLabs: an API key in a static site would be public. Generate each line once in ElevenLabs with the character's `voiceId`, save the MP3 under `assets/audio/<character>/`, and map it in `audioClips` as described below. Lines without a recording fall back to the device voice.
 

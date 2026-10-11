@@ -48,7 +48,7 @@ test("answers react instantly; harmful reply goes straight to repair; restart ca
     "data-mood",
     "worried",
   );
-  await expect(page.locator(".delta-pop")).toHaveText("-20");
+  await expect(page.locator(".meter-delta.down")).toHaveText("-20");
   await expect(page.locator('[data-kind="repair"]').first()).toBeVisible();
   await choose(page, "repair");
   await expect(page.locator(".feedback-title")).toContainText("begin again");
@@ -64,34 +64,19 @@ test("answers react instantly; harmful reply goes straight to repair; restart ca
     content.scenarios[0].open,
   );
 });
-test("typed replies: inline errors, uncertainty, escaping, and limits", async ({
+test("answer text is escaped, and typed replies, Finish and chat log are gone", async ({
   page,
 }) => {
+  await page.route("**/data/scenarios.json", async (route) => {
+    const data = structuredClone(content);
+    data.scenarios[0].replies[0][0].text = "<img src=x onerror=alert(1)> Hi";
+    return route.fulfill({ json: data });
+  });
   await enter(page);
-  await page.locator(".custom-entry summary").click();
-  await page.locator("#custom").fill("   ");
-  await page.locator("#custom-form button").click();
-  await expect(page.locator("#custom-error")).toContainText(
-    "Type a few words",
-  );
-  await expect(page.locator("#custom")).toHaveAttribute("aria-invalid", "true");
-  await page
-    .locator("#custom")
-    .fill("<img src=x onerror=alert(1)> What do you need?");
-  await page.locator("#custom-form button").click();
-  await expect(page.locator(".feedback-title")).toContainText(
-    "reflect rather than score",
-  );
+  await expect(page.locator(".custom-entry, #custom, #reflect, .transcript")).toHaveCount(0);
+  await page.locator(".reply", { hasText: "<img" }).click();
   await expect(page.locator(".your-choice")).toContainText("<img");
   await expect(page.locator(".your-choice img")).toHaveCount(0);
-  await page.locator(".custom-entry summary").click();
-  await page.locator("#custom").fill("Thank you for telling me.");
-  await page.locator("#custom-form button").click();
-  await expect(page.locator(".feedback-title")).toContainText(
-    "You made room for more",
-  );
-  await page.locator("#reflect").click();
-  await expect(page.locator(".turn")).toHaveCount(2);
 });
 test("neutral and promise responses leave space to continue", async ({
   page,
@@ -242,36 +227,33 @@ for (const width of [360, 390, 768, 1440])
       ),
     ).toBe(true);
   });
-test("overwhelmed pause preserves typed draft and feedback across the entire scenario", async ({
+test("pause: card button before practice, pill only during practice, feedback preserved", async ({
   page,
 }) => {
   await page.clock.install();
   await page.goto("/");
   await page.locator('[data-select="0"]').click();
-  await page.locator("#pause-session").click();
+  await expect(page.locator("#pause-session")).toBeHidden();
+  await page.locator("#breathe").click();
   await expect(page.locator("#calm-cue")).toContainText("Breathe in");
   await page.clock.fastForward(4000);
   await expect(page.locator("#calm-cue")).toContainText("Breathe out");
   await page.locator("#calm-return").click();
   await page.locator("#begin").click();
-  await page.locator(".custom-entry summary").click();
-  await page.locator("#custom").fill("I want to listen.");
-  await page.locator("#pause-session").click();
-  await page.clock.fastForward(10000);
-  await page.locator("#calm-return").click();
-  await expect(page.locator("#custom")).toHaveValue("I want to listen.");
+  await expect(page.locator("#pause-session")).toBeVisible();
   await page.locator('[data-kind="good"]').click();
   const feedback = await page.locator(".feedback-title").innerText();
   await page.locator("#pause-session").click();
   await page.clock.fastForward(30000);
   await page.locator("#calm-return").click();
   await expect(page.locator(".feedback-title")).toHaveText(feedback);
-  await page.locator("#reflect").click();
-  await expect(page.locator("#pause-session")).toBeVisible();
+  await page.locator('[data-kind="good"]').click();
+  await page.locator('[data-kind="good"]').click();
+  await page.locator("#continue").click();
+  await expect(page.locator("#pause-session")).toBeHidden();
   await page.locator("#plan-button").click();
   await expect(page.locator(".now-steps li")).toHaveCount(6);
-  await page.locator("#pause-session").click();
-  await expect(page.locator("#calm-seconds")).toHaveText("30");
+  await expect(page.locator("#pause-session")).toBeHidden();
 });
 
 test("master progression: neutral replies reach reflection without a score requirement", async ({
@@ -343,13 +325,15 @@ test("Back and Home are visible on every screen except home", async ({
   await page.locator("#begin").click();
   await expect(page.locator("#nav-back")).toBeVisible();
   await choose(page, "good");
-  await page.locator("#reflect").click();
+  await choose(page, "good");
+  await choose(page, "good");
+  await page.locator("#continue").click();
   await page.locator("#plan-button").click();
   await page.locator("#nav-back").click();
   await expect(page.locator("main")).toHaveAttribute("data-stage", "reflect");
   await page.locator("#nav-back").click();
   await expect(page.locator("main")).toHaveAttribute("data-stage", "practice");
-  await expect(page.locator(".turn, .reaction")).toHaveCount(1);
+  await expect(page.locator(".reaction")).toHaveCount(1);
   await page.locator("#nav-back").click();
   await expect(page.locator("main")).toHaveAttribute("data-stage", "prep");
   await page.locator("#now-nav").click();
@@ -361,8 +345,7 @@ test("Back and Home are visible on every screen except home", async ({
 test("double-clicking an answer records it once", async ({ page }) => {
   await enter(page);
   await page.locator('[data-kind="good"]').dblclick();
-  await page.locator("#reflect").click();
-  await expect(page.locator(".turn")).toHaveCount(1);
+  await expect(page.locator(".deck-progress b")).toHaveText("2");
 });
 test("loading screen shows on page load only, not when returning home", async ({
   page,
@@ -414,4 +397,27 @@ test("the result card is fully visible below the header after answering", async 
     header: document.querySelector("header").getBoundingClientRect().bottom,
   }));
   expect(top).toBeGreaterThanOrEqual(header);
+});
+
+test("children animate and react: talking, celebration, rain, banner, meter score", async ({
+  page,
+}) => {
+  await enter(page);
+  await expect(page.locator(".live-character.talking .c-mouth-open")).toHaveCount(1);
+  await expect(page.locator(".delta-pop")).toHaveCount(0);
+  await choose(page, "good");
+  await expect(page.locator(".burst span").first()).toBeAttached();
+  await expect(page.locator(".burst-banner.kind-good")).toContainText("Nice!");
+  await expect(page.locator(".meter-delta.up")).toHaveText("+15");
+  await choose(page, "harmful");
+  await expect(page.locator(".rain .cloud")).toBeAttached();
+  await expect(page.locator(".burst-banner.kind-harmful")).toContainText("Ouch");
+  await expect(page.locator(".meter-delta.down")).toHaveText("-20");
+});
+test("Home sits at the far right of the header", async ({ page }) => {
+  await enter(page);
+  const last = await page.evaluate(
+    () => document.querySelector("header nav").lastElementChild.id,
+  );
+  expect(last).toBe("nav-home");
 });

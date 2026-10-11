@@ -1,5 +1,4 @@
 import {
-  classify,
   evaluate,
   moodFor,
   validateContent,
@@ -29,7 +28,6 @@ let content,
   messages = [],
   count = 0,
   repairMode = false,
-  customDraft = "",
   reacted = false;
 let activeAudio = null;
 let breathTimer = null,
@@ -138,8 +136,11 @@ const MOODS = {
     blush: 0.4,
   },
 };
-const childArt = (i, mood = "worried") =>
-  `<svg viewBox="0 0 230 205" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${["Maya", "Jayden", "Lucía"][i]}: illustrative ${mood} expression" data-mood="${mood}"><circle cx="115" cy="100" r="83" fill="#fff" opacity=".35"/><path d="M55 203v-30c0-39 120-39 120 0v30" fill="${["#75896e", "#c29a72", "#9b8ea5"][i]}"/><rect x="101" y="132" width="28" height="29" rx="10" fill="${["#b47b57", "#7a4e36", "#d2a27f"][i]}"/><path d="M66 99V75c0-66 100-66 100 0v39" fill="${["#453b32", "#303d39", "#615043"][i]}"/><ellipse cx="115" cy="97" rx="44" ry="51" fill="${["#c58d67", "#956547", "#e1b492"][i]}"/><path d="M70 77c-1-57 91-63 96 0-27-8-36-27-39-34-11 20-34 32-57 34" fill="${["#453b32", "#303d39", "#615043"][i]}"/><ellipse cx="84" cy="114" rx="8" ry="4.5" fill="#e0806a" opacity="${MOODS[mood].blush}"/><ellipse cx="146" cy="114" rx="8" ry="4.5" fill="#e0806a" opacity="${MOODS[mood].blush}"/><path d="${MOODS[mood].brow}" stroke="#57463b" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="94" cy="99" rx="3.2" ry="${MOODS[mood].eye}" fill="#263a34"/><ellipse cx="137" cy="99" rx="3.2" ry="${MOODS[mood].eye}" fill="#263a34"/><circle cx="95.2" cy="97.5" r="1.1" fill="#fff"/><circle cx="138.2" cy="97.5" r="1.1" fill="#fff"/><path d="M111 112l-2 5h7" stroke="#775445" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M106 129${MOODS[mood].mouth}" stroke="#775445" stroke-width="2.4" fill="none" stroke-linecap="round"/>${mood === "sad" ? '<path d="M91 106q-3 6 0 9q3-3 0-9" fill="#9cc6dc"/>' : ""}${i === 2 ? '<path d="M72 68q-31 8-22 44m106-44q31 8 24 44" fill="none" stroke="#615043" stroke-width="17"/>' : ""}</svg>`;
+const childArt = (i, mood = "worried") => {
+  const hair = ["#453b32", "#303d39", "#615043"][i];
+  const m = MOODS[mood];
+  return `<svg class="child mood-${mood}" viewBox="0 0 230 205" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${["Maya", "Jayden", "Lucía"][i]}: illustrative ${mood} expression" data-mood="${mood}"><circle cx="115" cy="100" r="83" fill="#fff" opacity=".35"/><g class="c-body"><path d="M55 203v-30c0-39 120-39 120 0v30" fill="${["#75896e", "#c29a72", "#9b8ea5"][i]}"/><rect x="101" y="132" width="28" height="29" rx="10" fill="${["#b47b57", "#7a4e36", "#d2a27f"][i]}"/></g><g class="c-head"><path d="M66 99V75c0-66 100-66 100 0v39" fill="${hair}"/><ellipse cx="115" cy="97" rx="44" ry="51" fill="${["#c58d67", "#956547", "#e1b492"][i]}"/><path d="M70 77c-1-57 91-63 96 0-27-8-36-27-39-34-11 20-34 32-57 34" fill="${hair}"/><ellipse class="c-blush" cx="84" cy="114" rx="8" ry="4.5" fill="#e0806a" opacity="${m.blush}"/><ellipse class="c-blush" cx="146" cy="114" rx="8" ry="4.5" fill="#e0806a" opacity="${m.blush}"/><path class="c-brows" d="${m.brow}" stroke="#57463b" stroke-width="3" fill="none" stroke-linecap="round"/><g class="c-eyes"><g class="c-blink"><ellipse cx="94" cy="99" rx="3.2" ry="${m.eye}" fill="#263a34"/><ellipse cx="137" cy="99" rx="3.2" ry="${m.eye}" fill="#263a34"/><circle cx="95.2" cy="97.5" r="1.1" fill="#fff"/><circle cx="138.2" cy="97.5" r="1.1" fill="#fff"/></g></g><path d="M111 112l-2 5h7" stroke="#775445" stroke-width="2" fill="none" stroke-linecap="round"/><path class="c-mouth" d="M106 129${m.mouth}" stroke="#775445" stroke-width="2.4" fill="none" stroke-linecap="round"/><ellipse class="c-mouth-open" cx="115" cy="130" rx="6.5" ry="4.5" fill="#7a3f36"/><path class="c-tear" d="M91 106q-3 6 0 9q3-3 0-9" fill="#7fb8dc"/><path class="c-tear c-tear-2" d="M139 106q-3 6 0 9q3-3 0-9" fill="#7fb8dc"/>${i === 2 ? `<path d="M72 68q-31 8-22 44m106-44q31 8 24 44" fill="none" stroke="${hair}" stroke-width="17"/>` : ""}</g></svg>`;
+};
 function step(n) {
   return `<ol class="steps" aria-label="Practice progress">${["Choose", "Prepare", "Practice", "Reflect"].map((v, i) => `<li ${i === n ? 'aria-current="step"' : ""} class="${i === n ? "active" : ""} ${i < n ? "complete" : ""}"><span>${i < n ? "✓" : i + 1}</span>${v}</li>`).join("")}</ol>`;
 }
@@ -151,7 +152,6 @@ function reset() {
   messages = [{ who: c().name, text: c().open }];
   count = 0;
   repairMode = false;
-  customDraft = "";
   reacted = false;
 }
 function stopVoice() {
@@ -162,6 +162,7 @@ function stopVoice() {
   }
   voiceToken++;
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  $(".live-character")?.classList.remove("speaking");
   const button = $("#listen");
   if (button) {
     button.innerHTML = `${icon("speaker")} Listen`;
@@ -243,14 +244,31 @@ function practice() {
       ? ` react-${delta > 0 ? "up" : delta < 0 ? "down" : "flat"}`
       : "";
   const from = reacted && last ? last.before : score;
-  return `${step(2)}<div class="practice-heading"><div><h1>Talking with <em>${esc(c().name)}.</em></h1></div><button class="secondary" id="restart">↺ Start over</button></div><div class="practice-shell"><aside class="character-panel theme-${c().characterIndex} mood-${mood}${react}"><div class="character-top"><span class="pill">${esc(c().topic)}</span></div><div class="live-character">${childArt(c().characterIndex, mood)}<span class="mood-label">${mood === "happy" ? `${icon("happy")} Feeling closer` : mood === "calm" ? `${icon("calm")} Calmer` : mood === "sad" ? `${icon("sad")} Upset` : `${icon("worried")} Worried`}</span>${react ? `<span class="delta-pop ${delta > 0 ? "up" : delta < 0 ? "down" : ""}" aria-hidden="true">${delta > 0 ? "+" : ""}${delta}</span>` : ""}</div><div class="character-name">${esc(c().name)}<span>Age ${c().age}</span></div><div class="feeling"><strong>${icon("thought")}</strong><span>${last ? esc(last.feeling) : esc(c().feeling)}</span></div><div class="openness" role="img" aria-label="How open ${esc(c().name)} feels: ${zone()}"><div class="face-scale">${icon("worried")}<div class="meter"><span class="marker" style="--from:${from}%;--to:${score}%"></span></div>${icon("happy")}</div></div><button class="text-button small" data-rules>ⓘ How this works</button></aside><section class="conversation-area"><div class="deck-progress"><span><b>${Math.min(count + 1, 3)}</b> / 3</span><div class="progress-dots" aria-label="${count} of 3 moments explored">${[0, 1, 2].map((i) => `<span class="${i < count ? "done" : i === count ? "current" : ""}"></span>`).join("")}</div></div><div class="flashcard${react}" id="flashcard" tabindex="-1">${practiceCard()}</div><div class="under-card"><button class="text-button" id="reflect">Finish ✓</button></div>${messages.length > 1 ? `<details class="transcript"><summary>Chat so far <span>${turns.length}</span></summary><div class="chatlog" id="chatlog">${messages.map((m) => `<div class="bubble ${m.who === "You" ? "parent" : ""}"><span class="speaker">${esc(m.who)}</span>${esc(m.text)}</div>`).join("")}</div></details>` : ""}</section></div>`;
+  const way = delta > 0 ? "up" : delta < 0 ? "down" : "flat";
+  // Mouth moves for roughly as long as the line takes to say.
+  const talkBeats = Math.min(
+    24,
+    Math.max(6, Math.round(currentLine().split(/\s+/).length * 1.4)),
+  );
+  const effects = !react
+    ? ""
+    : way === "up"
+      ? `<div class="burst" aria-hidden="true">${Array.from({ length: 16 }, (_, k) => `<span style="--a:${k * 22.5}deg;--c:${["#2fbf55", "#ffc400", "#ff7a59", "#3fa9f5", "#b36bff"][k % 5]}"></span>`).join("")}</div>`
+      : way === "down"
+        ? `<div class="rain" aria-hidden="true"><span class="cloud"></span>${Array.from({ length: 7 }, (_, k) => `<i style="--x:${k * 14 - 42}px;--d:${(k % 3) * 0.15}s"></i>`).join("")}</div>`
+        : "";
+  const banner = !react
+    ? ""
+    : `<div class="burst-banner kind-${last.kind}" aria-hidden="true">${resultIcon(last.kind)}<strong>${
+        { good: "Nice! " + esc(c().name) + " opened up.", repair: "Nice repair! " + esc(c().name) + " feels safer.", harmful: "Ouch. " + esc(c().name) + " is upset.", promise: "Careful. That promise may not hold.", neutral: "Hmm. " + esc(c().name) + " isn’t sure yet.", unknown: "Hmm. " + esc(c().name) + " isn’t sure yet." }[last.kind] || ""
+      }</strong></div>`;
+  return `${step(2)}<div class="practice-heading"><div><h1>Talking with <em>${esc(c().name)}.</em></h1></div><button class="secondary" id="restart">↺ Start over</button></div><div class="practice-shell"><aside class="character-panel theme-${c().characterIndex} mood-${mood}${react}"><div class="character-top"><span class="pill">${esc(c().topic)}</span></div><div class="live-character talking" style="--talk-n:${talkBeats}">${effects}${childArt(c().characterIndex, mood)}<span class="mood-label">${mood === "happy" ? `${icon("happy")} Feeling closer` : mood === "calm" ? `${icon("calm")} Calmer` : mood === "sad" ? `${icon("sad")} Upset` : `${icon("worried")} Worried`}</span></div><div class="character-name">${esc(c().name)}<span>Age ${c().age}</span></div><div class="feeling"><strong>${icon("thought")}</strong><span>${last ? esc(last.feeling) : esc(c().feeling)}</span></div><div class="openness" role="img" aria-label="How open ${esc(c().name)} feels: ${zone()}"><div class="openness-head"><span>How open ${esc(c().name)} feels</span><b>${zone()}</b></div><div class="meter-track${react ? ` pulse-${way}` : ""}" style="--from:${from}%;--to:${score}%"><div class="meter-fill"></div><div class="meter-knob">${icon(mood === "sad" ? "sad" : mood === "worried" ? "worried" : mood === "calm" ? "calm" : "happy")}</div>${react && delta ? `<span class="meter-delta ${way}">${delta > 0 ? "+" : ""}${delta}</span>` : ""}</div></div><button class="text-button small" data-rules>ⓘ How this works</button></aside><section class="conversation-area"><div class="deck-progress"><span><b>${Math.min(count + 1, 3)}</b> / 3</span><div class="progress-dots" aria-label="${count} of 3 moments explored">${[0, 1, 2].map((i) => `<span class="${i < count ? "done" : i === count ? "current" : ""}"></span>`).join("")}</div></div><div class="flashcard${react}" id="flashcard" tabindex="-1">${practiceCard()}</div></section></div>${banner}`;
 }
 function practiceCard() {
   const last = lastTurn();
-  const delta = last ? last.after - last.before : 0;
   const finished = count >= 3 && !repairMode;
   const reaction = last
-    ? `<div class="reaction kind-${last.kind}" role="status"><div class="reaction-head">${resultIcon(last.kind)}<h2 class="feedback-title">${esc(last.title)}</h2>${delta ? `<span class="reaction-delta">${delta > 0 ? "+" : ""}${delta}</span>` : ""}</div><p class="your-choice">You said: “${esc(last.text)}”</p><p class="also-try">${icon("bulb")} <span>Also try: “${esc(last.alternative)}”</span></p></div>`
+    ? `<div class="reaction kind-${last.kind}" role="status"><div class="reaction-head">${resultIcon(last.kind)}<h2 class="feedback-title">${esc(last.title)}</h2></div><p class="your-choice">You said: “${esc(last.text)}”</p><p class="also-try">${icon("bulb")} <span>Also try: “${esc(last.alternative)}”</span></p></div>`
     : "";
   const child = `<div class="flashcard-top"><span class="eyebrow">${esc(c().name.toUpperCase())}${repairMode ? " · MAKE IT RIGHT" : ""}</span><button class="voice-button" id="listen" aria-pressed="false">${icon("speaker")} Listen</button></div><p id="voice-error" class="inline-error" role="status" hidden></p><blockquote class="child-quote">“${esc(currentLine())}”</blockquote>`;
   if (finished)
@@ -262,7 +280,7 @@ function practiceCard() {
     )
     .join(
       "",
-    )}</div><details class="custom-entry" ${customDraft ? "open" : ""}><summary>${icon("pencil")} Or type your own</summary><form id="custom-form" novalidate><label class="formlabel" for="custom">What would you say?</label><textarea id="custom" maxlength="500" aria-describedby="custom-help custom-error" placeholder="Type here…">${esc(customDraft)}</textarea><div class="custom-meta"><span id="custom-help">No real names, please.</span><span id="character-count">${customDraft.length}/500</span></div><p id="custom-error" class="inline-error" role="alert" hidden></p><button class="secondary" type="submit">Say it →</button></form></details>${!repairMode && (last?.kind === "harmful" || last?.kind === "promise") ? '<button class="text-button repair-link" id="repair">↺ Practice making it right</button>' : ""}`;
+    )}</div>${!repairMode && (last?.kind === "harmful" || last?.kind === "promise") ? '<button class="text-button repair-link" id="repair">↺ Practice making it right</button>' : ""}`;
 }
 const RESULT_ICONS = {
   good: "star",
@@ -296,19 +314,19 @@ function respond(text, kind, choice = {}) {
   for (const line of childLines) messages.push({ who: c().name, text: line });
   // A hurtful reply goes straight to repair choices, as the original continue step did.
   repairMode = kind === "harmful" && count < 3;
-  customDraft = "";
   currentOptions = null;
   reacted = true;
   render();
   reacted = false;
   $("#flashcard").focus({ preventScroll: true });
-  const result = $(".reaction");
+  // On phones the child sits above the card, so keep their reaction in view too.
+  const result = matchMedia("(max-width: 720px)").matches
+    ? $(".character-panel")
+    : $(".reaction");
   if (result) {
-    const top =
-      result.getBoundingClientRect().top +
-      window.scrollY -
-      $("header").offsetHeight -
-      16;
+    // Layout position (ignores the pop-in animation's transform).
+    let top = -$("header").offsetHeight - 16;
+    for (let el = result; el; el = el.offsetParent) top += el.offsetTop;
     window.scrollTo({ top: Math.max(0, top), behavior: motion() });
   }
 }
@@ -355,13 +373,7 @@ function render() {
   $("#how-nav").hidden = inside;
   $("#about-nav").hidden = inside;
   document.body.classList.toggle("inside", inside);
-  $("#pause-session").hidden = ![
-    "prep",
-    "practice",
-    "reflect",
-    "plan",
-    "resources",
-  ].includes(stage);
+  $("#pause-session").hidden = stage !== "practice";
   document.body.classList.toggle("in-session", !$("#pause-session").hidden);
   decorate($("#app"));
   bind();
@@ -426,38 +438,12 @@ function bind() {
   );
   on("#continue", () => go("reflect"));
   on("#repair", () => {
-    customDraft = $("#custom")?.value || "";
     repairMode = true;
     currentOptions = null;
     render();
     $(".reply").focus();
   });
-  on("#reflect", () => go("reflect"));
   on("#listen", speak);
-  const form = $("#custom-form");
-  if (form) {
-    $("#custom").oninput = () => {
-      customDraft = $("#custom").value;
-      $("#character-count").textContent = `${customDraft.length}/500`;
-      $("#custom-error").hidden = true;
-      $("#custom").removeAttribute("aria-invalid");
-    };
-    form.onsubmit = (e) => {
-      e.preventDefault();
-      const text = $("#custom").value.trim();
-      if (!text || text.length > 500) {
-        $("#custom-error").textContent =
-          text.length > 500
-            ? "Keep your reply under 500 characters."
-            : "Type a few words first.";
-        $("#custom-error").hidden = false;
-        $("#custom").setAttribute("aria-invalid", "true");
-        $("#custom").focus();
-        return;
-      }
-      respond(text, classify(text));
-    };
-  }
   on("#again", () => {
     reset();
     go("practice");
@@ -507,7 +493,7 @@ $("#modal").addEventListener("click", (e) => {
 });
 function showCalm() {
   openModal(
-    `<div class="calm-scene" aria-hidden="true"><div class="calm-picture"></div><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span></div><div class="calm-panel"><h2 id="modal-title">Take a pause.</h2><p>Your progress is saved.</p><div class="breathing-orbit breathing"><div class="breathing-circle"><span id="calm-seconds" role="timer" aria-label="Seconds remaining">30</span><small>seconds</small></div></div><h3 id="calm-cue" class="calm-cue" aria-live="polite">Breathe in gently…</h3><p id="calm-status" role="status">Follow the circle.</p><div class="modal-actions"><button class="primary" id="calm-return" data-close>End pause</button><button class="secondary" id="calm-start" hidden>↺ Again</button></div></div>`,
+    `<div class="calm-scene" aria-hidden="true"><div class="calm-picture"></div><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span></div><div class="calm-panel"><div class="calm-sky"><h2 id="modal-title">Take a pause.</h2><div class="breathing-orbit breathing"><div class="breathing-circle"><span id="calm-seconds" role="timer" aria-label="Seconds remaining">30</span><small>seconds</small></div></div></div><div class="calm-lake"><h3 id="calm-cue" class="calm-cue" aria-live="polite">Breathe in gently…</h3><p id="calm-status" role="status">Follow the circle. Your progress is saved.</p><div class="modal-actions"><button class="primary" id="calm-return" data-close>End pause</button><button class="secondary" id="calm-start" hidden>↺ Again</button></div></div></div>`,
     "calm-fullscreen",
   );
   const start = () => {
@@ -516,7 +502,7 @@ function showCalm() {
     $("#calm-start").hidden = true;
     $("#calm-return").textContent = "End pause";
     $("#calm-status").textContent =
-      "Follow the circle.";
+      "Follow the circle. Your progress is saved.";
     $(".breathing-orbit").classList.add("breathing");
     const tick = () => {
       const left = Math.max(0, Math.ceil((breathDeadline - Date.now()) / 1000));
@@ -592,6 +578,7 @@ function speak() {
       activeAudio.onerror = fail;
       button.textContent = "■ Stop";
       button.setAttribute("aria-pressed", "true");
+      $(".live-character")?.classList.add("speaking");
       activeAudio.play().catch(fail);
     } catch {
       fail();
@@ -625,6 +612,7 @@ function speak() {
   utterance.pitch = [1.05, 0.95, 1.12][c().characterIndex];
   button.textContent = "■ Stop";
   button.setAttribute("aria-pressed", "true");
+  $(".live-character")?.classList.add("speaking");
   utterance.onend = () => {
     if (token === voiceToken) stopVoice();
   };

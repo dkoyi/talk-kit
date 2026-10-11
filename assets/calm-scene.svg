@@ -11,9 +11,9 @@
       <stop offset="1" stop-color="#ffe2b8" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#e8cfb3"/>
-      <stop offset="0.4" stop-color="#a9c2c0"/>
-      <stop offset="1" stop-color="#6f9a98"/>
+      <stop offset="0" stop-color="#8fb0a8"/>
+      <stop offset="0.35" stop-color="#5f8f8a"/>
+      <stop offset="1" stop-color="#2f5f5c"/>
     </linearGradient>
     <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#fff8ee" stop-opacity="0"/>
