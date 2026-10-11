@@ -30,8 +30,7 @@ let content,
   count = 0,
   repairMode = false,
   customDraft = "",
-  picked = null,
-  revealed = false;
+  reacted = false;
 let activeAudio = null;
 let breathTimer = null,
   breathDeadline = 0,
@@ -77,6 +76,7 @@ const ICONS = {
   book: '<path d="M4 5c3-1 6-1 8 1 2-2 5-2 8-1v14c-3-1-6-1-8 1-2-2-5-2-8-1z"/><path d="M12 6v14"/>',
   shield: '<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M12 9v6M9 12h6"/>',
   trend: '<path d="M4 17l6-6 4 4 6-7"/><path d="M15 8h5v5"/>',
+  home: '<path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/>',
 };
 const icon = (name, cls = "") =>
   `<svg class="icon ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -152,8 +152,7 @@ function reset() {
   count = 0;
   repairMode = false;
   customDraft = "";
-  picked = null;
-  revealed = false;
+  reacted = false;
 }
 function stopVoice() {
   if (activeAudio) {
@@ -175,7 +174,7 @@ function toast(text) {
   $("#toast").hidden = false;
   toastTimer = setTimeout(() => ($("#toast").hidden = true), 5000);
 }
-function go(next) {
+function go(next, anchor = null) {
   if (next === "resources" && stage !== "resources") returnStage = stage;
   stopVoice();
   closeModal();
@@ -185,14 +184,24 @@ function go(next) {
   }
   stage = next;
   render();
-  window.scrollTo({ top: 0, behavior: "instant" });
-  const h = $("main h1");
+  const target = anchor && $(anchor);
+  if (target) target.scrollIntoView({ block: "start", behavior: "instant" });
+  else window.scrollTo({ top: 0, behavior: "instant" });
+  const h = (target && target.querySelector("h2")) || $("main h1");
   if (h) {
     h.tabIndex = -1;
     h.classList.add("focus-destination");
-    h.focus();
+    h.focus({ preventScroll: true });
   }
 }
+// Where "Back" leads from each screen. Resources returns to wherever it was opened.
+const BACK = {
+  prep: "home",
+  practice: "prep",
+  reflect: "practice",
+  plan: "reflect",
+  about: "home",
+};
 function reviewBadge() {
   return '<button class="review-badge" data-review><span aria-hidden="true">◇</span> Expert review pending <span aria-hidden="true">↗</span></button>';
 }
@@ -222,22 +231,38 @@ function home() {
     .join("")}</section>`;
 }
 function prep() {
-  return `${step(1)}<button class="back" id="back">← Back</button><div class="prep-title"><h1>Get <em>ready.</em></h1></div><div class="prep-layout"><section class="panel scenario-intro theme-${c().characterIndex}"><div class="portrait">${childArt(c().characterIndex)}</div><div class="eyebrow">${esc(c().name)}, ${c().age}</div><blockquote>“${esc(c().open)}”</blockquote><p class="muted">${esc(c().context)}</p></section><section class="panel preparation"><div class="tips"><div class="tip"><strong>${icon("check", "good-icon")} Try saying</strong><p>${(c().say || ["“Thank you for telling me.”", "“You’re not to blame.”", "“What would help right now?”"]).map(esc).join("<br>")}</p></div><div class="tip avoid"><strong>${icon("cross", "bad-icon")} Avoid</strong><p>${(c().avoid || ["Blaming or dismissing.", "Threatening punishment.", "Taking over without listening."]).map(esc).join("<br>")}</p></div></div><button class="breath-launch" id="breathe"><span class="breath-icon">${icon("leaf")}</span><span><strong>Take a breath first</strong><small>30 seconds</small></span><span aria-hidden="true">↗</span></button><button class="primary full-width" id="begin">I’m ready <span aria-hidden="true">→</span></button></section></div>`;
+  return `${step(1)}<div class="prep-title"><h1>Get <em>ready.</em></h1></div><div class="prep-layout"><section class="panel scenario-intro theme-${c().characterIndex}"><div class="portrait">${childArt(c().characterIndex)}</div><div class="eyebrow">${esc(c().name)}, ${c().age}</div><blockquote>“${esc(c().open)}”</blockquote><p class="muted">${esc(c().context)}</p></section><section class="panel preparation"><div class="tips"><div class="tip"><strong>${icon("check", "good-icon")} Try saying</strong><p>${(c().say || ["“Thank you for telling me.”", "“You’re not to blame.”", "“What would help right now?”"]).map(esc).join("<br>")}</p></div><div class="tip avoid"><strong>${icon("cross", "bad-icon")} Avoid</strong><p>${(c().avoid || ["Blaming or dismissing.", "Threatening punishment.", "Taking over without listening."]).map(esc).join("<br>")}</p></div></div><button class="breath-launch" id="breathe"><span class="breath-icon">${icon("leaf")}</span><span><strong>Take a breath first</strong><small>30 seconds</small></span><span aria-hidden="true">↗</span></button><button class="primary full-width" id="begin">I’m ready <span aria-hidden="true">→</span></button></section></div>`;
 }
 function practice() {
   const last = lastTurn();
   const mood = moodFor(score, last?.kind);
-  return `${step(2)}<div class="practice-heading"><div><h1>Talking with <em>${esc(c().name)}.</em></h1></div><button class="secondary" id="restart">↺ Start over</button></div><div class="practice-shell"><aside class="character-panel theme-${c().characterIndex}"><div class="character-top"><span class="pill">${esc(c().topic)}</span></div><div class="live-character">${childArt(c().characterIndex, mood)}<span class="mood-label">${mood === "happy" ? `${icon("happy")} Feeling closer` : mood === "calm" ? `${icon("calm")} Calmer` : mood === "sad" ? `${icon("sad")} Needs space` : `${icon("worried")} Worried`}</span></div><div class="character-name">${esc(c().name)}<span>Age ${c().age}</span></div><div class="feeling"><strong>${icon("thought")}</strong><span>${last ? esc(last.feeling) : esc(c().feeling)}</span></div><div class="openness" role="img" aria-label="How open ${esc(c().name)} feels: ${zone()}"><div class="face-scale">${icon("worried")}<div class="meter"><span class="marker" style="left:calc(${score}% - 2px)"></span></div>${icon("happy")}</div></div><button class="text-button small" data-rules>ⓘ How this works</button></aside><section class="conversation-area"><div class="deck-progress"><span><b>${Math.min(count + 1, 3)}</b> / 3</span><div class="progress-dots" aria-label="${count} of 3 moments explored">${[0, 1, 2].map((i) => `<span class="${i < count ? "done" : i === count ? "current" : ""}"></span>`).join("")}</div></div><div class="flashcard ${revealed ? "feedback-side" : ""}" id="flashcard" tabindex="-1">${revealed ? feedbackCard(last) : questionCard()}</div><div class="under-card"><button class="text-button" id="reflect">Finish ✓</button></div>${messages.length > 1 ? `<details class="transcript"><summary>Chat so far <span>${turns.length}</span></summary><div class="chatlog" id="chatlog">${messages.map((m) => `<div class="bubble ${m.who === "You" ? "parent" : ""}"><span class="speaker">${esc(m.who)}</span>${esc(m.text)}</div>`).join("")}</div></details>` : ""}</section></div>`;
+  const delta = last ? last.after - last.before : 0;
+  // Animate only on the render right after an answer, not on later re-renders.
+  const react =
+    reacted && last
+      ? ` react-${delta > 0 ? "up" : delta < 0 ? "down" : "flat"}`
+      : "";
+  const from = reacted && last ? last.before : score;
+  return `${step(2)}<div class="practice-heading"><div><h1>Talking with <em>${esc(c().name)}.</em></h1></div><button class="secondary" id="restart">↺ Start over</button></div><div class="practice-shell"><aside class="character-panel theme-${c().characterIndex} mood-${mood}${react}"><div class="character-top"><span class="pill">${esc(c().topic)}</span></div><div class="live-character">${childArt(c().characterIndex, mood)}<span class="mood-label">${mood === "happy" ? `${icon("happy")} Feeling closer` : mood === "calm" ? `${icon("calm")} Calmer` : mood === "sad" ? `${icon("sad")} Upset` : `${icon("worried")} Worried`}</span>${react ? `<span class="delta-pop ${delta > 0 ? "up" : delta < 0 ? "down" : ""}" aria-hidden="true">${delta > 0 ? "+" : ""}${delta}</span>` : ""}</div><div class="character-name">${esc(c().name)}<span>Age ${c().age}</span></div><div class="feeling"><strong>${icon("thought")}</strong><span>${last ? esc(last.feeling) : esc(c().feeling)}</span></div><div class="openness" role="img" aria-label="How open ${esc(c().name)} feels: ${zone()}"><div class="face-scale">${icon("worried")}<div class="meter"><span class="marker" style="--from:${from}%;--to:${score}%"></span></div>${icon("happy")}</div></div><button class="text-button small" data-rules>ⓘ How this works</button></aside><section class="conversation-area"><div class="deck-progress"><span><b>${Math.min(count + 1, 3)}</b> / 3</span><div class="progress-dots" aria-label="${count} of 3 moments explored">${[0, 1, 2].map((i) => `<span class="${i < count ? "done" : i === count ? "current" : ""}"></span>`).join("")}</div></div><div class="flashcard${react}" id="flashcard" tabindex="-1">${practiceCard()}</div><div class="under-card"><button class="text-button" id="reflect">Finish ✓</button></div>${messages.length > 1 ? `<details class="transcript"><summary>Chat so far <span>${turns.length}</span></summary><div class="chatlog" id="chatlog">${messages.map((m) => `<div class="bubble ${m.who === "You" ? "parent" : ""}"><span class="speaker">${esc(m.who)}</span>${esc(m.text)}</div>`).join("")}</div></details>` : ""}</section></div>`;
 }
-function questionCard() {
-  return `<div class="flashcard-top"><span class="eyebrow">${repairMode ? "↺ MAKE IT RIGHT" : ""}</span><button class="voice-button" id="listen" aria-pressed="false">${icon("speaker")} Listen</button></div><p id="voice-error" class="inline-error" role="status" hidden></p><blockquote class="child-quote">“${esc(currentLine())}”</blockquote><div class="choice-header"><h2>${repairMode ? "How can you make it right?" : "What would you say?"}</h2></div><div class="replies" role="group" aria-label="Response choices">${options()
+function practiceCard() {
+  const last = lastTurn();
+  const delta = last ? last.after - last.before : 0;
+  const finished = count >= 3 && !repairMode;
+  const reaction = last
+    ? `<div class="reaction kind-${last.kind}" role="status"><div class="reaction-head">${resultIcon(last.kind)}<h2 class="feedback-title">${esc(last.title)}</h2>${delta ? `<span class="reaction-delta">${delta > 0 ? "+" : ""}${delta}</span>` : ""}</div><p class="your-choice">You said: “${esc(last.text)}”</p><p class="also-try">${icon("bulb")} <span>Also try: “${esc(last.alternative)}”</span></p></div>`
+    : "";
+  const child = `<div class="flashcard-top"><span class="eyebrow">${esc(c().name.toUpperCase())}${repairMode ? " · MAKE IT RIGHT" : ""}</span><button class="voice-button" id="listen" aria-pressed="false">${icon("speaker")} Listen</button></div><p id="voice-error" class="inline-error" role="status" hidden></p><blockquote class="child-quote">“${esc(currentLine())}”</blockquote>`;
+  if (finished)
+    return `${reaction}${child}<button class="primary full-width" id="continue">See how it went <span aria-hidden="true">→</span></button>${last.kind === "harmful" || last.kind === "promise" ? '<button class="secondary full-width repair-now" id="repair">↺ Try making it right</button>' : ""}`;
+  return `${reaction}${child}<div class="choice-header"><h2>${repairMode ? "How can you make it right?" : "What would you say?"}</h2><span>Tap an answer</span></div><div class="replies" role="group" aria-label="Response choices">${options()
     .map(
       (o, i) =>
-        `<button class="reply ${picked === i ? "selected" : ""}" data-reply="${i}" data-kind="${o.kind}" aria-pressed="${picked === i}"><span class="choice-letter">${String.fromCharCode(65 + i)}</span><span>${esc(o.text)}</span><span class="choice-mark" aria-hidden="true">${picked === i ? "✓" : "↗"}</span></button>`,
+        `<button class="reply" data-reply="${i}" data-kind="${o.kind}"><span class="choice-letter">${String.fromCharCode(65 + i)}</span><span>${esc(o.text)}</span><span class="choice-mark" aria-hidden="true">→</span></button>`,
     )
     .join(
       "",
-    )}</div><p class="inline-error" id="choice-error" role="alert" hidden></p><button class="primary full-width" id="reveal">See what happens <span aria-hidden="true">→</span></button><details class="custom-entry" ${customDraft ? "open" : ""}><summary>${icon("pencil")} Or type your own</summary><form id="custom-form" novalidate><label class="formlabel" for="custom">What would you say?</label><textarea id="custom" maxlength="500" aria-describedby="custom-help custom-error" placeholder="Type here…">${esc(customDraft)}</textarea><div class="custom-meta"><span id="custom-help">No real names, please.</span><span id="character-count">${customDraft.length}/500</span></div><p id="custom-error" class="inline-error" role="alert" hidden></p><button class="secondary" type="submit">Try it →</button></form></details><button class="text-button repair-link" id="repair">↺ Practice making it right</button>`;
+    )}</div><details class="custom-entry" ${customDraft ? "open" : ""}><summary>${icon("pencil")} Or type your own</summary><form id="custom-form" novalidate><label class="formlabel" for="custom">What would you say?</label><textarea id="custom" maxlength="500" aria-describedby="custom-help custom-error" placeholder="Type here…">${esc(customDraft)}</textarea><div class="custom-meta"><span id="custom-help">No real names, please.</span><span id="character-count">${customDraft.length}/500</span></div><p id="custom-error" class="inline-error" role="alert" hidden></p><button class="secondary" type="submit">Say it →</button></form></details>${!repairMode && (last?.kind === "harmful" || last?.kind === "promise") ? '<button class="text-button repair-link" id="repair">↺ Practice making it right</button>' : ""}`;
 }
 const RESULT_ICONS = {
   good: "star",
@@ -249,9 +274,6 @@ const RESULT_ICONS = {
 };
 const resultIcon = (kind) =>
   icon(RESULT_ICONS[kind] || "question", `result-${kind}`);
-function feedbackCard(last) {
-  return `<div class="flashcard-top"><span class="feedback-emoji">${resultIcon(last.kind)}</span></div><p class="your-choice">You said: “${esc(last.text)}”</p><h2 class="feedback-title">${esc(last.title)}<span>.</span></h2><p class="feedback-copy">${esc(last.feedback)}</p><div class="tag-list">${last.values.map((v) => `<span class="tag">${v}</span>`).join("")}</div><div class="next-line"><span class="eyebrow">${esc(c().name.toUpperCase())}</span><blockquote>“${esc(currentLine())}”</blockquote><button class="voice-button" id="listen" aria-pressed="false">${icon("speaker")} Listen</button><p id="voice-error" class="inline-error" role="status" hidden></p></div><div class="another-line"><strong>${icon("bulb")} Also try</strong><p>“${esc(last.alternative)}”</p></div><button class="primary full-width" id="continue">${count >= 3 ? "See how it went" : "Keep going"} <span aria-hidden="true">→</span></button>${last.kind === "harmful" || last.kind === "promise" ? '<button class="secondary full-width repair-now" id="repair">↺ Try making it right</button>' : ""}`;
-}
 function respond(text, kind, choice = {}) {
   stopVoice();
   const turn = evaluate(text, kind, c(), score, choice);
@@ -272,12 +294,23 @@ function respond(text, kind, choice = {}) {
   if (kind === "harmful" && score < 30)
     childLines = ["I don’t want to talk about it anymore."];
   for (const line of childLines) messages.push({ who: c().name, text: line });
-  repairMode = false;
+  // A hurtful reply goes straight to repair choices, as the original continue step did.
+  repairMode = kind === "harmful" && count < 3;
   customDraft = "";
-  picked = null;
-  revealed = true;
+  currentOptions = null;
+  reacted = true;
   render();
-  $("#flashcard").focus();
+  reacted = false;
+  $("#flashcard").focus({ preventScroll: true });
+  const result = $(".reaction");
+  if (result) {
+    const top =
+      result.getBoundingClientRect().top +
+      window.scrollY -
+      $("header").offsetHeight -
+      16;
+    window.scrollTo({ top: Math.max(0, top), behavior: motion() });
+  }
 }
 function chart() {
   let scores = [50, ...turns.map((t) => t.after)];
@@ -293,15 +326,15 @@ function reflect() {
   return `${step(3)}<h1 style="font-size:47px;margin:12px 0">Well <em>done!</em></h1><p class="muted">Here’s how it went with ${esc(c().name)}.</p><div class="summary"><section class="panel"><h3>How ${esc(c().name)} opened up</h3>${chart()}${compare()}${turns.length ? turns.map((t, i) => `<div class="turn"><strong>${resultIcon(t.kind)} “${esc(t.text)}”</strong><p>${esc(t.title)}</p></div>`).join("") : '<p class="muted">No replies yet.</p>'}</section><aside><section class="panel"><h3>Values you showed</h3>${content.principles.map((v) => `<span class="tag ${vals.includes(v) ? "" : "off"}">${vals.includes(v) ? "✓ " : ""}${esc(v)}</span>`).join("")}<h3>Next time</h3>${[["heart", "Say thank you"], ["ear", "Listen first"], ["people", "Decide together"], ["calendar", "Check in later"]].map(([n, s]) => `<label class="check"><input type="checkbox">${icon(n)} ${s}</label>`).join("")}<button class="primary" id="plan-button">Next steps →</button><button class="text-button" id="resources-button">Get help ↗</button></section><div style="display:flex;gap:10px;margin-top:15px"><button class="secondary" id="again">↺ Try again</button><button class="secondary" id="new">Pick another</button></div></aside></div>`;
 }
 function resources() {
-  return `<button class="back" id="back-prev">← Back</button><h1 style="font-size:47px">Get <em>help.</em></h1><div class="summary"><section class="panel"><h3>${icon("chat")} What to say</h3><div class="script">“Thank you for telling me. You’re not in trouble. I’m here. What do you need right now?”</div><div class="notice">This site can’t send reports or call anyone. The links open other websites.</div></section><section><a class="resource" target="_blank" rel="noopener noreferrer" href="https://parents.thorn.org/"><strong>Thorn for Parents ↗</strong><span>Guides for talking about online safety.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.missingkids.org/gethelpnow/cybertipline"><strong>NCMEC CyberTipline ↗</strong><span>Report online sexual exploitation of a child.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.stopbullying.gov/cyberbullying/what-is-it"><strong>StopBullying.gov ↗</strong><span>Help with cyberbullying.</span></a><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
+  return `<h1 style="font-size:47px">Get <em>help.</em></h1><div class="summary"><section class="panel"><h3>${icon("chat")} What to say</h3><div class="script">“Thank you for telling me. You’re not in trouble. I’m here. What do you need right now?”</div><div class="notice">This site can’t send reports or call anyone. The links open other websites.</div></section><section><a class="resource" target="_blank" rel="noopener noreferrer" href="https://parents.thorn.org/"><strong>Thorn for Parents ↗</strong><span>Guides for talking about online safety.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.missingkids.org/gethelpnow/cybertipline"><strong>NCMEC CyberTipline ↗</strong><span>Report online sexual exploitation of a child.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.stopbullying.gov/cyberbullying/what-is-it"><strong>StopBullying.gov ↗</strong><span>Help with cyberbullying.</span></a><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
 }
 function about() {
-  return `<button class="back" id="back-home">← Back</button><h1 style="font-size:47px">About <em>this site.</em></h1><div class="summary"><section class="panel about-list"><p>${icon("book")} Made-up stories, for practice only.</p><p>${icon("lock")} No sign-up. Nothing is saved or sent.</p><p>${icon("happy")} The face and meter are a story, not a grade.</p><p>${icon("pencil")} Typed replies use a simple word check, not AI.</p></section><section class="panel about-list"><p>${icon("shield")} Not therapy or emergency help.</p><button class="review-badge" data-review>◇ Expert review pending ↗</button><p><a href="https://parents.thorn.org/guides/getting-aligned-on-social-media-platforms/" target="_blank" rel="noopener noreferrer">Source guide ↗</a></p></section></div>`;
+  return `<h1 style="font-size:47px">About <em>this site.</em></h1><div class="summary"><section class="panel about-list"><p>${icon("book")} Made-up stories, for practice only.</p><p>${icon("lock")} No sign-up. Nothing is saved or sent.</p><p>${icon("happy")} The face and meter are a story, not a grade.</p><p>${icon("pencil")} Typed replies use a simple word check, not AI.</p></section><section class="panel about-list"><p>${icon("shield")} Not therapy or emergency help.</p><button class="review-badge" data-review>◇ Expert review pending ↗</button><p><a href="https://parents.thorn.org/guides/getting-aligned-on-social-media-platforms/" target="_blank" rel="noopener noreferrer">Source guide ↗</a></p></section></div>`;
 }
 function render() {
   stopVoice();
   $("#app").innerHTML =
-    stage === "home"
+    (stage === "home"
       ? home()
       : stage === "prep"
         ? prep()
@@ -313,8 +346,15 @@ function render() {
               ? about()
               : stage === "plan"
                 ? plan()
-                : resources();
+                : resources());
   $("#app").dataset.stage = stage;
+  // One header for the whole site: Back and Home replace the home-page links in a session.
+  const inside = stage !== "home";
+  $("#nav-back").hidden = !inside;
+  $("#nav-home").hidden = !inside;
+  $("#how-nav").hidden = inside;
+  $("#about-nav").hidden = inside;
+  document.body.classList.toggle("inside", inside);
   $("#pause-session").hidden = ![
     "prep",
     "practice",
@@ -357,9 +397,6 @@ function bind() {
     .forEach((b) => (b.onclick = showRules));
   on("#start", () => $("#situations").scrollIntoView({ behavior: motion() }));
   on("#how-button", () => $("#how").scrollIntoView({ behavior: motion() }));
-  on("#back-prev", () => go(returnStage));
-  on("#back", () => go("home"));
-  on("#back-home", () => go("home"));
   on("#begin", () => {
     reset();
     go("practice");
@@ -380,46 +417,18 @@ function bind() {
   });
   document.querySelectorAll("[data-reply]").forEach(
     (b) =>
-      (b.onclick = () => {
-        picked = Number(b.dataset.reply);
-        document.querySelectorAll("[data-reply]").forEach((x) => {
-          const active = x === b;
-          x.classList.toggle("selected", active);
-          x.setAttribute("aria-pressed", active);
-          x.querySelector(".choice-mark").textContent = active ? "✓" : "↗";
-        });
-        $("#choice-error").hidden = true;
+      (b.onclick = (e) => {
+        // Ignore the second click of a double-click so one tap answers once.
+        if (e.detail > 1) return;
+        const o = options()[Number(b.dataset.reply)];
+        respond(o.text, o.kind, o);
       }),
   );
-  on("#reveal", () => {
-    if (picked === null) {
-      $("#choice-error").textContent =
-        "Pick an answer first.";
-      $("#choice-error").hidden = false;
-      return;
-    }
-    const o = options()[picked];
-    respond(o.text, o.kind, o);
-  });
-  on("#continue", () => {
-    if (count >= 3) {
-      go("reflect");
-      return;
-    }
-    revealed = false;
-    picked = null;
-    currentOptions = null;
-    repairMode = lastTurn()?.kind === "harmful";
-    render();
-    $("#flashcard").focus();
-  });
+  on("#continue", () => go("reflect"));
   on("#repair", () => {
     customDraft = $("#custom")?.value || "";
     repairMode = true;
-    revealed = false;
-    picked = null;
     currentOptions = null;
-    repairMode = lastTurn()?.kind === "harmful";
     render();
     $(".reply").focus();
   });
@@ -453,10 +462,9 @@ function bind() {
     reset();
     go("practice");
   });
-  on("#new", () => go("home"));
+  on("#new", () => go("home", "#situations"));
   on("#resources-button", () => go("resources"));
   on("#plan-button", () => go("plan"));
-  on("#back-reflect", () => go("reflect"));
 }
 const motion = () =>
   matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth";
@@ -469,6 +477,7 @@ function openModal(html, variant = "") {
   decorate($("#modal-content"));
   document.body.classList.add("modal-open");
   $("#modal").showModal();
+  $("#modal").focus();
   $("#modal")
     .querySelectorAll("[data-close]")
     .forEach((b) => (b.onclick = closeModal));
@@ -642,6 +651,13 @@ function speak() {
   }
 }
 $("#home").onclick = () => content && go("home");
+$("#nav-home").onclick = () => content && go("home");
+$("#nav-back").onclick = () => {
+  if (!content) return;
+  const to = stage === "resources" ? returnStage : BACK[stage] || "home";
+  // Leaving a scenario lands back on the scenario cards, not the top of the page.
+  go(to, to === "home" && stage !== "about" ? "#situations" : null);
+};
 $("#how-nav").onclick = () => {
   if (!content) return;
   if (stage !== "home") go("home");
@@ -656,6 +672,22 @@ window.addEventListener("pagehide", () => {
   stopVoice();
   closeModal();
 });
+// The splash lives in index.html, so it appears on every full page load only;
+// in-app navigation (including Home) re-renders #app and never brings it back.
+function hideSplash() {
+  const el = $("#splash");
+  if (!el || el.classList.contains("leaving")) return;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    el.remove();
+    return;
+  }
+  // Keep it up for at least ~1.4s from page start so the animation can play.
+  el.style.animationDelay = `${Math.max(0, 1400 - performance.now())}ms`;
+  el.classList.add("leaving");
+  el.addEventListener("animationend", (e) => {
+    if (e.target === el) el.remove();
+  });
+}
 async function init() {
   try {
     const response = await fetch("./data/scenarios.json");
@@ -663,11 +695,13 @@ async function init() {
     content = validateContent(await response.json());
     scenarios = content.scenarios;
     render();
+    hideSplash();
   } catch {
     content = null;
     $("#app").innerHTML =
       '<section class="panel load-error" role="alert"><span class="coach-icon">↺</span><h1>We couldn’t load the conversation cards.</h1><p>Please try again.</p><button class="primary" id="reload">Try again</button><p>Need support now? <a href="https://parents.thorn.org/" target="_blank" rel="noopener noreferrer">Visit Thorn for Parents ↗</a></p></section>';
     on("#reload", init);
+    hideSplash();
   }
 }
 decorate(document.body);
@@ -723,5 +757,5 @@ function plan() {
       ],
     ],
   };
-  return `${step(3)}<button class="back" id="back-reflect">← Back</button><h1 style="font-size:47px">Next <em>steps.</em></h1><div class="summary"><section class="panel"><ol class="now-steps">${pl.steps.map((x) => `<li>${esc(x).replace(/&lt;(\/?strong)&gt;/g, "<$1>")}</li>`).join("")}</ol>${reviewBadge()}</section><section><h3>Helpful links</h3>${pl.links.map(([title, description, url]) => `<a class="resource" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(title)} ↗</strong><span>${esc(description)}</span></a>`).join("")}<button class="secondary" id="resources-button">Get help now ↗</button><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
+  return `${step(3)}<h1 style="font-size:47px">Next <em>steps.</em></h1><div class="summary"><section class="panel"><ol class="now-steps">${pl.steps.map((x) => `<li>${esc(x).replace(/&lt;(\/?strong)&gt;/g, "<$1>")}</li>`).join("")}</ol>${reviewBadge()}</section><section><h3>Helpful links</h3>${pl.links.map(([title, description, url]) => `<a class="resource" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(title)} ↗</strong><span>${esc(description)}</span></a>`).join("")}<button class="secondary" id="resources-button">Get help now ↗</button><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
 }

@@ -69,6 +69,20 @@ The site has no accounts, analytics, cloud chat, or conversation persistence. Re
 
 Fonts: self-hosted `@fontsource-variable/dm-sans` and `@fontsource-variable/fraunces`, version 5.2.8, distributed under the SIL Open Font License. License notices are retained in `assets/fonts/`. No Google Fonts request is made at runtime.
 
+## Character voices (ElevenLabs)
+
+Each scenario in `data/scenarios.json` has a `voice` field naming the ElevenLabs voice for that child, so every character always sounds the same:
+
+| Character | Voice | `voiceId` |
+|---|---|---|
+| Maya, 13 | Gigi (young, childish, American) | `jBpfuIE2acCO8z3wKNLl` |
+| Jayden, 11 | Harry (young, anxious, American) | `SOYHLrjzK2X1ezoPC6cr` |
+| Lucía, 8 | Mimi (young, childish) | `zrHiDhphv9ZnVXBqCLjz` |
+
+These are ElevenLabs premade voices; none is labelled as a child, so these are the closest fits. Confirm each ID in your ElevenLabs account (Voices → ⋯ → Copy voice ID) before generating audio, as ElevenLabs is replacing some legacy default voices.
+
+The website never calls ElevenLabs: an API key in a static site would be public. Generate each line once in ElevenLabs with the character's `voiceId`, save the MP3 under `assets/audio/<character>/`, and map it in `audioClips` as described below. Lines without a recording fall back to the device voice.
+
 ## Prerecorded audio and deployment
 
 To use a recording instead of the device voice, add its relative path under `audioClips` in `data/scenarios.json`, keyed by the exact dialogue displayed on the card. For example:

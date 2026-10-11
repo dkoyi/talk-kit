@@ -28,6 +28,7 @@
         ]
       },
       "characterIndex": 0,
+      "voice": { "provider": "elevenlabs", "voiceId": "jBpfuIE2acCO8z3wKNLl", "name": "Gigi" },
       "categoryId": "contact",
       "background": "Some people online give kids attention or gifts, then ask for secrets and photos. Asking a child to keep secrets is a warning sign.",
       "say": [
@@ -146,6 +147,7 @@
         ]
       },
       "characterIndex": 1,
+      "voice": { "provider": "elevenlabs", "voiceId": "SOYHLrjzK2X1ezoPC6cr", "name": "Harry" },
       "categoryId": "friendship",
       "background": "Online bullying follows kids home. Many don’t tell adults because they fear losing their phone, or that you’ll make it worse.",
       "say": [
@@ -260,6 +262,7 @@
         ]
       },
       "characterIndex": 2,
+      "voice": { "provider": "elevenlabs", "voiceId": "zrHiDhphv9ZnVXBqCLjz", "name": "Mimi" },
       "categoryId": "feelings",
       "background": "Videos can play on their own and show young kids scary things they never searched for. Kids often blame themselves and may have trouble sleeping.",
       "say": [
@@ -342,6 +345,7 @@
     {
       "id": "private-details",
       "characterIndex": 0,
+      "voice": { "provider": "elevenlabs", "voiceId": "jBpfuIE2acCO8z3wKNLl", "name": "Gigi" },
       "categoryId": "contact",
       "name": "Maya",
       "age": 13,
@@ -431,6 +435,7 @@
     {
       "id": "meet-online-friend",
       "characterIndex": 1,
+      "voice": { "provider": "elevenlabs", "voiceId": "SOYHLrjzK2X1ezoPC6cr", "name": "Harry" },
       "categoryId": "contact",
       "name": "Jayden",
       "age": 11,
@@ -520,6 +525,7 @@
     {
       "id": "left-out",
       "characterIndex": 2,
+      "voice": { "provider": "elevenlabs", "voiceId": "zrHiDhphv9ZnVXBqCLjz", "name": "Mimi" },
       "categoryId": "friendship",
       "name": "Lucía",
       "age": 8,
@@ -609,6 +615,7 @@
     {
       "id": "hurtful-joke",
       "characterIndex": 0,
+      "voice": { "provider": "elevenlabs", "voiceId": "jBpfuIE2acCO8z3wKNLl", "name": "Gigi" },
       "categoryId": "friendship",
       "name": "Maya",
       "age": 13,
@@ -701,6 +708,7 @@
     {
       "id": "body-comparison",
       "characterIndex": 1,
+      "voice": { "provider": "elevenlabs", "voiceId": "SOYHLrjzK2X1ezoPC6cr", "name": "Harry" },
       "categoryId": "feelings",
       "name": "Jayden",
       "age": 11,
@@ -790,6 +798,7 @@
     {
       "id": "overwhelming-news",
       "characterIndex": 0,
+      "voice": { "provider": "elevenlabs", "voiceId": "jBpfuIE2acCO8z3wKNLl", "name": "Gigi" },
       "categoryId": "feelings",
       "name": "Maya",
       "age": 13,
@@ -879,6 +888,7 @@
     {
       "id": "end-game",
       "characterIndex": 1,
+      "voice": { "provider": "elevenlabs", "voiceId": "SOYHLrjzK2X1ezoPC6cr", "name": "Harry" },
       "categoryId": "boundaries",
       "name": "Jayden",
       "age": 11,
@@ -968,6 +978,7 @@
     {
       "id": "in-game-purchase",
       "characterIndex": 2,
+      "voice": { "provider": "elevenlabs", "voiceId": "zrHiDhphv9ZnVXBqCLjz", "name": "Mimi" },
       "categoryId": "boundaries",
       "name": "Lucía",
       "age": 8,
@@ -1057,6 +1068,7 @@
     {
       "id": "late-night-phone",
       "characterIndex": 0,
+      "voice": { "provider": "elevenlabs", "voiceId": "jBpfuIE2acCO8z3wKNLl", "name": "Gigi" },
       "categoryId": "boundaries",
       "name": "Maya",
       "age": 13,

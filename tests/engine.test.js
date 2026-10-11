@@ -56,3 +56,16 @@ test("expressions represent illustrative state and uncertainty", () => {
   assert.equal(moodFor(50), "worried");
   assert.equal(moodFor(95, "unknown"), "worried");
 });
+test("each character has one consistent ElevenLabs voice", () => {
+  const byCharacter = new Map();
+  for (const s of content.scenarios) {
+    assert.equal(s.voice.provider, "elevenlabs");
+    const seen = byCharacter.get(s.characterIndex);
+    if (seen) assert.equal(s.voice.voiceId, seen);
+    else byCharacter.set(s.characterIndex, s.voice.voiceId);
+  }
+  assert.equal(new Set(byCharacter.values()).size, 3);
+  const altered = structuredClone(content);
+  altered.scenarios[0].voice.voiceId = "not a voice";
+  assert.throws(() => validateContent(altered));
+});

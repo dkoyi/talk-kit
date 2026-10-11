@@ -2751,29 +2751,8 @@ body.modal-open {
   overflow: hidden;
 }
 @media (max-width: 720px) {
-  .pause-session {
-    position: sticky;
-    top: 0;
-    right: auto;
-    bottom: auto;
-    transform: none;
-    width: 100%;
-    max-width: none;
-    border-radius: 0;
-    border-left: 0;
-    border-right: 0;
-    justify-content: center;
-    padding: 7px 12px;
-    box-shadow: 0 3px 10px #4830550a;
-  }
-  .pause-session:active:not(:disabled) {
-    transform: none;
-  }
-  .pause-session:focus-visible {
-    outline-offset: -3px;
-  }
   .in-session footer {
-    padding-bottom: 30px;
+    padding-bottom: 80px;
   }
 }
 /* Full-screen relaxation pause with a slowly drifting landscape. */
@@ -3034,4 +3013,468 @@ dialog.calm-fullscreen .modal-close {
 .mood-label .icon {
   width: 18px;
   height: 18px;
+}
+.character-panel {
+  top: 110px;
+}
+
+/* Instant reaction: result, child's reply and next choices on one card. */
+.reaction {
+  border-radius: 18px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  background: #cfeec4;
+  border: 2px solid #6fbf5c;
+  color: #1d3f2a;
+}
+.reaction.kind-harmful {
+  background: #ffd3c6;
+  border-color: #e0725a;
+  color: #5a2014;
+}
+.reaction.kind-promise {
+  background: #ffe3a8;
+  border-color: #dba53c;
+  color: #553a08;
+}
+.reaction.kind-neutral,
+.reaction.kind-unknown {
+  background: #e3e8d6;
+  border-color: #a9b394;
+  color: #33402a;
+}
+.reaction-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.reaction-head > .icon {
+  width: 40px;
+  height: 40px;
+  stroke-width: 1.8;
+}
+.reaction .feedback-title {
+  flex: 1;
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+  color: inherit;
+}
+.reaction-delta {
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  background: #2f8a45;
+}
+.kind-harmful .reaction-delta {
+  background: #c4432a;
+}
+.kind-promise .reaction-delta {
+  background: #b9811c;
+}
+.reaction .your-choice {
+  margin: 8px 0 0 52px;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  opacity: 0.85;
+  font-size: 16px;
+}
+.reaction .also-try {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 10px 0 0 52px;
+  font-size: 17px;
+  font-weight: 600;
+  color: inherit;
+}
+.reaction .also-try .icon {
+  margin-top: 2px;
+}
+.result-good,
+.result-repair {
+  color: #2f8a45;
+}
+.result-harmful {
+  color: #c4432a;
+}
+.result-promise {
+  color: #b9811c;
+}
+.choice-header span {
+  color: var(--muted);
+}
+.reply:hover .choice-mark,
+.reply:focus-visible .choice-mark {
+  transform: translateX(4px);
+}
+.choice-mark {
+  transition: transform 0.15s;
+}
+.flashcard.react-up .reaction,
+.flashcard.react-down .reaction,
+.flashcard.react-flat .reaction {
+  animation: reaction-in 0.35s ease-out;
+}
+.flashcard.react-up .child-quote,
+.flashcard.react-down .child-quote,
+.flashcard.react-flat .child-quote {
+  animation: reaction-in 0.35s ease-out 0.1s both;
+}
+
+/* Emotion mechanic: the child visibly reacts to each answer. */
+.character-panel.mood-happy {
+  box-shadow: 0 0 0 4px #b9dcae, 0 18px 40px #3f7a5533;
+}
+.character-panel.mood-calm {
+  box-shadow: 0 0 0 4px #d6e6cf;
+}
+.character-panel.mood-worried {
+  box-shadow: 0 0 0 4px #f0dcb4;
+}
+.character-panel.mood-sad {
+  box-shadow: 0 0 0 4px #efc0b2, 0 18px 40px #b5553d2e;
+}
+.react-up .live-character > svg {
+  animation: child-bounce 0.6s ease-out;
+}
+.react-down .live-character > svg {
+  animation: child-shake 0.5s ease-in-out;
+}
+.react-flat .live-character > svg {
+  animation: child-tilt 0.6s ease-in-out;
+}
+.react-up .mood-label,
+.react-down .mood-label,
+.react-flat .mood-label {
+  animation: label-pop 0.4s ease-out 0.2s both;
+}
+.delta-pop {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 22px;
+  color: #fffdf8;
+  background: #7a8a6c;
+  animation: delta-float 1.6s ease-out forwards;
+  pointer-events: none;
+}
+.delta-pop.up {
+  background: #3f7a55;
+}
+.delta-pop.down {
+  background: #b5553d;
+}
+.openness .marker {
+  left: calc(var(--to) - 2px);
+  animation: marker-slide 0.7s cubic-bezier(0.3, 1.4, 0.6, 1);
+}
+@keyframes marker-slide {
+  from {
+    left: calc(var(--from) - 2px);
+  }
+}
+@keyframes reaction-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes child-bounce {
+  30% {
+    transform: translateY(-14px) scale(1.04);
+  }
+  60% {
+    transform: translateY(0) scale(0.98);
+  }
+}
+@keyframes child-shake {
+  20%,
+  60% {
+    transform: translateX(-9px) rotate(-3deg);
+  }
+  40%,
+  80% {
+    transform: translateX(9px) rotate(3deg);
+  }
+}
+@keyframes child-tilt {
+  40% {
+    transform: rotate(-5deg);
+  }
+}
+@keyframes label-pop {
+  from {
+    transform: translateX(-50%) scale(0.6);
+    opacity: 0;
+  }
+}
+@keyframes delta-float {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.7);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0) scale(1.1);
+  }
+  75% {
+    opacity: 1;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-22px);
+  }
+}
+
+/* Loading screen: part of index.html, so it only shows on a full page load. */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background:
+    radial-gradient(circle at 30% 20%, #3c7564 0, transparent 55%),
+    radial-gradient(circle at 75% 80%, #2d5f50 0, transparent 50%),
+    #1f4a3e;
+  color: #fffdf8;
+  text-align: center;
+}
+.splash.leaving {
+  pointer-events: none;
+  animation: splash-out 0.55s ease forwards;
+}
+.splash-inner {
+  animation: splash-rise 0.7s ease-out both;
+}
+.splash-faces {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+.splash-face {
+  width: 72px;
+  height: 72px;
+  animation: splash-hop 1.2s ease-in-out infinite;
+}
+.splash-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+.splash-brand .brand-icon {
+  width: 52px;
+  height: 52px;
+  background: #fffdf8;
+  color: #1f4a3e;
+}
+.splash-brand .brand-dot {
+  color: var(--orange);
+}
+.splash-tag {
+  margin: 8px 0 28px;
+  font:
+    italic 24px Fraunces,
+    serif;
+  color: #dfeadb;
+}
+.splash-bar {
+  width: min(260px, 70vw);
+  height: 6px;
+  margin: 0 auto;
+  border-radius: 999px;
+  background: #ffffff2e;
+  overflow: hidden;
+}
+.splash-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--orange), #fff3dd);
+  animation: splash-fill 1.3s ease-in-out forwards;
+}
+@keyframes splash-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.04);
+  }
+}
+@keyframes splash-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes splash-hop {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes splash-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+@media (max-width: 720px) {
+  .character-panel {
+    top: auto;
+  }
+  .splash-brand {
+    font-size: 32px;
+  }
+  .splash-face {
+    width: 58px;
+    height: 58px;
+  }
+}
+
+/* One header for the whole site; Back and Home appear in it inside a session. */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg);
+  box-shadow: 0 0 0 100vmax var(--bg);
+  clip-path: inset(0 -100vmax);
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+.nav-back,
+.nav-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 18px !important;
+  border-radius: 999px;
+  font-size: 17px !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.nav-back {
+  background: var(--paper);
+  color: var(--green);
+  border: 2px solid #cfd8c9;
+}
+.nav-back:hover {
+  border-color: var(--green);
+}
+nav .nav-home {
+  background: var(--green);
+  color: #fffdf8;
+}
+.nav-back[hidden],
+.nav-home[hidden],
+nav button[hidden] {
+  display: none;
+}
+#situations {
+  scroll-margin-top: 110px;
+}
+
+/* Scenario cards: the label sits above the child, never on top of them. */
+.scenario-card .portrait {
+  height: 205px;
+}
+.scenario-card .portrait svg {
+  height: 150px;
+  width: 168px;
+  transform: translateY(8px);
+}
+.deck-button {
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 13px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--green);
+  color: #fffdf8;
+  font-size: 18px;
+  font-weight: 800;
+  box-shadow: 0 4px 0 #173a30;
+  transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
+}
+.deck-button:hover {
+  background: #2c6a58;
+}
+.deck-button:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #173a30;
+}
+.deck-button span {
+  font-size: inherit;
+}
+@media (max-width: 720px) {
+  .inside .brand-name {
+    display: none;
+  }
+  .header-left {
+    gap: 10px;
+  }
+  .nav-back,
+  .nav-home {
+    font-size: 15px !important;
+    padding: 6px 14px !important;
+    min-height: 40px;
+  }
+  .scenario-card .portrait {
+    height: 195px;
+  }
+  #situations {
+    scroll-margin-top: 90px;
+  }
+}
+.brand-name {
+  white-space: nowrap;
+}
+.reaction-delta {
+  margin-left: auto;
+}
+@media (max-width: 720px) {
+  .inside .brand {
+    display: none;
+  }
+  nav .urgent {
+    white-space: nowrap;
+  }
+  .reaction {
+    padding: 14px 16px;
+  }
+  .reaction .feedback-title {
+    font-size: 22px;
+  }
+  .reaction-head > .icon {
+    width: 32px;
+    height: 32px;
+  }
+  .reaction .your-choice,
+  .reaction .also-try {
+    margin-left: 0;
+  }
 }

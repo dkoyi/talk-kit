@@ -145,6 +145,13 @@ export function validateContent(data) {
     ])
       if (typeof s[k] !== "string" || !s[k].trim())
         throw Error("Incomplete scenario");
+    // Optional ElevenLabs voice for generating this character's recordings.
+    if (
+      s.voice &&
+      (s.voice.provider !== "elevenlabs" ||
+        !/^[A-Za-z0-9]{20}$/.test(s.voice.voiceId || ""))
+    )
+      throw Error("Invalid voice");
     if (s.replies && (!Array.isArray(s.replies) || s.replies.length !== 3))
       throw Error("Incomplete response deck");
     if (
