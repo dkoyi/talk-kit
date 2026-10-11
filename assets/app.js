@@ -112,37 +112,136 @@ const currentLine = () => {
   return lines.join(" ") || c().open;
 };
 
+// Expression parts per mood. Eyes are soft dark ovals at (95,102) and (135,102); the
+// lids are drawn for the left eye and mirrored (s = -1) for the right.
 const MOODS = {
   sad: {
-    brow: "M86 91l12-5m34 0 12 5",
-    eye: 2.6,
-    mouth: "q9-7 18 0",
-    blush: 0.15,
+    brows: ["M84 89Q93 87 102 80", "M128 80Q137 87 146 89"],
+    lid: (x, s) => `M${x - 10 * s} 91H${x + 10 * s}V96L${x - 10 * s} 101Z`,
+    lidEdge: (x, s) => `M${x - 8 * s} 100.4L${x + 8 * s} 96.4`,
+    mouth:
+      '<path d="M102 136Q115 123 128 136" fill="none" stroke="#6d2f27" stroke-width="3.4" stroke-linecap="round"/>',
+    blush: 0.18,
   },
   worried: {
-    brow: "M86 90l12-4m34 0 12 4",
-    eye: 4,
-    mouth: "q9-3 18 0",
-    blush: 0.2,
+    brows: ["M84 86Q93 82 102 81", "M128 81Q137 82 146 86"],
+    lid: (x, s) => `M${x - 10 * s} 91H${x + 10 * s}V97.4L${x - 10 * s} 98Z`,
+    lidEdge: (x, s) => `M${x - 8 * s} 97.9L${x + 8 * s} 97.4`,
+    mouth:
+      '<path d="M104 131q5.5-5 11-1t11-1" fill="none" stroke="#6d2f27" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>',
+    blush: 0.22,
   },
   calm: {
-    brow: "M86 88q6-3 12-1m34 0q6-2 12 1",
-    eye: 4,
-    mouth: "q9 3 18 0",
-    blush: 0.3,
+    brows: ["M84 85Q93 79 102 82", "M128 82Q137 79 146 85"],
+    mouth:
+      '<path d="M103 127Q115 137 127 127" fill="none" stroke="#6d2f27" stroke-width="3.2" stroke-linecap="round"/>',
+    blush: 0.32,
   },
   happy: {
-    brow: "M86 86q6-4 12-2m34 0q6-2 12 2",
-    eye: 3.6,
-    mouth: "q9 8 18 0",
-    blush: 0.4,
+    brows: ["M83 82Q93 74 103 79", "M127 79Q137 74 147 82"],
+    // Smiling, half-moon eyes read as warm and friendly at any size.
+    smileEyes: true,
+    // A wide grin full of teeth, top and bottom, so the joy is unmistakable.
+    mouth: (id) =>
+      `<clipPath id="${id}"><path d="M95 122Q115 154 135 122Q115 127 95 122Z"/></clipPath><path d="M95 122Q115 154 135 122Q115 127 95 122Z" fill="#fffdf9"/><g clip-path="url(#${id})" fill="none"><path d="M93 131Q115 137 137 131" stroke="#cdbfb2" stroke-width="1.6"/><path d="M105 118v28M115 118v30M125 118v28" stroke="#e6ddd3" stroke-width="1.2"/></g><path d="M95 122Q115 154 135 122Q115 127 95 122Z" fill="none" stroke="#6d2f27" stroke-width="2.4" stroke-linejoin="round"/>`,
+    blush: 0.5,
   },
 };
+// Per-character look: skin, shade, shirt, hair, iris.
+const KIDS = [
+  { skin: "#c58d67", shade: "#a8714f", shirt: "#75896e", hair: "#453b32", iris: "#5b3b25" },
+  { skin: "#956547", shade: "#7a4e36", shirt: "#c29a72", hair: "#303d39", iris: "#3a271b" },
+  { skin: "#e1b492", shade: "#c9946f", shirt: "#9b8ea5", hair: "#615043", iris: "#6b4a2b" },
+];
+const HAIR = [
+  // Maya: shoulder-length hair with a side-swept fringe.
+  {
+    back: "M63 104C55 44 175 44 167 104L171 162Q160 172 148 162L150 122H80L82 162Q70 172 59 162Z",
+    front:
+      "M66 100C60 50 100 38 124 41C152 44 170 66 166 102C161 86 152 75 141 69C128 82 102 88 76 86C71 90 68 95 66 100Z",
+    shine: "M92 52Q112 44 132 49",
+  },
+  // Jayden: short, curly crop.
+  {
+    back: "",
+    front:
+      "M67 98C62 56 88 44 115 44C142 44 168 56 163 98C160 84 154 76 146 72C130 76 100 76 84 72C76 76 70 84 67 98Z",
+    curls: [
+      [78, 64, 10], [90, 54, 11], [104, 48, 11], [118, 46, 11], [132, 49, 11], [145, 56, 10], [154, 66, 9],
+    ],
+    shine: "M98 50Q115 44 132 50",
+  },
+  // Lucía: straight fringe and two pigtails.
+  {
+    back: "M66 100C60 46 170 46 164 100Z",
+    pigtails: true,
+    front:
+      "M64 100C55 32 175 32 166 100C163 90 159 84 156 80Q150 86 144 79Q138 86 131 79Q124 86 117 79Q110 86 103 79Q96 86 89 79Q82 86 75 80C71 85 68 91 66 98Z",
+    shine: "M90 56Q112 47 136 54",
+  },
+];
+let artSeq = 0;
 const childArt = (i, mood = "worried") => {
-  const hair = ["#453b32", "#303d39", "#615043"][i];
+  const k = KIDS[i];
+  const h = HAIR[i];
   const m = MOODS[mood];
-  return `<svg class="child mood-${mood}" viewBox="0 0 230 205" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${["Maya", "Jayden", "Lucía"][i]}: illustrative ${mood} expression" data-mood="${mood}"><circle cx="115" cy="100" r="83" fill="#fff" opacity=".35"/><g class="c-body"><path d="M55 203v-30c0-39 120-39 120 0v30" fill="${["#75896e", "#c29a72", "#9b8ea5"][i]}"/><rect x="101" y="132" width="28" height="29" rx="10" fill="${["#b47b57", "#7a4e36", "#d2a27f"][i]}"/></g><g class="c-head"><path d="M66 99V75c0-66 100-66 100 0v39" fill="${hair}"/><ellipse cx="115" cy="97" rx="44" ry="51" fill="${["#c58d67", "#956547", "#e1b492"][i]}"/><path d="M70 77c-1-57 91-63 96 0-27-8-36-27-39-34-11 20-34 32-57 34" fill="${hair}"/><ellipse class="c-blush" cx="84" cy="114" rx="8" ry="4.5" fill="#e0806a" opacity="${m.blush}"/><ellipse class="c-blush" cx="146" cy="114" rx="8" ry="4.5" fill="#e0806a" opacity="${m.blush}"/><path class="c-brows" d="${m.brow}" stroke="#57463b" stroke-width="3" fill="none" stroke-linecap="round"/><g class="c-eyes"><g class="c-blink"><ellipse cx="94" cy="99" rx="3.2" ry="${m.eye}" fill="#263a34"/><ellipse cx="137" cy="99" rx="3.2" ry="${m.eye}" fill="#263a34"/><circle cx="95.2" cy="97.5" r="1.1" fill="#fff"/><circle cx="138.2" cy="97.5" r="1.1" fill="#fff"/></g></g><path d="M111 112l-2 5h7" stroke="#775445" stroke-width="2" fill="none" stroke-linecap="round"/><path class="c-mouth" d="M106 129${m.mouth}" stroke="#775445" stroke-width="2.4" fill="none" stroke-linecap="round"/><ellipse class="c-mouth-open" cx="115" cy="130" rx="6.5" ry="4.5" fill="#7a3f36"/><path class="c-tear" d="M91 106q-3 6 0 9q3-3 0-9" fill="#7fb8dc"/><path class="c-tear c-tear-2" d="M139 106q-3 6 0 9q3-3 0-9" fill="#7fb8dc"/>${i === 2 ? `<path d="M72 68q-31 8-22 44m106-44q31 8 24 44" fill="none" stroke="${hair}" stroke-width="17"/>` : ""}</g></svg>`;
+  const id = `tk-mouth-${++artSeq}`;
+  const eye = (x) =>
+    m.smileEyes
+      ? `<path d="M${x - 8} 104Q${x} 93.5 ${x + 8} 104" fill="none" stroke="#2b1d16" stroke-width="3.6" stroke-linecap="round"/>`
+      : `<ellipse cx="${x}" cy="102" rx="6.8" ry="8.2" fill="#2b1d16"/><ellipse cx="${x}" cy="104" rx="4.4" ry="5" fill="${k.iris}" opacity=".6"/><circle cx="${x + 2.3}" cy="${m.lid ? 101 : 98.8}" r="2.6" fill="#fff"/><circle cx="${x - 2.1}" cy="105.8" r="1.2" fill="#fff" opacity=".85"/>`;
+  const lid = (x, s) =>
+    m.lid
+      ? `<path d="${m.lid(x, s)}" fill="${k.skin}"/><path d="${m.lidEdge(x, s)}" fill="none" stroke="${k.shade}" stroke-width="1.8" stroke-linecap="round"/>`
+      : "";
+  const shirtDetail = [
+    `<path d="M98 152Q115 170 132 152" fill="none" stroke="#5e7358" stroke-width="5" stroke-linecap="round"/><path d="M106 162v16M124 162v16" stroke="#eef2e6" stroke-width="2.4" stroke-linecap="round"/><circle cx="106" cy="179" r="2.2" fill="#eef2e6"/><circle cx="124" cy="179" r="2.2" fill="#eef2e6"/>`,
+    `<path d="M100 151Q115 162 130 151" fill="none" stroke="#a37e58" stroke-width="5" stroke-linecap="round"/><path d="M58 184Q115 176 172 184v8Q115 184 58 192Z" fill="#e8d3b3"/>`,
+    `<path d="M115 156Q101 168 92 156Q100 150 115 156ZM115 156Q129 168 138 156Q130 150 115 156Z" fill="#fffdf8" stroke="#d9d1e0" stroke-width="1.2"/><circle cx="115" cy="172" r="2.4" fill="#fffdf8"/><circle cx="115" cy="184" r="2.4" fill="#fffdf8"/>`,
+  ][i];
+  const pigtails = h.pigtails
+    ? `<g class="c-pigtails"><path d="M64 84C40 86 34 118 46 140C52 128 58 108 70 96Z" fill="${k.hair}" stroke="#4a3c32" stroke-width="1.5"/><path d="M166 84C190 86 196 118 184 140C178 128 172 108 160 96Z" fill="${k.hair}" stroke="#4a3c32" stroke-width="1.5"/><circle cx="66" cy="88" r="5.5" fill="#e8607a"/><circle cx="164" cy="88" r="5.5" fill="#e8607a"/></g>`
+    : "";
+  const curls = (h.curls || [])
+    .map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${k.hair}"/>`)
+    .join("");
+  return `<svg class="child mood-${mood}" viewBox="0 0 230 205" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" role="img" aria-label="${["Maya", "Jayden", "Lucía"][i]}: illustrative ${mood} expression" data-mood="${mood}"><circle cx="115" cy="100" r="83" fill="#fff" opacity=".35"/><g class="c-body"><path d="M52 205C52 168 80 151 115 151S178 168 178 205Z" fill="${k.shirt}"/><path d="M103 128h24v22q-12 9-24 0Z" fill="${k.shade}"/>${shirtDetail}</g><g class="c-head">${pigtails}${h.back ? `<path d="${h.back}" fill="${k.hair}"/>` : ""}<circle cx="68" cy="106" r="9" fill="${k.skin}" stroke="${k.shade}" stroke-width="1.5"/><circle cx="162" cy="106" r="9" fill="${k.skin}" stroke="${k.shade}" stroke-width="1.5"/><path d="M68 98C68 66 90 52 115 52S162 66 162 98C162 128 144 150 115 150S68 128 68 98Z" fill="${k.skin}" stroke="${k.shade}" stroke-width="1.6"/>${curls}<path d="${h.front}" fill="${k.hair}"/><path d="${h.shine}" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".16"/><path class="c-brows" d="${m.brows.join("")}" stroke="${k.hair}" stroke-width="4.5" fill="none" stroke-linecap="round"/><g class="c-blink"><g class="c-eyes">${eye(95)}${eye(135)}</g>${lid(95, 1)}${lid(135, -1)}</g><ellipse class="c-blush" cx="82" cy="121" rx="9" ry="5" fill="#e0806a" opacity="${m.blush}"/><ellipse class="c-blush" cx="148" cy="121" rx="9" ry="5" fill="#e0806a" opacity="${m.blush}"/><path d="M112 113q-1.5 5 2 6.5q2.5 .8 4.5-1" stroke="${k.shade}" stroke-width="2.2" fill="none" stroke-linecap="round"/><g class="c-mouth">${typeof m.mouth === "function" ? m.mouth(id) : m.mouth}</g><ellipse class="c-mouth-open" cx="115" cy="130" rx="7" ry="5.5" fill="#7a2a26"/><path class="c-tear" d="M88 112q-4 8 0 11q4-3 0-11" fill="#7fb8dc"/><path class="c-tear c-tear-2" d="M142 112q-4 8 0 11q4-3 0-11" fill="#7fb8dc"/></g></svg>`;
 };
+// Decorative green sprigs and sparkles that sway and twinkle around the page.
+const LEAF = "M0 0C9-12 27-13 38 0C27 13 9 12 0 0Z";
+const sprig = (cls, flip = false) =>
+  `<svg class="sprig ${cls}" viewBox="0 0 120 170" aria-hidden="true"${flip ? ' style="--flip:-1"' : ""}><path class="sprig-stem" d="M60 168C57 130 64 92 58 52C56 36 60 20 66 8" fill="none" stroke="#3f7a5c" stroke-width="3.2" stroke-linecap="round"/>${[
+    [59, 140, -150, "#2f6b52", 0],
+    [60, 122, -30, "#4f8f68", 0.4],
+    [60, 100, -155, "#6fa27a", 0.8],
+    [59, 80, -25, "#2f6b52", 1.2],
+    [58, 58, -150, "#4f8f68", 1.6],
+    [61, 38, -35, "#6fa27a", 2],
+    [65, 14, -70, "#8fbf86", 2.4],
+  ]
+    .map(
+      ([x, y, a, f, d]) =>
+        `<g transform="translate(${x} ${y}) rotate(${a})"><path class="sprig-leaf" style="--d:${d}s" d="${LEAF}" fill="${f}"/></g>`,
+    )
+    .join("")}</svg>`;
+const twinkle = (cls) =>
+  `<svg class="twinkle ${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z" fill="currentColor"/></svg>`;
+// Big leaves fanning out of a corner, for the page background.
+const fern = (cls) =>
+  `<svg class="fern ${cls}" viewBox="0 0 220 220" aria-hidden="true">${[
+    [-14, "#2f6b52", 0],
+    [-40, "#4f8f68", 0.7],
+    [-66, "#6fa27a", 1.4],
+    [-88, "#8fbf86", 2.1],
+  ]
+    .map(
+      ([a, f, d]) =>
+        `<g transform="translate(14 206) rotate(${a})"><g class="fern-leaf" style="--d:${d}s"><path d="M0 0C40-30 128-34 176 0C128 34 40 30 0 0Z" fill="${f}"/><path d="M8 0H160" stroke="#fffdf8" stroke-width="2" stroke-linecap="round" opacity=".35"/></g></g>`,
+    )
+    .join("")}</svg>`;
+// A fixed layer behind everything: it never takes space, scrolls or catches taps.
+const backdrop = () =>
+  `<div class="bg-decor" aria-hidden="true"><span class="bg-blob bg-blob-a"></span><span class="bg-blob bg-blob-b"></span><span class="bg-blob bg-blob-c"></span>${fern("bg-fern-a")}${fern("bg-fern-b")}${sprig("bg-sprig-a")}${sprig("bg-sprig-b", true)}${twinkle("bg-tw-a")}${twinkle("bg-tw-b")}${twinkle("bg-tw-c")}${twinkle("bg-tw-d")}</div>`;
 function step(n) {
   return `<ol class="steps" aria-label="Practice progress">${["Choose", "Prepare", "Practice", "Reflect"].map((v, i) => `<li ${i === n ? 'aria-current="step"' : ""} class="${i === n ? "active" : ""} ${i < n ? "complete" : ""}"><span>${i < n ? "✓" : i + 1}</span>${v}</li>`).join("")}</ol>`;
 }
@@ -205,6 +304,7 @@ const BACK = {
   reflect: "practice",
   plan: "reflect",
   about: "home",
+  review: "home",
 };
 function reviewBadge() {
   return '<button class="review-badge" data-review><span aria-hidden="true">◇</span> Expert review pending <span aria-hidden="true">↗</span></button>';
@@ -216,14 +316,14 @@ const CATEGORY_ICONS = {
   boundaries: "clock",
 };
 function home() {
-  return `<section class="hero new-hero"><div class="hero-copy"><h1>Practice the<br><em>hard talks.</em></h1><p>Kids face tricky things online. Practice what to say before it happens.</p><div class="hero-actions"><button class="primary" id="start">Let’s start <span aria-hidden="true">↓</span></button><button class="text-button" id="how-button">How it works <span aria-hidden="true">↓</span></button></div><div class="privacy">${icon("lock")} Free · No sign-up</div></div><div class="hero-stage" aria-label="An example practice card"><span class="floating-tag top-tag">${icon("happy")} Safe to try</span><span class="spark spark-one" aria-hidden="true">✳</span><div class="back-card one"></div><div class="back-card two"></div><div class="hero-demo"><div class="demo-top"><span class="pill">MAYA, 13</span></div><div class="demo-character">${childArt(0, "happy")}</div><blockquote>“Can I tell you<br>something?”</blockquote><div class="demo-response"><span aria-hidden="true">♡</span> “Of course. I’m listening.”</div></div><span class="floating-tag bottom-tag"><span aria-hidden="true">↺</span> Try again anytime</span></div></section><section id="situations" class="situation-section"><div class="section-head"><div><h2>Pick a moment</h2></div></div><div class="category-tabs" role="group" aria-label="Conversation topics">${content.categories.map((cat) => `<button data-category="${esc(cat.id)}" aria-pressed="${cat.id === activeCategory}">${icon(CATEGORY_ICONS[cat.id] || "chat", "cat-icon")} ${esc(cat.label)}</button>`).join("")}</div><div class="cards">${scenarios
+  return `<section class="hero new-hero"><div class="hero-copy"><h1>Practice the<br><em>hard talks.</em></h1><p>Kids face tricky things online. Practice what to say before it happens.</p><div class="hero-actions"><button class="primary" id="start">Let’s start <span aria-hidden="true">↓</span></button><button class="text-button" id="how-button">How it works <span aria-hidden="true">↓</span></button></div><div class="privacy">${icon("lock")} Free · No sign-up</div></div><div class="hero-stage" aria-label="An example practice card"><span class="blob blob-one" aria-hidden="true"></span><span class="blob blob-two" aria-hidden="true"></span>${sprig("sprig-left")}${sprig("sprig-right", true)}${twinkle("tw-one")}${twinkle("tw-two")}${twinkle("tw-three")}<span class="floating-tag top-tag">${icon("happy")} Safe to try</span><span class="spark spark-one" aria-hidden="true">✳</span><div class="back-card one"></div><div class="back-card two"></div><div class="hero-demo"><div class="demo-top"><span class="pill">MAYA, 14</span></div><div class="demo-character">${childArt(0, "happy")}</div><blockquote>“Can I tell you<br>something?”</blockquote><div class="demo-response"><span aria-hidden="true">♡</span> “Of course. I’m listening.”</div></div><span class="floating-tag bottom-tag"><span aria-hidden="true">↺</span> Try again anytime</span></div></section><section id="situations" class="situation-section"><div class="section-head"><div><h2>Pick a moment</h2></div>${sprig("sprig-head")}${twinkle("tw-head")}</div><div class="category-tabs" role="group" aria-label="Conversation topics">${content.categories.map((cat) => `<button data-category="${esc(cat.id)}" aria-pressed="${cat.id === activeCategory}">${icon(CATEGORY_ICONS[cat.id] || "chat", "cat-icon")} ${esc(cat.label)}</button>`).join("")}</div><div class="cards">${scenarios
     .map((s, i) => ({ s, i }))
     .filter(({ s }) => s.categoryId === activeCategory)
     .map(
       ({ s, i }) =>
-        `<article class="card scenario-card theme-${s.characterIndex}"><div class="portrait"><span class="topic">${esc(s.topic)}</span>${childArt(s.characterIndex)}</div><div class="card-content"><div class="character-meta"><span>${esc(s.name)} <span class="age">· ${s.age}</span></span></div><h3>${esc(s.headline)}</h3><button class="deck-button" data-select="${i}">Start <span aria-hidden="true">↗</span></button></div></article>`,
+        `<article class="card scenario-card theme-${s.characterIndex}"><div class="portrait"><span class="topic">${esc(s.topic)}</span>${twinkle("tw-card")}${childArt(s.characterIndex)}</div><div class="card-content"><div class="character-meta"><span>${esc(s.name)} <span class="age">· ${s.age}</span></span></div><h3>${esc(s.headline)}</h3><button class="deck-button" data-select="${i}">Start <span aria-hidden="true">↗</span></button></div></article>`,
     )
-    .join("")}</div><div class="review-note">${reviewBadge()}</div></section><section class="how" id="how"><div><h2>How it works</h2></div>${[
+    .join("")}</div></section><section class="how" id="how" aria-label="How it works">${[
     ["eye", "Pick a moment"],
     ["chat", "Choose what to say"],
     ["happy", "See how they feel"],
@@ -235,7 +335,7 @@ function home() {
     .join("")}</section>`;
 }
 function prep() {
-  return `${step(1)}<div class="prep-title"><h1>Get <em>ready.</em></h1></div><div class="prep-layout"><section class="panel scenario-intro theme-${c().characterIndex}"><div class="portrait">${childArt(c().characterIndex)}</div><div class="eyebrow">${esc(c().name)}, ${c().age}</div><blockquote>“${esc(c().open)}”</blockquote><p class="muted">${esc(c().context)}</p></section><section class="panel preparation"><div class="tips"><div class="tip"><strong>${icon("check", "good-icon")} Try saying</strong><p>${(c().say || ["“Thank you for telling me.”", "“You’re not to blame.”", "“What would help right now?”"]).map(esc).join("<br>")}</p></div><div class="tip avoid"><strong>${icon("cross", "bad-icon")} Avoid</strong><p>${(c().avoid || ["Blaming or dismissing.", "Threatening punishment.", "Taking over without listening."]).map(esc).join("<br>")}</p></div></div><button class="breath-launch" id="breathe"><span class="breath-icon">${icon("leaf")}</span><span><strong>Take a breath first</strong><small>30 seconds</small></span><span aria-hidden="true">↗</span></button><button class="primary full-width" id="begin">I’m ready <span aria-hidden="true">→</span></button></section></div>`;
+  return `${step(1)}<div class="prep-title"><h1>Get <em>ready.</em></h1></div><div class="prep-layout"><section class="panel scenario-intro theme-${c().characterIndex}"><div class="intro-hero"><div class="portrait">${childArt(c().characterIndex)}</div><div class="intro-name">${esc(c().name)}<span>Age ${c().age}</span></div></div><blockquote>“${esc(c().open)}”</blockquote><p class="muted">${esc(c().context)}</p></section><section class="panel preparation"><div class="tips"><div class="tip"><strong>${icon("check", "good-icon")} Try saying</strong><p>${(c().say || ["“Thank you for telling me.”", "“You’re not to blame.”", "“What would help right now?”"]).map(esc).join("<br>")}</p></div><div class="tip avoid"><strong>${icon("cross", "bad-icon")} Avoid</strong><p>${(c().avoid || ["Blaming or dismissing.", "Threatening punishment.", "Taking over without listening."]).map(esc).join("<br>")}</p></div></div><button class="breath-launch" id="breathe"><span class="breath-icon">${icon("leaf")}</span><span><strong>Take a breath first</strong><small>30 seconds</small></span><span aria-hidden="true">↗</span></button><button class="primary full-width" id="begin">I’m ready <span aria-hidden="true">→</span></button></section></div>`;
 }
 function practice() {
   const last = lastTurn();
@@ -265,7 +365,7 @@ function practice() {
     : `<div class="burst-banner kind-${last.kind}" aria-hidden="true">${resultIcon(last.kind)}<strong>${
         { good: "Nice! " + esc(c().name) + " opened up.", repair: "Nice repair! " + esc(c().name) + " feels safer.", harmful: "Ouch. " + esc(c().name) + " is upset.", promise: "Careful. That promise may not hold.", neutral: "Hmm. " + esc(c().name) + " isn’t sure yet.", unknown: "Hmm. " + esc(c().name) + " isn’t sure yet." }[last.kind] || ""
       }</strong></div>`;
-  return `${step(2)}<div class="practice-heading"><div><h1>Talking with <em>${esc(c().name)}.</em></h1></div><button class="secondary" id="restart">↺ Start over</button></div><div class="practice-shell"><aside class="character-panel theme-${c().characterIndex} mood-${mood}${react}"><div class="character-top"><span class="pill">${esc(c().topic)}</span></div><div class="live-character talking" style="--talk-n:${talkBeats}">${effects}${childArt(c().characterIndex, mood)}<span class="mood-label">${mood === "happy" ? `${icon("happy")} Feeling closer` : mood === "calm" ? `${icon("calm")} Calmer` : mood === "sad" ? `${icon("sad")} Upset` : `${icon("worried")} Worried`}</span></div><div class="character-name">${esc(c().name)}<span>Age ${c().age}</span></div><div class="feeling"><strong>${icon("thought")}</strong><span>${last ? esc(last.feeling) : esc(c().feeling)}</span></div><div class="openness" role="img" aria-label="How open ${esc(c().name)} feels: ${zone()}"><div class="openness-head"><span>How open ${esc(c().name)} feels</span><b>${zone()}</b></div><div class="meter-track${react ? ` pulse-${way}` : ""}" style="--from:${from}%;--to:${score}%"><div class="meter-fill"></div><div class="meter-knob">${icon(mood === "sad" ? "sad" : mood === "worried" ? "worried" : mood === "calm" ? "calm" : "happy")}</div>${react && delta ? `<span class="meter-delta ${way}">${delta > 0 ? "+" : ""}${delta}</span>` : ""}</div></div><button class="text-button small" data-rules>ⓘ How this works</button></aside><section class="conversation-area"><div class="deck-progress"><span><b>${Math.min(count + 1, 3)}</b> / 3</span><div class="progress-dots" aria-label="${count} of 3 moments explored">${[0, 1, 2].map((i) => `<span class="${i < count ? "done" : i === count ? "current" : ""}"></span>`).join("")}</div></div><div class="flashcard${react}" id="flashcard" tabindex="-1">${practiceCard()}</div></section></div>${banner}`;
+  return `${step(2)}<div class="practice-heading"><div><h1>Talking with <em>${esc(c().name)}.</em></h1></div><button class="secondary" id="restart">↺ Start over</button></div><div class="practice-shell"><div class="deck-progress"><span><b>${Math.min(count + 1, 3)}</b> / 3</span><div class="progress-dots" aria-label="${count} of 3 moments explored">${[0, 1, 2].map((i) => `<span class="${i < count ? "done" : i === count ? "current" : ""}"></span>`).join("")}</div></div><aside class="character-panel theme-${c().characterIndex} mood-${mood}${react}"><div class="character-hero"><div class="character-top"><span class="pill">${esc(c().topic)}</span></div><div class="live-character talking" style="--talk-n:${talkBeats}">${effects}${childArt(c().characterIndex, mood)}<span class="mood-label">${mood === "happy" ? `${icon("happy")} Feeling closer` : mood === "calm" ? `${icon("calm")} Calmer` : mood === "sad" ? `${icon("sad")} Upset` : `${icon("worried")} Worried`}</span></div><div class="character-name">${esc(c().name)}</div></div><div class="character-age">Age ${c().age}</div><div class="feeling"><strong>${icon("thought")}</strong><span>${last ? esc(last.feeling) : esc(c().feeling)}</span></div><div class="openness" role="img" aria-label="How open ${esc(c().name)} feels: ${zone()}"><div class="openness-head"><span>How open ${esc(c().name)} feels</span><b>${zone()}</b></div><div class="meter-track${react ? ` pulse-${way}` : ""}" style="--from:${from}%;--to:${score}%"><div class="meter-fill"></div><div class="meter-knob">${icon(mood === "sad" ? "sad" : mood === "worried" ? "worried" : mood === "calm" ? "calm" : "happy")}</div>${react && delta ? `<span class="meter-delta ${way}">${delta > 0 ? "+" : ""}${delta}</span>` : ""}</div></div><button class="text-button small" data-rules>ⓘ How this works</button></aside><section class="conversation-area"><div class="flashcard${react}" id="flashcard" tabindex="-1">${practiceCard()}</div></section></div>${banner}`;
 }
 function practiceCard() {
   const last = lastTurn();
@@ -348,10 +448,37 @@ function reflect() {
   return `${step(3)}<h1 style="font-size:47px;margin:12px 0">Well <em>done!</em></h1><p class="muted">Here’s how it went with ${esc(c().name)}.</p><div class="summary"><section class="panel"><h3>How ${esc(c().name)} opened up</h3>${chart()}${compare()}${turns.length ? turns.map((t, i) => `<div class="turn"><strong>${resultIcon(t.kind)} “${esc(t.text)}”</strong><p>${esc(t.title)}</p></div>`).join("") : '<p class="muted">No replies yet.</p>'}</section><aside><section class="panel"><h3>Values you showed</h3>${content.principles.map((v) => `<span class="tag ${vals.includes(v) ? "" : "off"}">${vals.includes(v) ? "✓ " : ""}${esc(v)}</span>`).join("")}<h3>Next time</h3>${[["heart", "Say thank you"], ["ear", "Listen first"], ["people", "Decide together"], ["calendar", "Check in later"]].map(([n, s]) => `<label class="check"><input type="checkbox">${icon(n)} ${s}</label>`).join("")}<button class="primary" id="plan-button">Next steps →</button><button class="text-button" id="resources-button">Get help ↗</button></section><div style="display:flex;gap:10px;margin-top:15px"><button class="secondary" id="again">↺ Try again</button><button class="secondary" id="new">Pick another</button></div></aside></div>`;
 }
 function resources() {
-  return `<h1 style="font-size:47px">Get <em>help.</em></h1><div class="summary"><section class="panel"><h3>${icon("chat")} What to say</h3><div class="script">“Thank you for telling me. You’re not in trouble. I’m here. What do you need right now?”</div><div class="notice">This site can’t send reports or call anyone. The links open other websites.</div></section><section><a class="resource" target="_blank" rel="noopener noreferrer" href="https://parents.thorn.org/"><strong>Thorn for Parents ↗</strong><span>Guides for talking about online safety.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.missingkids.org/gethelpnow/cybertipline"><strong>NCMEC CyberTipline ↗</strong><span>Report online sexual exploitation of a child.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.stopbullying.gov/cyberbullying/what-is-it"><strong>StopBullying.gov ↗</strong><span>Help with cyberbullying.</span></a><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
+  return `<h1 style="font-size:47px">Get <em>help.</em></h1><div class="summary"><section class="panel"><h3>${icon("chat")} What to say</h3><div class="script">“Thank you for telling me. You’re not in trouble. I’m here. What do you need right now?”</div><div class="notice">This site can’t send reports or call anyone. The links open other websites.</div></section><section><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.missingkids.org/gethelpnow/cybertipline"><strong>NCMEC CyberTipline ↗</strong><span>Report online sexual exploitation of a child.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.stopbullying.gov/cyberbullying/what-is-it"><strong>StopBullying.gov ↗</strong><span>Help with cyberbullying.</span></a><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
 }
 function about() {
-  return `<h1 style="font-size:47px">About <em>this site.</em></h1><div class="summary"><section class="panel about-list"><p>${icon("book")} Made-up stories, for practice only.</p><p>${icon("lock")} No sign-up. Nothing is saved or sent.</p><p>${icon("happy")} The face and meter are a story, not a grade.</p><p>${icon("pencil")} Typed replies use a simple word check, not AI.</p></section><section class="panel about-list"><p>${icon("shield")} Not therapy or emergency help.</p><button class="review-badge" data-review>◇ Expert review pending ↗</button><p><a href="https://parents.thorn.org/guides/getting-aligned-on-social-media-platforms/" target="_blank" rel="noopener noreferrer">Source guide ↗</a></p></section></div>`;
+  return `<div class="page-title"><h1>About <em>us.</em></h1><p class="lead">We’re the Talk Kit team. Kids meet tricky things online: strangers, bullying, scary videos. We want every parent and caregiver to feel ready to talk about them, so kids keep coming to you.</p></div><div class="info-grid">${[
+    ["heart", "Our goal", "Help you stay calm, listen and keep your child talking when something goes wrong online."],
+    ["chat", "How it works", "Pick a moment, choose what to say, and see how the child might feel. Inspired by the CDC’s Free Mind “Real Talk” cards."],
+    ["people", "Who it’s for", "Parents, grandparents and caregivers. No tech skills needed."],
+    ["book", "Made-up stories", "Every child and story is made up. The feedback is written by people, not AI."],
+    ["lock", "Private", "No sign-up. Nothing you do here is saved or sent."],
+    ["alert", "Not therapy", "Practice only. Not therapy, a test or emergency help."],
+  ]
+    .map(
+      ([n, t, d]) =>
+        `<section class="info-card">${icon(n, "info-icon")}<h2>${t}</h2><p>${d}</p></section>`,
+    )
+    .join("")}</div><section class="panel info-callout">${icon("shield", "info-icon")}<div><h2>Expert review</h2><p>We’re asking licensed professionals who work with children to check every story.</p></div><button class="primary" id="about-review">See how review works <span aria-hidden="true">→</span></button></section>`;
+}
+// The expert review process. Honest about status: nothing is signed off yet.
+function review() {
+  return `<div class="page-title"><h1>Expert <em>review.</em></h1><p class="lead">Licensed professionals who work with children and families check our stories, answers and feedback.</p><span class="status-pending">◇ In progress</span><p class="muted review-status">Reviews are still underway. No reviewer credentials or approvals have been verified yet, so treat every story as practice only.</p></div><ol class="review-steps">${[
+    ["shield", "Check the license", "We confirm each reviewer is a licensed therapist, psychologist, counselor or social worker, and that the license is active."],
+    ["book", "Read every story", "They go through each child’s lines, every answer choice and all the feedback."],
+    ["check", "Check the advice", "Is it safe, kind, right for the child’s age and in line with current child-safety guidance?"],
+    ["pencil", "Fix what they flag", "We rewrite anything they question, then they check it again."],
+    ["calendar", "Show who reviewed it", "Each story will show the reviewer’s name, license and date once it’s signed off."],
+  ]
+    .map(
+      ([n, t, d], i) =>
+        `<li class="info-card"><span class="review-num">${i + 1}</span>${icon(n, "info-icon")}<h2>${t}</h2><p>${d}</p></li>`,
+    )
+    .join("")}</ol><section class="panel info-callout"><div><h2>What reviewers look for</h2><div class="look-for">${["Safe advice", "No blame", "Right for the age", "Kind words", "Clear next steps"].map((x) => `<span class="tag">✓ ${x}</span>`).join("")}</div></div></section>`;
 }
 function render() {
   stopVoice();
@@ -366,6 +493,8 @@ function render() {
             ? reflect()
             : stage === "about"
               ? about()
+              : stage === "review"
+                ? review()
               : stage === "plan"
                 ? plan()
                 : resources());
@@ -374,7 +503,7 @@ function render() {
   const inside = stage !== "home";
   $("#nav-back").hidden = !inside;
   $("#nav-home").hidden = !inside;
-  $("#how-nav").hidden = inside;
+  $("#review-nav").hidden = inside;
   $("#about-nav").hidden = inside;
   document.body.classList.toggle("inside", inside);
   $("#pause-session").hidden = stage !== "practice";
@@ -455,6 +584,7 @@ function bind() {
   });
   on("#new", () => go("home", "#situations"));
   on("#resources-button", () => go("resources"));
+  on("#about-review", () => go("review"));
   on("#plan-button", () => go("plan"));
 }
 const motion = () =>
@@ -651,13 +781,11 @@ $("#nav-back").onclick = () => {
   if (!content) return;
   const to = stage === "resources" ? returnStage : BACK[stage] || "home";
   // Leaving a scenario lands back on the scenario cards, not the top of the page.
-  go(to, to === "home" && stage !== "about" ? "#situations" : null);
+  go(to, to === "home" && !["about", "review"].includes(stage) ? "#situations" : null);
 };
-$("#how-nav").onclick = () => {
-  if (!content) return;
-  if (stage !== "home") go("home");
-  $("#how").scrollIntoView({ behavior: motion() });
-};
+$("#review-nav").onclick = () => content && go("review");
+$("#footer-review").onclick = () => content && go("review");
+$("#footer-about").onclick = () => content && go("about");
 $("#about-nav").onclick = () => content && go("about");
 $("#now-nav").onclick = () => {
   if (content) go("resources");
@@ -703,11 +831,12 @@ async function init() {
   } catch {
     content = null;
     $("#app").innerHTML =
-      '<section class="panel load-error" role="alert"><span class="coach-icon">↺</span><h1>We couldn’t load the conversation cards.</h1><p>Please try again.</p><button class="primary" id="reload">Try again</button><p>Need support now? <a href="https://parents.thorn.org/" target="_blank" rel="noopener noreferrer">Visit Thorn for Parents ↗</a></p></section>';
+      '<section class="panel load-error" role="alert"><span class="coach-icon">↺</span><h1>We couldn’t load the conversation cards.</h1><p>Please try again.</p><button class="primary" id="reload">Try again</button><p>In danger right now? Call 911 (US) or your local emergency number.</p></section>';
     on("#reload", init);
     hideSplash();
   }
 }
+document.body.insertAdjacentHTML("afterbegin", backdrop());
 decorate(document.body);
 init();
 
@@ -755,11 +884,11 @@ function plan() {
     ],
     links: [
       [
-        "Thorn for Parents",
-        "Conversation guides about online safety.",
-        "https://parents.thorn.org/",
+        "StopBullying.gov",
+        "Help with cyberbullying.",
+        "https://www.stopbullying.gov/cyberbullying/what-is-it",
       ],
     ],
   };
-  return `${step(3)}<h1 style="font-size:47px">Next <em>steps.</em></h1><div class="summary"><section class="panel"><ol class="now-steps">${pl.steps.map((x) => `<li>${esc(x).replace(/&lt;(\/?strong)&gt;/g, "<$1>")}</li>`).join("")}</ol>${reviewBadge()}</section><section><h3>Helpful links</h3>${pl.links.map(([title, description, url]) => `<a class="resource" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(title)} ↗</strong><span>${esc(description)}</span></a>`).join("")}<button class="secondary" id="resources-button">Get help now ↗</button><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
+  return `${step(3)}<h1 style="font-size:47px">Next <em>steps.</em></h1><div class="summary"><section class="panel"><ol class="now-steps">${pl.steps.map((x) => `<li>${esc(x).replace(/&lt;(\/?strong)&gt;/g, "<$1>")}</li>`).join("")}</ol>${reviewBadge()}</section><section>${pl.links.length ? "<h3>Helpful links</h3>" : ""}${pl.links.map(([title, description, url]) => `<a class="resource" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(title)} ↗</strong><span>${esc(description)}</span></a>`).join("")}<button class="secondary" id="resources-button">Get help now ↗</button><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
 }
