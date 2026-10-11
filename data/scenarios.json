@@ -60,7 +60,7 @@
         ],
         [
           {
-            "text": "People who ask kids to keep secrets like that are the ones doing something wrong. This isn’t your fault.",
+            "text": "Asking you to keep secrets is wrong. This isn’t your fault.",
             "kind": "good",
             "values": ["Forgiveness", "Empathy"]
           },
@@ -76,7 +76,7 @@
         ],
         [
           {
-            "text": "I’m not taking your phone for telling me. Let’s save the messages and report this together, and I’ll explain each step.",
+            "text": "You’re not losing your phone. Let’s report this together.",
             "kind": "good",
             "values": ["Respect", "Integrity"]
           },
@@ -158,7 +158,7 @@
       "replies": [
         [
           {
-            "text": "I’m really glad you told me. That sounds awful, and you don’t deserve it.",
+            "text": "I’m glad you told me. You don’t deserve that.",
             "kind": "good",
             "values": ["Kindness", "Empathy"]
           },
@@ -174,7 +174,7 @@
         ],
         [
           {
-            "text": "That sounds exhausting, like there’s no break from it. I’m listening.",
+            "text": "That sounds exhausting. I’m listening.",
             "kind": "good",
             "values": ["Empathy", "Compassion"]
           },
@@ -190,7 +190,7 @@
         ],
         [
           {
-            "text": "I won’t do anything without talking to you first. Let’s decide together who could help.",
+            "text": "I won’t act without you. Let’s decide together who can help.",
             "kind": "good",
             "values": ["Respect", "Integrity"]
           },
@@ -289,7 +289,7 @@
         ],
         [
           {
-            "text": "I believe you. Videos sometimes start on their own, and that’s not your fault. It makes sense that you feel scared.",
+            "text": "I believe you. It’s not your fault, and it’s okay to feel scared.",
             "kind": "good",
             "values": ["Empathy", "Forgiveness"]
           },
@@ -305,7 +305,7 @@
         ],
         [
           {
-            "text": "I’ll stay right here with you. Let’s take some slow breaths together, and tomorrow we can change the settings so videos don’t play on their own.",
+            "text": "I’ll stay with you. Tomorrow we’ll fix the video settings.",
             "kind": "good",
             "values": ["Compassion", "Respect"]
           },
@@ -380,7 +380,7 @@
         ],
         [
           {
-            "text": "It can be hard to set a boundary with someone you like. Your address and school are private.",
+            "text": "It’s hard to say no to a friend. Your address stays private.",
             "kind": "good",
             "values": ["Empathy", "Respect"]
           },
@@ -396,7 +396,7 @@
         ],
         [
           {
-            "text": "Let’s practice a message that keeps your details private, and talk about what to do if they keep asking.",
+            "text": "Let’s practice a reply that keeps your details private.",
             "kind": "good",
             "values": ["Integrity", "Compassion"]
           },
@@ -413,7 +413,7 @@
       "background": "A new online friend asks Maya for her school name and home address. She wants to keep the friendship but feels unsure about sharing.",
       "say": [
         "I’m glad you checked with me before sharing. We can talk about it together.",
-        "It can be hard to set a boundary with someone you like. Your address and school are private."
+        "It’s hard to say no to a friend. Your address stays private."
       ],
       "avoid": [
         "Blame, dismissal, or threats.",
@@ -458,7 +458,7 @@
             "kind": "harmful"
           },
           {
-            "text": "Thank you for telling me before agreeing. I want to understand what you know about them.",
+            "text": "Thanks for asking before agreeing. What do you know about them?",
             "kind": "good",
             "values": ["Kindness", "Compassion"]
           },
@@ -470,7 +470,7 @@
         ],
         [
           {
-            "text": "I hear that this friendship matters to you. Knowing someone in a game doesn’t tell us everything about who they are.",
+            "text": "Online friends matter, but we can’t be sure who they are.",
             "kind": "good",
             "values": ["Empathy", "Respect"]
           },
@@ -486,7 +486,7 @@
         ],
         [
           {
-            "text": "Let’s pause any plans to meet and work out safe next steps together. I’ll explain my concerns.",
+            "text": "Let’s pause the meetup and plan safe next steps together.",
             "kind": "good",
             "values": ["Integrity", "Compassion"]
           },
@@ -502,8 +502,8 @@
       ],
       "background": "Someone Jayden knows only through a game has suggested meeting in person. He tells a caregiver before agreeing.",
       "say": [
-        "Thank you for telling me before agreeing. I want to understand what you know about them.",
-        "I hear that this friendship matters to you. Knowing someone in a game doesn’t tell us everything about who they are."
+        "Thanks for asking before agreeing. What do you know about them?",
+        "Online friends matter, but we can’t be sure who they are."
       ],
       "avoid": [
         "Blame, dismissal, or threats.",
@@ -560,7 +560,7 @@
         ],
         [
           {
-            "text": "Being left out can feel lonely. It doesn’t mean there’s something wrong with you.",
+            "text": "Being left out hurts, but nothing is wrong with you.",
             "kind": "good",
             "values": ["Empathy", "Respect"]
           },
@@ -576,7 +576,7 @@
         ],
         [
           {
-            "text": "Would you like company right now, or help thinking of someone kind to spend time with?",
+            "text": "Want some company, or help finding someone kind to see?",
             "kind": "good",
             "values": ["Integrity", "Compassion"]
           },
@@ -593,7 +593,7 @@
       "background": "Lucía sees photos of a get-together she was not invited to. She feels left out and is unsure whether her friends still like her.",
       "say": [
         "That really hurts. I’m glad you told me how you’re feeling.",
-        "Being left out can feel lonely. It doesn’t mean there’s something wrong with you."
+        "Being left out hurts, but nothing is wrong with you."
       ],
       "avoid": [
         "Blame, dismissal, or threats.",
@@ -638,7 +638,7 @@
             "kind": "harmful"
           },
           {
-            "text": "Thank you for being honest. We can take responsibility for a hurtful choice without deciding you’re a bad person.",
+            "text": "Thank you for being honest. A hurtful choice doesn’t make you bad.",
             "kind": "good",
             "values": ["Kindness", "Compassion"],
             "note": "This response makes room for honesty while helping the child take responsibility. Support and accountability can belong in the same conversation."
@@ -651,7 +651,7 @@
         ],
         [
           {
-            "text": "Wanting to fit in is understandable. Let’s think about how the joke affected the other person.",
+            "text": "Fitting in matters. How do you think the joke felt for them?",
             "kind": "good",
             "values": ["Empathy", "Respect"],
             "note": "This response makes room for honesty while helping the child take responsibility. Support and accountability can belong in the same conversation."
@@ -668,7 +668,7 @@
         ],
         [
           {
-            "text": "We can plan a sincere apology and how to respond differently next time. What would you like to say?",
+            "text": "Let’s plan a real apology together. What would you say?",
             "kind": "good",
             "values": ["Integrity", "Compassion"],
             "note": "This response makes room for honesty while helping the child take responsibility. Support and accountability can belong in the same conversation."
@@ -685,8 +685,8 @@
       ],
       "background": "Maya joined in with a joke in a group chat. Another student was hurt, and she is unsure how to take responsibility.",
       "say": [
-        "Thank you for being honest. We can take responsibility for a hurtful choice without deciding you’re a bad person.",
-        "Wanting to fit in is understandable. Let’s think about how the joke affected the other person."
+        "Thank you for being honest. A hurtful choice doesn’t make you bad.",
+        "Fitting in matters. How do you think the joke felt for them?"
       ],
       "avoid": [
         "Blame, dismissal, or threats.",
@@ -743,7 +743,7 @@
         ],
         [
           {
-            "text": "Those comparisons sound exhausting. I want to listen to what this feels like for you.",
+            "text": "Those comparisons sound exhausting. Tell me how it feels.",
             "kind": "good",
             "values": ["Empathy", "Respect"]
           },
@@ -759,7 +759,7 @@
         ],
         [
           {
-            "text": "Let’s look for things that support how you feel, and take a break from accounts that make it harder.",
+            "text": "Let’s take a break from accounts that make you feel worse.",
             "kind": "good",
             "values": ["Integrity", "Compassion"]
           },
@@ -776,7 +776,7 @@
       "background": "Jayden sees edited fitness and appearance videos and has started making negative comments about his body.",
       "say": [
         "I’m glad you told me. It sounds painful to feel that way about yourself.",
-        "Those comparisons sound exhausting. I want to listen to what this feels like for you."
+        "Those comparisons sound exhausting. Tell me how it feels."
       ],
       "avoid": [
         "Blame, dismissal, or threats.",
@@ -833,7 +833,7 @@
         ],
         [
           {
-            "text": "Taking a break doesn’t mean you don’t care. We can care and make room for rest.",
+            "text": "Taking a break doesn’t mean you don’t care.",
             "kind": "good",
             "values": ["Empathy", "Respect"]
           },
@@ -849,7 +849,7 @@
         ],
         [
           {
-            "text": "Would you like to choose a time to check the news together, then do something calming?",
+            "text": "Want to check the news together, then do something calming?",
             "kind": "good",
             "values": ["Integrity", "Compassion"]
           },
@@ -866,7 +866,7 @@
       "background": "Maya has been watching distressing news clips. She feels guilty about taking a break and is having trouble settling down.",
       "say": [
         "That sounds like a lot to carry. I’m here to listen.",
-        "Taking a break doesn’t mean you don’t care. We can care and make room for rest."
+        "Taking a break doesn’t mean you don’t care."
       ],
       "avoid": [
         "Blame, dismissal, or threats.",
@@ -911,7 +911,7 @@
             "kind": "harmful"
           },
           {
-            "text": "I can see your team matters to you. Let’s take a breath and talk about the time we agreed on.",
+            "text": "Your team matters. Let’s talk about the time we agreed on.",
             "kind": "good",
             "values": ["Kindness", "Compassion"]
           },
@@ -923,7 +923,7 @@
         ],
         [
           {
-            "text": "You wanted to be there for them. We still need a plan that respects our family agreement.",
+            "text": "You wanted to be there for them. Let’s find a plan that works.",
             "kind": "good",
             "values": ["Empathy", "Respect"]
           },
@@ -939,7 +939,7 @@
         ],
         [
           {
-            "text": "Let’s agree on a stopping point and how to plan the last round next time.",
+            "text": "Let’s agree on a stopping point for next time.",
             "kind": "good",
             "values": ["Integrity", "Compassion"]
           },
@@ -955,8 +955,8 @@
       ],
       "background": "Jayden is in a team game when an agreed screen-time limit arrives. A caregiver wants to revisit the plan calmly.",
       "say": [
-        "I can see your team matters to you. Let’s take a breath and talk about the time we agreed on.",
-        "You wanted to be there for them. We still need a plan that respects our family agreement."
+        "Your team matters. Let’s talk about the time we agreed on.",
+        "You wanted to be there for them. Let’s find a plan that works."
       ],
       "avoid": [
         "Blame, dismissal, or threats.",
@@ -1013,7 +1013,7 @@
         ],
         [
           {
-            "text": "It’s confusing when a game makes buying things easy. I’ll help you understand what costs real money.",
+            "text": "Games make buying easy. Let me show you what costs real money.",
             "kind": "good",
             "values": ["Empathy", "Respect"]
           },
@@ -1029,7 +1029,7 @@
         ],
         [
           {
-            "text": "Let’s check the purchase settings together and agree that you’ll ask before buying anything.",
+            "text": "Let’s check the settings and agree you’ll ask before buying.",
             "kind": "good",
             "values": ["Integrity", "Compassion"]
           },
@@ -1046,7 +1046,7 @@
       "background": "Lucía tapped through an in-game purchase without realizing it used real money. She is worried about telling a caregiver.",
       "say": [
         "Thank you for telling me. Let’s look at what happened calmly.",
-        "It’s confusing when a game makes buying things easy. I’ll help you understand what costs real money."
+        "Games make buying easy. Let me show you what costs real money."
       ],
       "avoid": [
         "Blame, dismissal, or threats.",
@@ -1091,7 +1091,7 @@
             "kind": "harmful"
           },
           {
-            "text": "I hear that staying connected matters to you. What feels hardest about leaving the chat?",
+            "text": "Staying connected matters to you. What’s hardest about leaving?",
             "kind": "good",
             "values": ["Kindness", "Compassion"]
           },
@@ -1103,7 +1103,7 @@
         ],
         [
           {
-            "text": "It makes sense to want to belong. Your rest matters too, and I want us to find a balance.",
+            "text": "Belonging matters, and so does your rest. Let’s find a balance.",
             "kind": "good",
             "values": ["Empathy", "Respect"]
           },
@@ -1119,7 +1119,7 @@
         ],
         [
           {
-            "text": "Let’s try a bedtime plan together, then check in about what is and isn’t working.",
+            "text": "Let’s try a bedtime plan together and see how it goes.",
             "kind": "good",
             "values": ["Integrity", "Compassion"]
           },
@@ -1135,8 +1135,8 @@
       ],
       "background": "Maya stays connected late at night because she worries about missing messages. She is tired, and a caregiver opens a conversation about rest.",
       "say": [
-        "I hear that staying connected matters to you. What feels hardest about leaving the chat?",
-        "It makes sense to want to belong. Your rest matters too, and I want us to find a balance."
+        "Staying connected matters to you. What’s hardest about leaving?",
+        "Belonging matters, and so does your rest. Let’s find a balance."
       ],
       "avoid": [
         "Blame, dismissal, or threats.",
@@ -1191,12 +1191,12 @@
   ],
   "repairChoices": [
     {
-      "text": "I reacted out of fear. I’m sorry. You’re not in trouble for telling me. Can we start again?",
+      "text": "I’m sorry I reacted that way. Can we start again?",
       "kind": "repair",
       "values": ["Self-reflection", "Compassion"]
     },
     {
-      "text": "I want to understand before we decide what to do. I’m here to listen.",
+      "text": "I want to understand first. I’m here to listen.",
       "kind": "good",
       "values": ["Respect", "Empathy"]
     },
@@ -1242,7 +1242,7 @@
       "StarRunner. I don’t know their real name.",
       "Why, are you going to message them?"
     ],
-    "People who ask kids to keep secrets like that are the ones doing something wrong. This isn’t your fault.": [
+    "Asking you to keep secrets is wrong. This isn’t your fault.": [
       "I thought I’d get in trouble.",
       "I was scared you’d take my phone. Can you help me?"
     ],
@@ -1254,7 +1254,7 @@
       "Like two weeks? It started out nice.",
       "They said I was really mature for my age."
     ],
-    "I’m not taking your phone for telling me. Let’s save the messages and report this together, and I’ll explain each step.": [
+    "You’re not losing your phone. Let’s report this together.": [
       "Okay.",
       "Thanks for not freaking out."
     ],
@@ -1266,7 +1266,7 @@
       "So I get punished for telling you?",
       "Great."
     ],
-    "I’m really glad you told me. That sounds awful, and you don’t deserve it.": [
+    "I’m glad you told me. You don’t deserve that.": [
       "They keep sharing this picture of me.",
       "Even at home it’s still there. It doesn’t stop."
     ],
@@ -1278,7 +1278,7 @@
       "Stuff about how I look.",
       "I don’t want to say it."
     ],
-    "That sounds exhausting, like there’s no break from it. I’m listening.": [
+    "That sounds exhausting. I’m listening.": [
       "Yeah.",
       "I just don’t want to lose my friends too. Please don’t call anyone yet."
     ],
@@ -1290,7 +1290,7 @@
       "…Okay.",
       "Just don’t send them to anyone without asking me."
     ],
-    "I won’t do anything without talking to you first. Let’s decide together who could help.": [
+    "I won’t act without you. Let’s decide together who can help.": [
       "Okay.",
       "Maybe Ms. Rivera? She’s nice."
     ],
@@ -1314,7 +1314,7 @@
       "I don’t want to say.",
       "It was really scary."
     ],
-    "I believe you. Videos sometimes start on their own, and that’s not your fault. It makes sense that you feel scared.": [
+    "I believe you. It’s not your fault, and it’s okay to feel scared.": [
       "I feel scared when I close my eyes.",
       "Can you stay with me?"
     ],
@@ -1326,7 +1326,7 @@
       "The one with the cartoons.",
       "It played by itself."
     ],
-    "I’ll stay right here with you. Let’s take some slow breaths together, and tomorrow we can change the settings so videos don’t play on their own.": [
+    "I’ll stay with you. Tomorrow we’ll fix the video settings.": [
       "Okay.",
       "Can we do the breathing again?"
     ],
@@ -1337,11 +1337,11 @@
     "If you keep thinking about it, you’ll just make it worse.": [
       "Now I’m even more scared."
     ],
-    "I reacted out of fear. I’m sorry. You’re not in trouble for telling me. Can we start again?": [
+    "I’m sorry I reacted that way. Can we start again?": [
       "…Okay.",
       "I was just scared you’d be mad."
     ],
-    "I want to understand before we decide what to do. I’m here to listen.": [
+    "I want to understand first. I’m here to listen.": [
       "Okay…",
       "I’ll try to explain."
     ],

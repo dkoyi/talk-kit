@@ -6269,3 +6269,151 @@ footer > span:last-child {
     zoom: 0.889;
   }
 }
+
+/* Answer options: same size and space as before, but semi-bold and full ink colour so they
+   read clearly at the 80% scenario scale, still well below the child's line and feedback. */
+.reply > span:nth-child(2) {
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.reply .choice-letter {
+  font-weight: 700;
+}
+
+/* Progress steps (Choose, Prepare, Practice, Reflect): larger, easier to read, same layout. */
+.steps {
+  font-size: 18px;
+  font-weight: 600;
+}
+.steps li > span {
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.steps li:not(.active):not(.complete) {
+  color: #4f5d55;
+}
+@media (max-width: 720px) {
+  .steps {
+    font-size: 14px;
+    gap: 10px;
+    justify-content: space-between;
+  }
+  .steps li {
+    gap: 4px;
+  }
+  .steps li > span {
+    width: 22px;
+    height: 22px;
+    font-size: 13px;
+  }
+}
+@media (max-width: 380px) {
+  .steps {
+    font-size: 13px;
+    gap: 6px;
+  }
+  .steps li > span {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+}
+
+/* "Listen again": a clear, raised green button so parents know they can replay the line. */
+.flashcard-top .voice-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 9px 18px 9px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--green);
+  color: #fffdf8;
+  font-size: 17px;
+  font-weight: 700;
+  box-shadow: 0 4px 0 #173a30, 0 10px 22px -8px #265c4c80;
+  transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
+}
+.flashcard-top .voice-button .icon {
+  width: 22px;
+  height: 22px;
+  color: #fffdf8;
+}
+.flashcard-top .voice-button:hover {
+  background: #2c6a58;
+}
+.flashcard-top .voice-button:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #173a30, 0 4px 10px -4px #265c4c66;
+}
+.flashcard-top .voice-button[aria-pressed="true"] {
+  background: #fffdf8;
+  color: var(--green);
+  box-shadow: inset 0 0 0 2px var(--green), 0 4px 0 #cfd8c9;
+}
+
+/* Ages on every character card: larger and easier to read, sitting a little closer to the name. */
+.character-age {
+  font-size: 17px;
+  font-weight: 600;
+  color: #4f5d55;
+}
+@media (min-width: 721px) {
+  .character-hero {
+    padding-bottom: 12px;
+  }
+  .character-age {
+    margin: 8px 0 16px;
+  }
+}
+@media (max-width: 720px) {
+  .character-age {
+    font-size: 15px;
+  }
+}
+.intro-name span {
+  font-size: 16px;
+  padding: 4px 13px;
+  margin-left: 8px;
+}
+.character-meta,
+.character-meta .age {
+  font-size: 16px;
+}
+.character-meta .age {
+  font-weight: 600;
+}
+.character-meta > span:last-child {
+  font-size: 16px;
+}
+.scenario-card .character-meta > span:last-child {
+  font-size: 17px;
+  font-weight: 600;
+  color: #4f5d55;
+}
+.scenario-card .character-meta .age {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+}
+/* Home story cards: the age sits in a small pill beside the name, like on the Get ready card. */
+.scenario-card .character-meta > span:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+}
+.scenario-card .character-meta .age {
+  display: inline-block;
+  padding: 3px 11px;
+  border-radius: 999px;
+  background: var(--theme, #e3eedb);
+  color: var(--theme-dark, #4b5f45);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
