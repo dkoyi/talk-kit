@@ -25,7 +25,7 @@ for (const [index, scenario] of content.scenarios.entries()) {
     await expect(page.locator(".feedback-title")).toContainText(
       "You made room for more",
     );
-    await expect(page.locator(".live-character svg")).toHaveAttribute(
+    await expect(page.locator(".live-character > svg")).toHaveAttribute(
       "data-mood",
       "calm",
     );
@@ -47,10 +47,10 @@ test("selection errors, harmful reply, repair, restart cancel and confirm", asyn
   await enter(page);
   await page.locator("#reveal").click();
   await expect(page.locator("#choice-error")).toContainText(
-    "Choose a response",
+    "Pick an answer",
   );
   await choose(page, "harmful");
-  await expect(page.locator(".live-character svg")).toHaveAttribute(
+  await expect(page.locator(".live-character > svg")).toHaveAttribute(
     "data-mood",
     "worried",
   );
@@ -77,7 +77,7 @@ test("typed replies: inline errors, uncertainty, escaping, and limits", async ({
   await page.locator("#custom").fill("   ");
   await page.locator("#custom-form button").click();
   await expect(page.locator("#custom-error")).toContainText(
-    "Write a few words",
+    "Type a few words",
   );
   await expect(page.locator("#custom")).toHaveAttribute("aria-invalid", "true");
   await page
@@ -146,7 +146,7 @@ test("review status, rule explanation, keyboard dialog behavior", async ({
   await page.locator("[data-rules]").click();
   await expect(page.locator(".rule-list")).toContainText("+18");
   await expect(page.locator("#modal-content")).toContainText(
-    "not clinically validated",
+    "Not clinically validated",
   );
 });
 test("voice unavailable and failure are recoverable", async ({ page }) => {

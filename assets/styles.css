@@ -17,7 +17,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font:
-    15px/1.6 "Trebuchet MS",
+    18px/1.6 "Trebuchet MS",
     Arial,
     sans-serif;
 }
@@ -58,7 +58,7 @@ header {
   display: flex;
   align-items: center;
   gap: 11px;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: bold;
   letter-spacing: -0.8px;
 }
@@ -70,7 +70,7 @@ header {
   border-radius: 11px 11px 11px 2px;
   background: var(--green);
   color: #f7ead6;
-  font-size: 23px;
+  font-size: 28px;
 }
 nav {
   display: flex;
@@ -80,7 +80,7 @@ nav {
 nav button {
   background: none;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
 }
 .urgent {
@@ -96,7 +96,7 @@ main {
   padding: 40px 0 60px;
 }
 .eyebrow {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: bold;
   letter-spacing: 1.8px;
   text-transform: uppercase;
@@ -117,7 +117,7 @@ p {
 }
 h1 {
   font:
-    normal 58px/1.08 Georgia,
+    normal 64px/1.08 Georgia,
     serif;
   letter-spacing: -2px;
   margin: 19px 0 20px;
@@ -128,25 +128,25 @@ h1 em {
 }
 h2 {
   font:
-    normal 30px/1.2 Georgia,
+    normal 36px/1.2 Georgia,
     serif;
   letter-spacing: -0.6px;
 }
 h3 {
-  font-size: 18px;
+  font-size: 22px;
   line-height: 1.3;
 }
 .hero p {
   color: var(--muted);
   max-width: 455px;
-  font-size: 14px;
+  font-size: 18px;
 }
 .primary {
   background: var(--green);
   color: #fff;
   border-radius: 10px;
   padding: 12px 20px;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
 }
 .primary:hover {
@@ -157,7 +157,7 @@ h3 {
   background: var(--paper);
   border-radius: 10px;
   padding: 11px 18px;
-  font-size: 12px;
+  font-size: 16px;
   color: var(--ink);
   font-weight: bold;
 }
@@ -167,7 +167,7 @@ h3 {
   margin: 25px 0 16px;
 }
 .privacy {
-  font-size: 10px;
+  font-size: 14px;
   color: var(--muted);
 }
 .hero-art {
@@ -191,14 +191,14 @@ h3 {
   border-radius: 14px;
   padding: 13px 17px;
   font:
-    italic 17px Georgia,
+    italic 20px Georgia,
     serif;
 }
 .quote small {
   display: block;
   margin-top: 7px;
   font:
-    10px "Trebuchet MS",
+    14px "Trebuchet MS",
     sans-serif;
   color: var(--muted);
 }
@@ -208,7 +208,7 @@ h3 {
   padding: 17px 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  font-size: 11px;
+  font-size: 14px;
   color: var(--muted);
 }
 .trustline b {
@@ -225,7 +225,7 @@ h3 {
   margin: 7px 0 0;
 }
 .section-head p {
-  font-size: 12px;
+  font-size: 16px;
   color: var(--muted);
   max-width: 270px;
   margin: 0;
@@ -259,7 +259,7 @@ h3 {
   background: #fffdf7ce;
   border-radius: 6px;
   padding: 4px 8px;
-  font-size: 9px;
+  font-size: 14px;
   color: #4d6354;
 }
 .card-content {
@@ -269,13 +269,13 @@ h3 {
   margin-bottom: 9px;
 }
 .card-content p {
-  font-size: 12px;
+  font-size: 16px;
   color: var(--muted);
   min-height: 42px;
 }
 .card-content blockquote {
   font:
-    italic 16px/1.4 Georgia,
+    italic 21px/1.4 Georgia,
     serif;
   margin: 0 0 17px;
 }
@@ -287,14 +287,14 @@ h3 {
   padding-top: 15px;
 }
 .card-bottom span {
-  font-size: 10px;
+  font-size: 14px;
   color: var(--muted);
 }
 .card-bottom button {
   color: var(--green);
   font-weight: bold;
   background: none;
-  font-size: 12px;
+  font-size: 16px;
 }
 .how {
   margin-top: 30px;
@@ -306,10 +306,10 @@ h3 {
   gap: 23px;
 }
 .how strong {
-  font-size: 12px;
+  font-size: 16px;
 }
 .how p {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--muted);
   margin: 6px 0 0;
 }
@@ -330,14 +330,14 @@ footer {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  font-size: 10px;
+  font-size: 14px;
   color: var(--muted);
 }
 .steps {
   display: flex;
   gap: 30px;
   margin: 8px 0 27px;
-  font-size: 11px;
+  font-size: 14px;
   color: var(--muted);
 }
 .steps .active {
@@ -349,7 +349,7 @@ footer {
   color: var(--muted);
   padding: 0;
   margin-bottom: 16px;
-  font-size: 12px;
+  font-size: 16px;
 }
 .prep-layout {
   display: grid;
@@ -373,13 +373,13 @@ footer {
 }
 .scenario-intro blockquote {
   font:
-    italic 24px/1.4 Georgia,
+    italic 29px/1.4 Georgia,
     serif;
   margin: 15px 0;
 }
 .muted {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 17px;
 }
 .tips {
   display: grid;
@@ -391,7 +391,7 @@ footer {
   border-radius: 12px;
   padding: 16px;
   background: var(--mint);
-  font-size: 12px;
+  font-size: 16px;
 }
 .tip.avoid {
   background: #f3e8df;
@@ -411,14 +411,14 @@ footer {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 22px;
-  font-size: 12px;
+  font-size: 16px;
 }
 .breath button {
   background: #fff;
   border-radius: 8px;
   padding: 7px 13px;
   color: var(--ink);
-  font-size: 11px;
+  font-size: 14px;
 }
 .practice {
   display: grid;
@@ -433,11 +433,11 @@ footer {
   height: 145px;
 }
 .practice h3 {
-  font-size: 15px;
+  font-size: 20px;
 }
 .zone {
   display: block;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: bold;
   margin: 12px 0;
 }
@@ -468,7 +468,7 @@ footer {
 .zones {
   display: flex;
   justify-content: space-between;
-  font-size: 8px;
+  font-size: 14px;
   color: var(--muted);
 }
 .feeling {
@@ -476,15 +476,15 @@ footer {
   background: #f0ecef;
   border-radius: 12px;
   padding: 14px;
-  font-size: 12px;
+  font-size: 16px;
 }
 .feeling strong {
   display: block;
-  font-size: 10px;
+  font-size: 14px;
   margin-bottom: 6px;
 }
 .sim-label {
-  font-size: 10px;
+  font-size: 14px;
   color: var(--muted);
   margin-top: 15px;
   line-height: 1.5;
@@ -496,7 +496,7 @@ footer {
   padding: 6px 0 14px;
 }
 .bubble {
-  font-size: 13px;
+  font-size: 17px;
   border-radius: 13px 13px 13px 3px;
   padding: 13px 15px;
   background: #edf0e7;
@@ -509,7 +509,7 @@ footer {
   margin-left: auto;
 }
 .speaker {
-  font-size: 9px;
+  font-size: 14px;
   font-weight: bold;
   display: block;
   margin-bottom: 5px;
@@ -526,14 +526,14 @@ footer {
   padding: 11px 13px;
   text-align: left;
   color: var(--ink);
-  font-size: 12px;
+  font-size: 16px;
 }
 .reply:hover {
   background: #eef2e8;
   border-color: #6b927e;
 }
 .formlabel {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--muted);
   display: block;
   margin: 17px 0 7px;
@@ -547,7 +547,7 @@ textarea {
   min-height: 76px;
   background: #fff;
   color: var(--ink);
-  font-size: 12px;
+  font-size: 16px;
 }
 .actions {
   display: flex;
@@ -556,7 +556,7 @@ textarea {
   margin-top: 10px;
 }
 .actions button {
-  font-size: 11px;
+  font-size: 14px;
 }
 .coach-icon {
   width: 35px;
@@ -568,14 +568,14 @@ textarea {
   margin-bottom: 12px;
 }
 .coach p {
-  font-size: 12px;
+  font-size: 16px;
   color: var(--muted);
 }
 .feedback {
   background: #eef2e8;
   border-radius: 12px;
   padding: 14px;
-  font-size: 12px;
+  font-size: 16px;
   margin: 15px 0;
 }
 .feedback strong {
@@ -590,7 +590,7 @@ textarea {
   padding: 10px;
   font-weight: bold;
   color: #825b36;
-  font-size: 11px;
+  font-size: 14px;
   margin-top: 10px;
 }
 .tag {
@@ -598,7 +598,7 @@ textarea {
   background: var(--mint);
   border-radius: 20px;
   padding: 4px 9px;
-  font-size: 9px;
+  font-size: 14px;
   margin: 2px;
 }
 .summary {
@@ -616,7 +616,7 @@ textarea {
 .turn {
   padding: 14px 0;
   border-top: 1px solid var(--line);
-  font-size: 12px;
+  font-size: 16px;
 }
 .turn p {
   margin: 5px 0;
@@ -626,7 +626,7 @@ textarea {
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  font-size: 13px;
+  font-size: 17px;
   margin: 14px 0;
 }
 .check input {
@@ -644,15 +644,15 @@ textarea {
 }
 .resource strong {
   display: block;
-  font-size: 14px;
+  font-size: 18px;
 }
 .resource span {
-  font-size: 12px;
+  font-size: 16px;
   color: var(--muted);
 }
 .script {
   font:
-    italic 25px/1.5 Georgia,
+    italic 30px/1.5 Georgia,
     serif;
   color: var(--green);
   border-left: 3px solid #a4ba98;
@@ -663,9 +663,11 @@ textarea {
   background: #f1e7dc;
   border-radius: 12px;
   padding: 14px;
-  font-size: 12px;
+  font-size: 16px;
 }
-.focus-destination:focus {
+/* Containers focused from code (for screen readers) aren't controls, so no ring. */
+.focus-destination:focus,
+[tabindex="-1"]:focus {
   outline: none;
 }
 .toast {
@@ -677,7 +679,7 @@ textarea {
   color: white;
   border-radius: 10px;
   padding: 13px 22px;
-  font-size: 12px;
+  font-size: 16px;
   z-index: 5;
 }
 [hidden] {
@@ -699,7 +701,7 @@ textarea {
     max-width: 650px;
   }
   .hero h1 {
-    font-size: 49px;
+    font-size: 54px;
   }
 }
 @media (max-width: 720px) {
@@ -707,13 +709,13 @@ textarea {
     padding: 18px 20px;
   }
   .brand {
-    font-size: 19px;
+    font-size: 23px;
   }
   nav {
     gap: 12px;
   }
   nav button {
-    font-size: 10px;
+    font-size: 14px;
   }
   nav .aboutnav {
     display: none;
@@ -728,7 +730,7 @@ textarea {
     padding-top: 0;
   }
   h1 {
-    font-size: 43px !important;
+    font-size: 47px !important;
   }
   .hero-art {
     height: 235px;
@@ -757,7 +759,7 @@ textarea {
   }
   .steps {
     gap: 17px;
-    font-size: 10px;
+    font-size: 14px;
   }
   .practice .portrait {
     height: 110px;
@@ -814,7 +816,7 @@ textarea {
 }
 body {
   font-family: "DM Sans", sans-serif;
-  font-size: 15px;
+  font-size: 20px;
   line-height: 1.65;
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
@@ -853,7 +855,7 @@ h2,
   letter-spacing: -1.1px;
 }
 h1 {
-  font-size: 58px;
+  font-size: 64px;
   line-height: 1.12;
 }
 h1 em {
@@ -861,7 +863,7 @@ h1 em {
   color: #52765c;
 }
 h2 {
-  font-size: 31px;
+  font-size: 34px;
 }
 h3 {
   letter-spacing: -0.3px;
@@ -872,14 +874,14 @@ header {
   min-height: 91px;
 }
 .brand {
-  font-size: 25px;
+  font-size: 30px;
   letter-spacing: -1.3px;
 }
 .brand-icon {
   width: 38px;
   height: 38px;
   border-radius: 13px 13px 13px 4px;
-  font-size: 32px;
+  font-size: 35px;
   padding-bottom: 9px;
 }
 .brand-dot {
@@ -890,7 +892,7 @@ nav {
   gap: 30px;
 }
 nav button {
-  font-size: 12px;
+  font-size: 16px;
 }
 .urgent {
   border-radius: 24px;
@@ -905,23 +907,23 @@ main {
 }
 footer {
   max-width: 1150px;
-  font-size: 11px;
+  font-size: 14px;
   align-items: center;
 }
 footer b {
-  font-size: 14px;
+  font-size: 18px;
   color: var(--ink);
   margin-right: 8px;
 }
 .eyebrow {
-  font-size: 10px;
+  font-size: 14px;
   letter-spacing: 1.6px;
   color: #627463;
   font-weight: 700;
 }
 .primary,
 .secondary {
-  font-size: 13px;
+  font-size: 17px;
   border-radius: 12px;
   padding: 14px 21px;
 }
@@ -942,7 +944,7 @@ footer b {
   padding: 8px 3px;
   background: transparent;
   color: var(--green);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
 }
 .text-button:hover {
@@ -950,7 +952,7 @@ footer b {
   text-underline-offset: 4px;
 }
 .text-button.small {
-  font-size: 11px;
+  font-size: 14px;
 }
 .full-width {
   width: 100%;
@@ -981,17 +983,17 @@ footer b {
 }
 .new-hero h1 {
   margin: 22px 0 21px;
-  font-size: 58px;
+  font-size: 64px;
   letter-spacing: -2.5px;
 }
 .new-hero p {
-  font-size: 15px;
+  font-size: 20px;
   line-height: 1.8;
   max-width: 450px;
 }
 .tiny-spark {
   color: #986149;
-  font-size: 17px;
+  font-size: 20px;
   margin-right: 6px;
 }
 .hero-actions {
@@ -1000,10 +1002,10 @@ footer b {
   margin: 26px 0 19px;
 }
 .privacy {
-  font-size: 11px;
+  font-size: 14px;
 }
 .privacy span {
-  font-size: 18px;
+  font-size: 22px;
   vertical-align: middle;
   margin-right: 5px;
 }
@@ -1029,12 +1031,12 @@ footer b {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 9px;
+  font-size: 14px;
   color: #718064;
 }
 .pill {
   display: inline-block;
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.6px;
   background: #ffffff9e;
@@ -1045,7 +1047,7 @@ footer b {
 .hero-demo .pill {
   background: #eef1e7;
   color: #5d7257;
-  font-size: 8px;
+  font-size: 14px;
 }
 .demo-character {
   height: 138px;
@@ -1061,7 +1063,7 @@ footer b {
 }
 .hero-demo blockquote {
   font:
-    400 28px/1.22 Fraunces,
+    400 34px/1.22 Fraunces,
     Georgia,
     serif;
   text-align: center;
@@ -1072,17 +1074,17 @@ footer b {
   border: 1px solid #dce6d3;
   border-radius: 11px;
   background: #eef4e7;
-  font-size: 10px;
+  font-size: 14px;
   padding: 12px 10px;
   display: flex;
   align-items: center;
   gap: 9px;
 }
 .demo-response > span {
-  font-size: 19px;
+  font-size: 23px;
 }
 .demo-bottom {
-  font-size: 9px;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1121,7 +1123,7 @@ footer b {
   border: 1px solid #e0e1d6;
   border-radius: 9px;
   box-shadow: 0 4px 13px #263f370c;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 500;
   z-index: 3;
 }
@@ -1137,12 +1139,12 @@ footer b {
   background: #f6eadf;
 }
 .bottom-tag span {
-  font-size: 17px;
+  font-size: 20px;
   margin-right: 4px;
 }
 .spark {
   position: absolute;
-  font-size: 40px;
+  font-size: 44px;
   color: #a9b693;
   z-index: 3;
 }
@@ -1152,18 +1154,18 @@ footer b {
 }
 .trustline {
   justify-content: space-between;
-  font-size: 11px;
+  font-size: 14px;
   padding: 19px 12px;
 }
 .section-head {
   margin: 39px 0 22px;
 }
 .section-head h2 {
-  font-size: 34px;
+  font-size: 37px;
   margin: 8px 0 0;
 }
 .section-head p {
-  font-size: 12px;
+  font-size: 16px;
   max-width: 290px;
   line-height: 1.8;
 }
@@ -1206,7 +1208,7 @@ footer b {
   --theme-dark: #897395;
 }
 .portrait .topic {
-  font-size: 9px;
+  font-size: 14px;
   padding: 4px 9px;
   border-radius: 20px;
   top: 13px;
@@ -1217,7 +1219,7 @@ footer b {
   top: 16px;
   right: 17px;
   font:
-    400 18px Fraunces,
+    400 22px Fraunces,
     serif;
   color: var(--theme-dark);
   opacity: 0.8;
@@ -1228,12 +1230,12 @@ footer b {
 .character-meta {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
   margin-bottom: 12px;
 }
 .character-meta > span:last-child {
-  font-size: 10px;
+  font-size: 14px;
   color: var(--muted);
   font-weight: 400;
 }
@@ -1242,14 +1244,14 @@ footer b {
   color: var(--muted);
 }
 .card-content h3 {
-  font-size: 18px;
+  font-size: 22px;
   line-height: 1.35;
   min-height: 49px;
 }
 .card-content blockquote {
   font-family: "DM Sans", sans-serif;
   font-style: normal;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.65;
   color: var(--muted);
   min-height: 80px;
@@ -1262,13 +1264,13 @@ footer b {
   width: 100%;
   padding: 13px 0 0;
   border-top: 1px solid var(--line);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--green);
   background: none;
 }
 .deck-button span {
-  font-size: 19px;
+  font-size: 23px;
 }
 .review-strip {
   display: flex;
@@ -1281,11 +1283,11 @@ footer b {
   background: #f3f4ed;
 }
 .review-strip h3 {
-  font-size: 13px;
+  font-size: 17px;
   margin-bottom: 3px;
 }
 .review-strip p {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--muted);
   margin: 0;
   max-width: 620px;
@@ -1297,14 +1299,14 @@ footer b {
   height: 37px;
   display: grid;
   place-items: center;
-  font-size: 24px;
+  font-size: 29px;
   flex-shrink: 0;
 }
 .review-badge {
   display: inline-flex;
   gap: 7px;
   align-items: center;
-  font-size: 10px;
+  font-size: 14px;
   white-space: nowrap;
   background: #fffefa;
   border: 1px solid #d9dece;
@@ -1328,23 +1330,23 @@ footer b {
   grid-template-columns: 1.05fr 1fr 1fr 1fr;
 }
 .how h2 {
-  font-size: 24px;
+  font-size: 29px;
   margin: 8px 0 0;
 }
 .how-number {
   font:
-    400 22px Fraunces,
+    400 26px Fraunces,
     serif;
   color: #809171;
   display: block;
   margin-bottom: 9px;
 }
 .how strong {
-  font-size: 12px;
+  font-size: 16px;
   display: block;
 }
 .how p {
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.8;
 }
 .steps {
@@ -1353,7 +1355,7 @@ footer b {
   justify-content: center;
   gap: 45px;
   margin: 0 0 32px;
-  font-size: 11px;
+  font-size: 14px;
 }
 .steps li {
   display: flex;
@@ -1367,7 +1369,7 @@ footer b {
   height: 23px;
   border: 1px solid var(--line);
   border-radius: 50%;
-  font-size: 10px;
+  font-size: 14px;
 }
 .steps .active > span {
   color: white;
@@ -1379,14 +1381,14 @@ footer b {
   color: #456445;
 }
 .back {
-  font-size: 12px;
+  font-size: 16px;
   margin-bottom: 20px;
 }
 .prep-title {
   margin-bottom: 28px;
 }
 .prep-title h1 {
-  font-size: 43px;
+  font-size: 47px;
   margin: 10px 0;
 }
 .prep-layout {
@@ -1411,35 +1413,35 @@ footer b {
 .scenario-intro blockquote {
   font-family: Fraunces, serif;
   font-style: normal;
-  font-size: 25px;
+  font-size: 30px;
 }
 .scenario-intro .review-badge {
   margin-top: 14px;
 }
 .preparation h2 {
-  font-size: 31px;
+  font-size: 34px;
   margin-top: 0;
 }
 .coach-icon {
   background: #e7eddc;
   color: #527046;
-  font-size: 23px;
+  font-size: 28px;
   width: 42px;
   height: 42px;
 }
 .feedback {
   padding: 17px;
   background: #edf1e4;
-  font-size: 13px;
+  font-size: 17px;
   border-radius: 12px;
 }
 .tip {
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.8;
   padding: 14px;
 }
 .tip strong {
-  font-size: 12px;
+  font-size: 16px;
 }
 .breath-launch {
   display: flex;
@@ -1458,15 +1460,15 @@ footer b {
   margin-left: auto;
 }
 .breath-launch strong {
-  font-size: 12px;
+  font-size: 16px;
   display: block;
 }
 .breath-launch small {
-  font-size: 10px;
+  font-size: 14px;
   color: #6b6172;
 }
 .breath-icon {
-  font-size: 29px;
+  font-size: 35px;
   color: #8c79a0;
 }
 .practice-heading {
@@ -1476,11 +1478,11 @@ footer b {
   margin-bottom: 25px;
 }
 .practice-heading h1 {
-  font-size: 38px;
+  font-size: 42px;
   margin: 7px 0 0;
 }
 .practice-heading .secondary {
-  font-size: 11px;
+  font-size: 14px;
   padding: 10px 16px;
 }
 .practice-shell {
@@ -1513,7 +1515,7 @@ footer b {
   border-radius: 50%;
   background: #ffffffaa;
   color: var(--green);
-  font-size: 21px;
+  font-size: 25px;
 }
 .live-character {
   position: relative;
@@ -1521,7 +1523,7 @@ footer b {
   text-align: center;
   margin-top: 10px;
 }
-.live-character svg {
+.live-character > svg {
   height: 197px;
   width: 228px;
   transition: transform 0.4s;
@@ -1535,20 +1537,20 @@ footer b {
   background: #fffefade;
   border: 1px solid #ffffff;
   border-radius: 20px;
-  font-size: 9px;
+  font-size: 14px;
   white-space: nowrap;
 }
 .character-name {
   text-align: center;
   font:
-    400 26px Fraunces,
+    400 31px Fraunces,
     serif;
   margin: 19px 0 24px;
 }
 .character-name span {
   display: block;
   font:
-    10px "DM Sans",
+    14px "DM Sans",
     sans-serif;
   margin-top: 5px;
   color: #67705c;
@@ -1557,22 +1559,22 @@ footer b {
   background: var(--paper);
   border: 1px solid #e4e6db;
   margin-top: 0;
-  font-size: 12px;
+  font-size: 16px;
   min-height: 113px;
   line-height: 1.7;
 }
 .feeling strong {
   letter-spacing: 1px;
-  font-size: 9px;
+  font-size: 14px;
   color: #687660;
 }
 .openness {
   margin: 19px 0 7px;
-  font-size: 10px;
+  font-size: 14px;
 }
 .openness > b {
   float: right;
-  font-size: 10px;
+  font-size: 14px;
   color: #526b4a;
 }
 .meter {
@@ -1585,10 +1587,10 @@ footer b {
   border: 1px solid #fff;
 }
 .zones {
-  font-size: 9px;
+  font-size: 14px;
 }
 .sim-label {
-  font-size: 10px;
+  font-size: 14px;
   line-height: 1.65;
   margin-top: 13px;
   color: #6b7467;
@@ -1596,13 +1598,13 @@ footer b {
 .deck-progress {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: 14px;
   color: #62715f;
   margin: 0 4px 13px;
 }
 .deck-progress b {
   color: var(--green);
-  font-size: 14px;
+  font-size: 18px;
 }
 .progress-hint {
   margin-left: 4px;
@@ -1649,7 +1651,7 @@ footer b {
   border-radius: 20px;
   color: #536a48;
   padding: 6px 11px;
-  font-size: 10px;
+  font-size: 14px;
   white-space: nowrap;
 }
 .voice-button[aria-pressed="true"] {
@@ -1657,12 +1659,12 @@ footer b {
 }
 .voice-caption {
   text-align: right;
-  font-size: 9px;
+  font-size: 14px;
   color: #727b6b;
   margin: 5px 0 0;
 }
 .child-quote {
-  font-size: 28px;
+  font-size: 34px;
   line-height: 1.4;
   margin: 26px 0 28px;
   letter-spacing: -0.5px;
@@ -1677,12 +1679,12 @@ footer b {
 .choice-header h2 {
   font-family: "DM Sans", sans-serif;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 18px;
   letter-spacing: -0.3px;
   margin: 0;
 }
 .choice-header > span {
-  font-size: 10px;
+  font-size: 14px;
   color: #73806d;
 }
 .replies {
@@ -1693,7 +1695,7 @@ footer b {
   display: flex;
   align-items: center;
   gap: 13px;
-  font-size: 12px;
+  font-size: 16px;
   border-radius: 12px;
   min-height: 70px;
   padding: 12px;
@@ -1719,7 +1721,7 @@ footer b {
   background: #f0f2e9;
   border: 1px solid #e0e5d7;
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 14px;
   color: #69785d;
 }
 .selected .choice-letter {
@@ -1739,30 +1741,30 @@ footer b {
 }
 summary {
   cursor: pointer;
-  font-size: 11px;
+  font-size: 14px;
   color: #5b6b52;
 }
 summary > span {
   float: right;
-  font-size: 9px;
+  font-size: 14px;
   color: #778170;
 }
 .custom-entry textarea {
   min-height: 100px;
-  font-size: 12px;
+  font-size: 16px;
 }
 .custom-meta {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  font-size: 9px;
+  font-size: 14px;
   color: #6d7765;
   margin: 4px 0 12px;
 }
 .repair-link {
   display: block;
   margin: 14px auto 0;
-  font-size: 10px;
+  font-size: 14px;
 }
 .under-card {
   display: flex;
@@ -1772,11 +1774,11 @@ summary > span {
   gap: 10px;
 }
 .under-card > span {
-  font-size: 10px;
+  font-size: 14px;
   color: #7a826f;
 }
 .under-card button {
-  font-size: 11px;
+  font-size: 14px;
 }
 .transcript {
   border-top: 1px solid var(--line);
@@ -1787,17 +1789,17 @@ summary > span {
   min-height: 0;
 }
 .transcript .bubble {
-  font-size: 12px;
+  font-size: 16px;
 }
 .feedback-side {
   background: linear-gradient(155deg, #f6f9ef, var(--paper) 60%);
 }
 .feedback-symbol {
-  font-size: 30px;
+  font-size: 36px;
   color: #849b6d;
 }
 .your-choice {
-  font-size: 11px;
+  font-size: 14px;
   color: #6c7a61;
   background: #eef2e7;
   padding: 12px 14px;
@@ -1806,7 +1808,7 @@ summary > span {
   overflow-wrap: anywhere;
 }
 .feedback-title {
-  font-size: 34px;
+  font-size: 37px;
   line-height: 1.2;
   margin: 0 0 17px;
   max-width: 440px;
@@ -1815,7 +1817,7 @@ summary > span {
   color: #b98867;
 }
 .feedback-copy {
-  font-size: 13px;
+  font-size: 17px;
   line-height: 1.85;
   color: #617055;
 }
@@ -1823,7 +1825,7 @@ summary > span {
   background: #e4ecd9;
   border: 1px solid #d8e4ca;
   color: #4f6941;
-  font-size: 9px;
+  font-size: 14px;
   padding: 4px 10px;
 }
 .tag-list {
@@ -1835,7 +1837,7 @@ summary > span {
 }
 .next-line blockquote {
   font:
-    400 21px/1.5 Fraunces,
+    400 25px/1.5 Fraunces,
     serif;
   letter-spacing: -0.2px;
   margin: 10px 0 14px;
@@ -1845,11 +1847,11 @@ summary > span {
   border-radius: 11px;
   padding: 14px 17px;
   margin-bottom: 24px;
-  font-size: 12px;
+  font-size: 16px;
   color: #79664d;
 }
 .another-line strong {
-  font-size: 10px;
+  font-size: 14px;
 }
 .another-line p {
   margin: 4px 0 0;
@@ -1863,7 +1865,7 @@ summary > span {
   color: #8b3d28;
   border: 1px solid #e4bba6;
   border-radius: 9px;
-  font-size: 11px;
+  font-size: 14px;
   margin: 10px 0;
 }
 .inline-error[hidden] {
@@ -1873,7 +1875,7 @@ summary > span {
   margin-top: 24px;
 }
 .summary h3 {
-  font-size: 17px;
+  font-size: 20px;
 }
 .turn {
   overflow-wrap: anywhere;
@@ -1908,12 +1910,12 @@ dialog::backdrop {
   backdrop-filter: blur(5px);
 }
 dialog h2 {
-  font-size: 31px;
+  font-size: 34px;
   line-height: 1.2;
   margin: 11px 0 17px;
 }
 dialog p {
-  font-size: 13px;
+  font-size: 17px;
   color: #66745e;
   line-height: 1.8;
 }
@@ -1925,10 +1927,10 @@ dialog p {
   height: 30px;
   background: transparent;
   color: #637159;
-  font-size: 24px;
+  font-size: 29px;
 }
 .modal-kicker {
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 1.5px;
   color: #6e805e;
 }
@@ -1940,7 +1942,7 @@ dialog p {
 }
 .modal-actions > * {
   flex: 1;
-  font-size: 11px;
+  font-size: 14px;
   min-width: 160px;
 }
 .breathing-orbit {
@@ -1966,11 +1968,11 @@ dialog p {
 }
 .breathing-circle > span {
   font:
-    400 52px Fraunces,
+    400 57px Fraunces,
     serif;
 }
 .breathing-circle small {
-  font-size: 10px;
+  font-size: 14px;
   color: #697d55;
 }
 .breathing .breathing-circle {
@@ -1978,10 +1980,10 @@ dialog p {
 }
 #calm-status {
   text-align: center;
-  font-size: 12px;
+  font-size: 16px;
 }
 .status-pending {
-  font-size: 11px;
+  font-size: 14px;
   padding: 7px 12px;
   display: inline-block;
   background: #f2e9d8;
@@ -1998,10 +2000,10 @@ dialog p {
   margin-top: 12px;
 }
 .review-process b {
-  font-size: 12px;
+  font-size: 16px;
 }
 .review-process p {
-  font-size: 12px;
+  font-size: 16px;
   margin: 6px 0;
 }
 .rule-list > div {
@@ -2009,7 +2011,7 @@ dialog p {
   justify-content: space-between;
   border-bottom: 1px solid var(--line);
   padding: 8px 0;
-  font-size: 12px;
+  font-size: 16px;
 }
 .rule-list dd {
   font-weight: 700;
@@ -2019,7 +2021,7 @@ dialog p {
   margin: 50px auto;
 }
 .load-error h1 {
-  font-size: 34px;
+  font-size: 37px;
 }
 .load-error .primary {
   margin-bottom: 20px;
@@ -2038,7 +2040,7 @@ dialog p {
   border: 1px solid #dbe1d1;
   border-radius: 24px;
   padding: 9px 15px;
-  font-size: 11px;
+  font-size: 14px;
   color: #65775a;
 }
 .category-tabs button[aria-pressed="true"] {
@@ -2047,14 +2049,14 @@ dialog p {
   border-color: var(--green);
 }
 .category-tabs button > span {
-  font-size: 9px;
+  font-size: 14px;
   opacity: 0.85;
   border-radius: 50%;
   background: #ffffff26;
   padding: 1px 5px;
 }
 .category-description {
-  font-size: 12px;
+  font-size: 16px;
   color: #6d7966;
   margin: -5px 0 23px;
 }
@@ -2109,7 +2111,7 @@ dialog p {
     gap: 25px;
   }
   .new-hero h1 {
-    font-size: 50px;
+    font-size: 55px;
   }
   .hero-stage {
     min-height: 415px;
@@ -2136,7 +2138,7 @@ dialog p {
     gap: 13px;
   }
   .review-strip .review-badge {
-    font-size: 9px;
+    font-size: 14px;
   }
   .practice-shell {
     grid-template-columns: 275px minmax(0, 1fr);
@@ -2155,7 +2157,7 @@ dialog p {
 }
 @media (max-width: 950px) {
   .new-hero h1 {
-    font-size: 43px !important;
+    font-size: 47px !important;
   }
   .hero-actions {
     gap: 14px;
@@ -2168,7 +2170,7 @@ dialog p {
     min-height: 410px;
   }
   .hero-demo blockquote {
-    font-size: 25px;
+    font-size: 30px;
   }
   .back-card {
     width: 250px;
@@ -2184,7 +2186,7 @@ dialog p {
     padding: 18px;
   }
   .card-content h3 {
-    font-size: 16px;
+    font-size: 21px;
   }
   .card-content blockquote {
     min-height: 116px;
@@ -2199,7 +2201,7 @@ dialog p {
     grid-template-columns: 235px minmax(0, 1fr);
     gap: 17px;
   }
-  .live-character svg {
+  .live-character > svg {
     width: 200px;
   }
   .character-panel {
@@ -2216,10 +2218,10 @@ dialog p {
     padding: 21px;
   }
   .child-quote {
-    font-size: 25px;
+    font-size: 30px;
   }
   .feedback-title {
-    font-size: 29px;
+    font-size: 35px;
   }
   .under-card {
     align-items: flex-start;
@@ -2235,13 +2237,13 @@ dialog p {
     min-height: 77px;
   }
   .brand {
-    font-size: 21px;
+    font-size: 25px;
     gap: 8px;
   }
   .brand-icon {
     width: 32px;
     height: 32px;
-    font-size: 26px;
+    font-size: 31px;
   }
   .brand-dot {
     margin-left: -6px;
@@ -2250,7 +2252,7 @@ dialog p {
     gap: 10px;
   }
   nav button {
-    font-size: 10px;
+    font-size: 14px;
   }
   nav #how-nav {
     display: none;
@@ -2268,11 +2270,11 @@ dialog p {
     padding: 8px 0 32px;
   }
   .new-hero h1 {
-    font-size: 43px !important;
+    font-size: 47px !important;
     letter-spacing: -1.8px;
   }
   .new-hero p {
-    font-size: 14px;
+    font-size: 18px;
     max-width: 480px;
   }
   .hero-actions {
@@ -2281,7 +2283,7 @@ dialog p {
   .primary,
   .secondary {
     padding: 13px 17px;
-    font-size: 12px;
+    font-size: 16px;
   }
   .hero-stage {
     max-width: 380px;
@@ -2319,13 +2321,13 @@ dialog p {
     padding: 17px 0;
     gap: 12px 19px;
     justify-content: flex-start;
-    font-size: 10px;
+    font-size: 14px;
   }
   .section-head {
     margin-top: 30px;
   }
   .section-head h2 {
-    font-size: 30px;
+    font-size: 36px;
   }
   .section-head p {
     max-width: none;
@@ -2336,7 +2338,7 @@ dialog p {
   }
   .category-tabs button {
     padding: 8px 12px;
-    font-size: 10px;
+    font-size: 14px;
   }
   .cards {
     grid-template-columns: 1fr;
@@ -2350,7 +2352,7 @@ dialog p {
     min-height: 0;
   }
   .card-content h3 {
-    font-size: 19px;
+    font-size: 23px;
   }
   .card-content {
     padding: 21px 23px;
@@ -2366,7 +2368,7 @@ dialog p {
     flex: 1;
   }
   .review-strip p {
-    font-size: 11px;
+    font-size: 14px;
   }
   .review-strip .review-badge {
     margin-left: 49px;
@@ -2376,16 +2378,16 @@ dialog p {
     gap: 25px;
   }
   .how h2 {
-    font-size: 25px;
+    font-size: 30px;
   }
   .how strong {
-    font-size: 12px;
+    font-size: 16px;
   }
   footer {
     margin: 0 20px;
     padding-top: 19px;
     display: block;
-    font-size: 9px;
+    font-size: 14px;
   }
   footer > span {
     display: block;
@@ -2393,7 +2395,7 @@ dialog p {
   }
   .steps {
     gap: 18px;
-    font-size: 10px;
+    font-size: 14px;
     margin-bottom: 24px;
   }
   .steps li {
@@ -2402,10 +2404,10 @@ dialog p {
   .steps li > span {
     width: 20px;
     height: 20px;
-    font-size: 9px;
+    font-size: 14px;
   }
   .prep-title h1 {
-    font-size: 35px !important;
+    font-size: 38px !important;
   }
   .prep-layout {
     grid-template-columns: 1fr;
@@ -2418,7 +2420,7 @@ dialog p {
     height: 180px;
   }
   .scenario-intro blockquote {
-    font-size: 24px;
+    font-size: 29px;
   }
   .tips {
     grid-template-columns: 1fr 1fr;
@@ -2426,10 +2428,10 @@ dialog p {
   }
   .tip {
     padding: 12px;
-    font-size: 10px;
+    font-size: 14px;
   }
   .tip strong {
-    font-size: 11px;
+    font-size: 14px;
   }
   .practice-heading {
     align-items: flex-end;
@@ -2437,17 +2439,17 @@ dialog p {
     margin-bottom: 19px;
   }
   .practice-heading .eyebrow {
-    font-size: 8px;
+    font-size: 14px;
     letter-spacing: 1px;
   }
   .practice-heading h1 {
-    font-size: 29px !important;
+    font-size: 35px !important;
     margin-top: 9px;
   }
   .practice-heading .secondary {
     white-space: nowrap;
     padding: 8px 11px;
-    font-size: 10px;
+    font-size: 14px;
   }
   .practice-shell {
     grid-template-columns: 1fr;
@@ -2465,7 +2467,7 @@ dialog p {
     display: block;
   }
   .character-top .pill {
-    font-size: 8px;
+    font-size: 14px;
     padding: 3px 7px;
   }
   .character-top .icon-button {
@@ -2481,22 +2483,22 @@ dialog p {
     height: 124px;
     margin: 0;
   }
-  .live-character svg {
+  .live-character > svg {
     width: 132px;
     height: 132px;
   }
   .mood-label {
-    font-size: 7px;
+    font-size: 14px;
     padding: 3px 6px;
     bottom: -10px;
   }
   .character-name {
     text-align: left;
-    font-size: 22px;
+    font-size: 26px;
     margin: 8px 0;
   }
   .character-name span {
-    font-size: 9px;
+    font-size: 14px;
     margin-top: 3px;
   }
   .character-panel .feeling {
@@ -2505,7 +2507,7 @@ dialog p {
     padding: 0;
     min-height: 0;
     border-radius: 0;
-    font-size: 10px;
+    font-size: 14px;
     margin: 10px 0;
   }
   .character-panel .feeling strong {
@@ -2516,33 +2518,33 @@ dialog p {
     display: none;
   }
   .character-panel > .text-button {
-    font-size: 9px;
+    font-size: 14px;
     text-align: left;
     padding: 0;
   }
   .deck-progress {
-    font-size: 10px;
+    font-size: 14px;
   }
   .flashcard {
     padding: 20px;
     border-radius: 18px;
   }
   .flashcard-top .eyebrow {
-    font-size: 8px;
+    font-size: 14px;
     letter-spacing: 1px;
   }
   .child-quote {
-    font-size: 25px;
+    font-size: 30px;
     margin: 22px 0;
   }
   .choice-header h2 {
-    font-size: 13px;
+    font-size: 17px;
   }
   .choice-header > span {
-    font-size: 9px;
+    font-size: 14px;
   }
   .reply {
-    font-size: 12px;
+    font-size: 16px;
     gap: 10px;
     padding: 11px;
     min-height: 75px;
@@ -2552,32 +2554,32 @@ dialog p {
     height: 25px;
   }
   .choice-mark {
-    font-size: 10px;
+    font-size: 14px;
   }
   .feedback-title {
-    font-size: 30px;
+    font-size: 36px;
   }
   .feedback-copy {
-    font-size: 12px;
+    font-size: 16px;
   }
   .under-card > span {
-    font-size: 9px;
+    font-size: 14px;
   }
   .under-card button {
-    font-size: 10px;
+    font-size: 14px;
   }
   .summary {
     grid-template-columns: 1fr;
   }
   .summary h1 {
-    font-size: 32px !important;
+    font-size: 35px !important;
   }
   dialog {
     padding: 29px 23px;
     width: calc(100% - 26px);
   }
   dialog h2 {
-    font-size: 29px;
+    font-size: 35px;
   }
   .breathing-orbit {
     width: 195px;
@@ -2588,7 +2590,7 @@ dialog p {
     height: 150px;
   }
   .review-badge {
-    font-size: 9px;
+    font-size: 14px;
   }
 }
 @media (max-width: 370px) {
@@ -2596,7 +2598,7 @@ dialog p {
     gap: 10px;
   }
   .new-hero h1 {
-    font-size: 38px !important;
+    font-size: 42px !important;
   }
   .hero-demo {
     width: 242px;
@@ -2611,7 +2613,7 @@ dialog p {
     right: 16px;
   }
   .hero-actions .primary {
-    font-size: 11px;
+    font-size: 14px;
   }
   .review-strip .review-badge {
     margin-left: 0;
@@ -2625,7 +2627,7 @@ dialog p {
   .live-character {
     width: 114px;
   }
-  .live-character svg {
+  .live-character > svg {
     width: 118px;
   }
   .tips {
@@ -2673,10 +2675,10 @@ dialog p {
   background: #f4eef8;
   color: #60516b;
   box-shadow: 0 4px 18px #48305518;
-  font-size: 11px;
+  font-size: 14px;
 }
 .pause-session > span:first-child {
-  font-size: 23px;
+  font-size: 28px;
 }
 .pause-session b {
   margin-left: 5px;
@@ -2691,7 +2693,7 @@ dialog p {
 .calm-cue {
   text-align: center;
   font-family: Fraunces, serif;
-  font-size: 23px;
+  font-size: 28px;
   font-weight: 400;
   margin: 0 0 7px;
 }
@@ -2708,7 +2710,7 @@ dialog p {
 }
 .now-steps li {
   padding: 8px 0 13px 5px;
-  font-size: 13px;
+  font-size: 17px;
   line-height: 1.85;
   border-bottom: 1px solid var(--line);
 }
@@ -2732,7 +2734,7 @@ dialog p {
     bottom: 13px;
     white-space: nowrap;
     padding: 9px 16px;
-    font-size: 10px;
+    font-size: 14px;
     max-width: calc(100% - 25px);
   }
   .pause-session:active:not(:disabled) {
@@ -2773,4 +2775,263 @@ body.modal-open {
   .in-session footer {
     padding-bottom: 30px;
   }
+}
+/* Full-screen relaxation pause with a slowly drifting landscape. */
+dialog.calm-fullscreen {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  inset: 0;
+  padding: 24px 16px;
+  border: 0;
+  border-radius: 0;
+  background: #cfdcd6;
+  box-shadow: none;
+  overflow: auto;
+}
+dialog.calm-fullscreen[open] {
+  animation: calm-fade 1.2s ease;
+}
+dialog.calm-fullscreen::backdrop {
+  background: #cfdcd6;
+}
+dialog.calm-fullscreen #modal-content {
+  position: relative;
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+}
+.calm-scene {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.calm-picture {
+  position: absolute;
+  inset: -4%;
+  background: url("calm-scene.svg") center / cover no-repeat;
+  animation: calm-drift 40s ease-in-out infinite alternate;
+}
+.calm-mote {
+  position: absolute;
+  bottom: -20px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff8e6;
+  box-shadow: 0 0 14px 4px #fff3d4aa;
+  opacity: 0;
+  animation: calm-float 18s linear infinite;
+}
+.calm-mote:nth-child(3) { left: 12%; animation-delay: 0s; }
+.calm-mote:nth-child(4) { left: 28%; animation-delay: 6s; width: 7px; height: 7px; }
+.calm-mote:nth-child(5) { left: 47%; animation-delay: 11s; }
+.calm-mote:nth-child(6) { left: 63%; animation-delay: 3s; width: 6px; height: 6px; }
+.calm-mote:nth-child(7) { left: 78%; animation-delay: 9s; }
+.calm-mote:nth-child(8) { left: 90%; animation-delay: 14s; width: 8px; height: 8px; }
+dialog.calm-fullscreen .modal-close {
+  position: fixed;
+  z-index: 2;
+  top: 18px;
+  right: 22px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fffdf8b3;
+  backdrop-filter: blur(6px);
+}
+.calm-panel {
+  position: relative;
+  z-index: 1;
+  width: min(560px, 100%);
+  padding: 20px 8px;
+  text-align: center;
+  color: #1d3a31;
+  text-shadow:
+    0 0 18px #fff8ee,
+    0 0 6px #fff8eecc;
+}
+.calm-panel h2 {
+  font-size: 38px;
+}
+.calm-panel h2 {
+  color: #1d3a31;
+}
+.calm-panel p,
+.calm-panel #calm-status {
+  color: #1d3a31;
+  font-size: 20px;
+}
+.calm-panel .calm-cue {
+  font-size: 32px;
+}
+.calm-panel .modal-actions {
+  justify-content: center;
+}
+.calm-panel .modal-actions > * {
+  flex: 0 1 260px;
+  font-size: 18px;
+  text-shadow: none;
+}
+.calm-fullscreen .breathing-orbit {
+  background: transparent;
+  border: 2px solid #ffffffcc;
+}
+.calm-fullscreen .breathing-circle {
+  background: transparent;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 40px #fff3d8;
+}
+.calm-fullscreen .breathing-circle small {
+  color: #1d3a31;
+  font-size: 16px;
+}
+@keyframes calm-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes calm-drift {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.08) translate(-1.5%, -1%); }
+}
+@keyframes calm-float {
+  0% { transform: translate(0, 0); opacity: 0; }
+  15% { opacity: 0.8; }
+  85% { opacity: 0.6; }
+  100% { transform: translate(40px, -90vh); opacity: 0; }
+}
+@media (max-width: 720px) {
+  dialog.calm-fullscreen {
+    padding-top: 72px;
+  }
+  .calm-panel {
+    padding: 12px 4px;
+  }
+  .calm-panel h2 {
+    font-size: 30px;
+  }
+}
+/* Visual cues: line icons that replace explanatory text. */
+.icon {
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.25em;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cat-icon {
+  margin-right: 4px;
+}
+.review-note {
+  margin-top: 28px;
+  text-align: center;
+}
+.how .how-number .icon {
+  width: 48px;
+  height: 48px;
+  color: var(--green);
+  stroke-width: 1.5;
+}
+.how strong {
+  font-size: 20px;
+}
+.face-scale {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #526b4a;
+}
+.face-scale .icon {
+  width: 30px;
+  height: 30px;
+}
+.face-scale .meter {
+  flex: 1;
+}
+.character-panel .feeling {
+  min-height: 0;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 18px;
+}
+.character-panel .feeling .icon {
+  width: 28px;
+  height: 28px;
+  color: #687660;
+}
+.feedback-emoji .icon {
+  width: 52px;
+  height: 52px;
+  stroke-width: 1.5;
+}
+.result-good,
+.result-repair,
+.good-icon {
+  color: #3f7a55;
+}
+.result-neutral,
+.result-unknown {
+  color: #7a8a6c;
+}
+.result-promise {
+  color: #b07a2a;
+}
+.result-harmful,
+.bad-icon {
+  color: #b5553d;
+}
+.breath-icon .icon {
+  width: 30px;
+  height: 30px;
+  color: var(--green);
+}
+.about-list p {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  font-size: 20px;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+.about-list p > .icon {
+  width: 32px;
+  height: 32px;
+  color: var(--green);
+}
+.pause-session .icon {
+  width: 24px;
+  height: 24px;
+  color: var(--green);
+}
+.preparation .tip p {
+  font-size: 17px;
+  line-height: 1.7;
+}
+.preparation .tip strong {
+  font-size: 19px;
+}
+.summary aside h3 + .tag,
+.summary aside .tag + h3 {
+  margin-top: 22px;
+}
+.summary aside .tag:last-of-type {
+  margin-bottom: 18px;
+}
+.mood-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.mood-label .icon {
+  width: 18px;
+  height: 18px;
 }

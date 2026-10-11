@@ -24,8 +24,8 @@ On Windows, use `py -m http.server 8000 --bind 127.0.0.1` if `python3` is unavai
 - Three fictional characters with four SVG expressions that respond to the illustrative conversation state.
 - Shuffled response cards: select, explore feedback, then continue. Feedback stays visible until the parent chooses to move on.
 - Scenario-specific preparation, original curated responses and child dialogue, repair practice, optional typed replies, seven human values, reflection and next-step plans.
-- A persistent **Feeling overwhelmed? Take a pause** action during preparation, practice, feedback, reflection, next steps, and support. On mobile it becomes a sticky bar above the content.
-- A 30-second countdown that begins when opened, with 4-second inhale / 6-second exhale cues over three cycles. Following the cues is optional. End early, press Escape, or wait and continue when ready. It never submits an answer, changes the score, or clears a draft/selection. Timing uses a deadline to account for background-tab throttling. Reduced-motion settings disable the breathing animation; the countdown and cues remain.
+- A persistent **Take a pause** action during preparation, practice, feedback, reflection, next steps, and support. On mobile it becomes a sticky bar above the content.
+- A full-screen pause over a calm landscape (`assets/calm-scene.svg`) with a 30-second countdown that begins when opened, with 4-second inhale / 6-second exhale cues over three cycles. Following the cues is optional. End early, press Escape, or wait and continue when ready. It never submits an answer, changes the score, or clears a draft/selection. Timing uses a deadline to account for background-tab throttling. Reduced-motion settings disable the breathing animation; the countdown and cues remain.
 - Optional **Listen** playback using installed English device voices. Only `localService` voices are selected. It requests no microphone access and stops on navigation or opening a dialog. Browser voices differ; clear inline fallback text appears when no voice is available. This is speech playback, not speech recognition, voice cloning, or an AI conversation service.
 - Locally served DM Sans and Fraunces fonts, restrained transitions, keyboard controls, dialog focus restoration, and mobile layouts.
 - Clear pending professional-review status. No names, licenses, or completed approvals are invented.
@@ -42,34 +42,13 @@ Typed replies use a small phrase checker. It can miss context, negation, sarcasm
 
 After changing content, refresh the browser and run the tests below. The loader rejects malformed response decks and non-pending review statuses in this demo. Edit `contentVersion` when preparing a new reviewed release.
 
-## Database supplied
-
-`database/catalog.sqlite3` is an optional seeded SQLite catalog containing the 12 situations, a content snapshot, and empty professional/review tables. The web demo reads JSON directly; no backend connection is needed or implied.
-
-Rebuild or add a content snapshot with:
-
-```sh
-python3 database/build_database.py
-```
-
-The builder is repeatable, preserves existing snapshots/reviews, and hashes the content plus the response engine so approvals can be tied to exact questions, feedback, and weights. `database/schema.sql` defines immutable snapshots/reviews, reviewer license metadata, evidence and expiry fields, approval constraints, and a current-approvals view that excludes expired or revoked credentials. To use another location:
-
-```sh
-python3 database/build_database.py /path/to/catalog.sqlite3
-```
-
-This is a foundation for the professional curation layer, **not a live license verification service**. Before publishing verified labels, implement authenticated reviewer/admin access, verify credentials with the relevant licensing board, securely record evidence, approve a specific content version, and serve current approvals through a backend. Database constraints do not prove a credential is genuine or replace authorization. The current frontend deliberately does not turn a manually edited JSON badge into a verified claim.
-
-A full backend becomes useful when you need shared editorial accounts, authenticated sign-off, real license verification, published review histories, or server-based voice. It is unnecessary for the current demo. Do not add real professional personal data or parent conversations to the public JSON or a database served by a static host.
-
 ## Tests
 
-Requires Node.js 20+ and Python 3. Browser test dependencies are development-only:
+Requires Node.js 20+. Browser test dependencies are development-only:
 
 ```sh
 npm ci
 npm test
-python3 tests/database_test.py
 npx playwright install chromium
 npm run test:browser
 ```
@@ -92,7 +71,7 @@ Fonts: self-hosted `@fontsource-variable/dm-sans` and `@fontsource-variable/frau
 
 ## Prerecorded audio and deployment
 
-The existing `assets/audio/` directory is retained. To use a recording instead of the device voice, add its relative path under `audioClips` in `data/scenarios.json`, keyed by the exact dialogue displayed on the card. For example:
+To use a recording instead of the device voice, add its relative path under `audioClips` in `data/scenarios.json`, keyed by the exact dialogue displayed on the card. For example:
 
 ```json
 "audioClips": {
@@ -102,4 +81,4 @@ The existing `assets/audio/` directory is retained. To use a recording instead o
 
 Only map recordings that exist and match the displayed line. Allowed file types are MP3, WAV and OGG. Missing/unplayable recordings produce an inline error and leave the text usable. Unmapped dialogue uses the optional device voice. This replaces the previous single-file `availableAudio` mapping and preserves its opt-in behavior. Obtain permission for any recordings you use.
 
-For Vercel, use framework **Other**, no build command, and the repository root as the output directory. For Netlify or GitHub Pages, publish the static application files (`index.html`, `assets/`, `data/`). On GitHub Pages this repository uses the `master` branch; use **Settings → Pages → Deploy from a branch → master / root**. Do not publish a private review database as part of a later production rollout.
+For Vercel, use framework **Other**, no build command, and the repository root as the output directory. For Netlify or GitHub Pages, publish the static application files (`index.html`, `assets/`, `data/`). On GitHub Pages this repository uses the `master` branch; use **Settings → Pages → Deploy from a branch → master / root**.

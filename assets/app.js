@@ -38,6 +38,48 @@ let breathTimer = null,
   toastTimer = null,
   voiceToken = 0,
   modalReturn = null;
+// Simple line icons (24px grid) used as visual cues in place of text.
+const ICONS = {
+  chat: '<path d="M4 5h16v11H9l-5 4z"/>',
+  people:
+    '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-4 3-6 6-6s6 2 6 6M15 14.5c3 0 6 1.5 6 5"/>',
+  heart:
+    '<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+  clock: '<circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/>',
+  lock: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  happy:
+    '<circle cx="12" cy="12" r="9"/><path d="M8 14.5c2 2.5 6 2.5 8 0"/><path d="M9 9.5h.01M15 9.5h.01"/>',
+  calm: '<circle cx="12" cy="12" r="9"/><path d="M9 15h6"/><path d="M9 9.5h.01M15 9.5h.01"/>',
+  worried:
+    '<circle cx="12" cy="12" r="9"/><path d="M8.5 16c2-2 5-2 7 0"/><path d="M9 9.5h.01M15 9.5h.01"/>',
+  sad: '<circle cx="12" cy="12" r="9"/><path d="M8.5 16.5c2-2.5 5-2.5 7 0"/><path d="M9 9.5h.01M15 9.5h.01M9 12v1.5"/>',
+  check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/>',
+  cross: '<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
+  leaf: '<path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19l8-8"/>',
+  speaker:
+    '<path d="M4 10v4h4l5 4V6L8 10z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/>',
+  thought:
+    '<path d="M7 15a4 4 0 0 1-.5-8A5 5 0 0 1 16 6a4 4 0 0 1 1 9z"/><circle cx="7" cy="19" r="1.3"/><circle cx="4" cy="21.5" r=".7"/>',
+  star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+  sprout:
+    '<path d="M12 21v-9M12 12c0-4-3-6-7-6 0 4 3 6 7 6zM12 12c0-3 2.5-5.5 7-5.5 0 3.5-2.5 5.5-7 5.5z"/>',
+  question:
+    '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7"/><path d="M12 17h.01"/>',
+  alert: '<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',
+  broken:
+    '<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/><path d="M12 7.4l-1.5 4 3 1.5-1.5 4"/>',
+  bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+  pencil: '<path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M14 6l4 4"/>',
+  ear: '<path d="M8 9a5 5 0 0 1 10 0c0 3-3 4-3 7a3 3 0 0 1-6 0"/><path d="M11 10a2 2 0 0 1 4 0"/>',
+  calendar:
+    '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>',
+  book: '<path d="M4 5c3-1 6-1 8 1 2-2 5-2 8-1v14c-3-1-6-1-8 1-2-2-5-2-8-1z"/><path d="M12 6v14"/>',
+  shield: '<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M12 9v6M9 12h6"/>',
+  trend: '<path d="M4 17l6-6 4 4 6-7"/><path d="M15 8h5v5"/>',
+};
+const icon = (name, cls = "") =>
+  `<svg class="icon ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
 const c = () => scenarios[selected];
 const options = () => {
   if (currentOptions) return currentOptions;
@@ -123,7 +165,7 @@ function stopVoice() {
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
   const button = $("#listen");
   if (button) {
-    button.textContent = "◖ Listen";
+    button.innerHTML = `${icon("speaker")} Listen`;
     button.setAttribute("aria-pressed", "false");
   }
 }
@@ -152,61 +194,63 @@ function go(next) {
   }
 }
 function reviewBadge() {
-  return '<button class="review-badge" data-review><span aria-hidden="true">◇</span> Professional review pending <span aria-hidden="true">↗</span></button>';
+  return '<button class="review-badge" data-review><span aria-hidden="true">◇</span> Expert review pending <span aria-hidden="true">↗</span></button>';
 }
+const CATEGORY_ICONS = {
+  contact: "chat",
+  friendship: "people",
+  feelings: "heart",
+  boundaries: "clock",
+};
 function home() {
-  return `<section class="hero new-hero"><div class="hero-copy"><div class="eyebrow"><span class="tiny-spark">✦</span> FOR THE CONVERSATIONS THAT MATTER</div><h1>A little practice.<br>A <em>closer connection.</em></h1><p>You don’t need all the right answers. Just a little room to listen. Practice tricky online moments before they happen.</p><div class="hero-actions"><button class="primary" id="start">Find your first conversation <span aria-hidden="true">↗</span></button><button class="text-button" id="how-button">How it works <span aria-hidden="true">↓</span></button></div><div class="privacy"><span aria-hidden="true">◌</span> No account. No pressure. Your own pace.</div></div><div class="hero-stage" aria-label="An example fictional conversation card"><span class="floating-tag top-tag">A safe space to try.</span><span class="spark spark-one" aria-hidden="true">✳</span><div class="back-card one"></div><div class="back-card two"></div><div class="hero-demo"><div class="demo-top"><span class="pill">A MOMENT WITH MAYA</span><span aria-hidden="true">01 / 03</span></div><div class="demo-character">${childArt(0, "happy")}</div><blockquote>“Can I tell you<br>something?”</blockquote><div class="demo-response"><span aria-hidden="true">♡</span> “Of course. I’m here to listen.”</div><div class="demo-bottom"><span class="little-dot"></span> Small words. A big opening.</div></div><span class="floating-tag bottom-tag"><span aria-hidden="true">↺</span> You can always begin again.</span></div></section><div class="trustline"><span><b>✧</b> Real-life moments, fictional stories</span><span><b>◷</b> A few minutes for you</span><span><b>♡</b> Connection over perfection</span></div><section id="situations" class="situation-section"><div class="section-head"><div><div class="eyebrow">YOUR CONVERSATION DECK</div><h2>What’s on their mind?</h2></div><p>${scenarios.length} situations. ${content.categories.length} everyday topics.<br>Start with what feels familiar.</p></div><div class="category-tabs" role="group" aria-label="Conversation topics">${content.categories.map((cat) => `<button data-category="${esc(cat.id)}" aria-pressed="${cat.id === activeCategory}">${esc(cat.label)} <span>${scenarios.filter((s) => s.categoryId === cat.id).length}</span></button>`).join("")}</div><p class="category-description" id="category-description" role="status">${esc(content.categories.find((cat) => cat.id === activeCategory).description)}</p><div class="cards">${scenarios
+  return `<section class="hero new-hero"><div class="hero-copy"><h1>Practice the<br><em>hard talks.</em></h1><p>Kids face tricky things online. Practice what to say before it happens.</p><div class="hero-actions"><button class="primary" id="start">Let’s start <span aria-hidden="true">↓</span></button><button class="text-button" id="how-button">How it works <span aria-hidden="true">↓</span></button></div><div class="privacy">${icon("lock")} Free · No sign-up</div></div><div class="hero-stage" aria-label="An example practice card"><span class="floating-tag top-tag">${icon("happy")} Safe to try</span><span class="spark spark-one" aria-hidden="true">✳</span><div class="back-card one"></div><div class="back-card two"></div><div class="hero-demo"><div class="demo-top"><span class="pill">MAYA, 13</span></div><div class="demo-character">${childArt(0, "happy")}</div><blockquote>“Can I tell you<br>something?”</blockquote><div class="demo-response"><span aria-hidden="true">♡</span> “Of course. I’m listening.”</div></div><span class="floating-tag bottom-tag"><span aria-hidden="true">↺</span> Try again anytime</span></div></section><section id="situations" class="situation-section"><div class="section-head"><div><h2>Pick a moment</h2></div></div><div class="category-tabs" role="group" aria-label="Conversation topics">${content.categories.map((cat) => `<button data-category="${esc(cat.id)}" aria-pressed="${cat.id === activeCategory}">${icon(CATEGORY_ICONS[cat.id] || "chat", "cat-icon")} ${esc(cat.label)}</button>`).join("")}</div><div class="cards">${scenarios
     .map((s, i) => ({ s, i }))
     .filter(({ s }) => s.categoryId === activeCategory)
     .map(
       ({ s, i }) =>
-        `<article class="card scenario-card theme-${s.characterIndex}"><div class="portrait"><span class="topic">${esc(s.topic)}</span><span class="card-number">${String(i + 1).padStart(2, "0")}</span>${childArt(s.characterIndex)}</div><div class="card-content"><div class="character-meta"><span>${esc(s.name)} <span class="age">· age ${s.age}</span></span><span>~5 min</span></div><h3>${esc(s.headline)}</h3><blockquote>“${esc(s.open)}”</blockquote><button class="deck-button" data-select="${i}">Practice this moment <span aria-hidden="true">↗</span></button></div></article>`,
+        `<article class="card scenario-card theme-${s.characterIndex}"><div class="portrait"><span class="topic">${esc(s.topic)}</span>${childArt(s.characterIndex)}</div><div class="card-content"><div class="character-meta"><span>${esc(s.name)} <span class="age">· ${s.age}</span></span></div><h3>${esc(s.headline)}</h3><button class="deck-button" data-select="${i}">Start <span aria-hidden="true">↗</span></button></div></article>`,
     )
-    .join(
-      "",
-    )}</div></section><section class="review-strip"><div class="seal" aria-hidden="true">◇</div><div><h3>Carefully written. Open to review.</h3><p>Our goal: content curated with licensed therapists and psychologists. These demo decks are awaiting professional review.</p></div>${reviewBadge()}</section><section class="how" id="how"><div><div class="eyebrow">A LITTLE REHEARSAL</div><h2>Room to get<br>comfortable.</h2></div>${[
-    [
-      "01",
-      "Meet the moment",
-      "Choose a fictional situation that feels familiar.",
-    ],
-    [
-      "02",
-      "Try your words",
-      "Turn a response card over. Notice what it makes room for.",
-    ],
-    [
-      "03",
-      "Take it with you",
-      "Reflect, try a repair, and leave with a conversation starter.",
-    ],
+    .join("")}</div><div class="review-note">${reviewBadge()}</div></section><section class="how" id="how"><div><h2>How it works</h2></div>${[
+    ["eye", "Pick a moment"],
+    ["chat", "Choose what to say"],
+    ["happy", "See how they feel"],
   ]
     .map(
       (x) =>
-        `<div><span class="how-number">${x[0]}</span><strong>${x[1]}</strong><p>${x[2]}</p></div>`,
+        `<div><span class="how-number">${icon(x[0])}</span><strong>${x[1]}</strong></div>`,
     )
     .join("")}</section>`;
 }
 function prep() {
-  return `${step(1)}<button class="back" id="back">← All conversations</button><div class="prep-title"><div class="eyebrow">BEFORE THE FIRST WORD</div><h1>First, make a little <em>room.</em></h1><p class="muted">Take a breath. Get to know the moment. There’s no rush.</p></div><div class="prep-layout"><section class="panel scenario-intro theme-${c().characterIndex}"><div class="portrait">${childArt(c().characterIndex)}</div><div class="eyebrow">${esc(c().topic)} · ${esc(c().name)}, ${c().age}</div><blockquote>“${esc(c().open)}”</blockquote><p class="muted">${esc(c().context)}</p>${c().background ? `<div class="feedback"><strong>What’s going on</strong>${esc(c().background)}</div>` : ""}${reviewBadge()}</section><section class="panel preparation"><span class="coach-icon" aria-hidden="true">♡</span><h2>Connection comes first.</h2><p class="muted">You don’t need every answer immediately. Start by showing that sharing with you was a good decision.</p><div class="feedback"><strong>What ${esc(c().name)} may need</strong>${esc(c().need)}</div><div class="tips"><div class="tip"><strong>Make space for…</strong><p>${(c().say || ["“Thank you for telling me.”", "“You’re not to blame.”", "“What would help right now?”"]).map(esc).join("<br>")}</p></div><div class="tip avoid"><strong>Pause before…</strong><p>${(c().avoid || ["Blaming or dismissing.", "Threatening punishment.", "Taking over without listening."]).map(esc).join("<br>")}</p></div></div><button class="breath-launch" id="breathe"><span class="breath-icon" aria-hidden="true">✳</span><span><strong>A moment to settle</strong><small>Optional · 30-second relaxation pause</small></span><span aria-hidden="true">↗</span></button><button class="primary full-width" id="begin">I’m ready to practice <span aria-hidden="true">→</span></button><p class="sim-label">A fictional exercise, not a prediction of a real child’s feelings or a clinical assessment.</p></section></div>`;
+  return `${step(1)}<button class="back" id="back">← Back</button><div class="prep-title"><h1>Get <em>ready.</em></h1></div><div class="prep-layout"><section class="panel scenario-intro theme-${c().characterIndex}"><div class="portrait">${childArt(c().characterIndex)}</div><div class="eyebrow">${esc(c().name)}, ${c().age}</div><blockquote>“${esc(c().open)}”</blockquote><p class="muted">${esc(c().context)}</p></section><section class="panel preparation"><div class="tips"><div class="tip"><strong>${icon("check", "good-icon")} Try saying</strong><p>${(c().say || ["“Thank you for telling me.”", "“You’re not to blame.”", "“What would help right now?”"]).map(esc).join("<br>")}</p></div><div class="tip avoid"><strong>${icon("cross", "bad-icon")} Avoid</strong><p>${(c().avoid || ["Blaming or dismissing.", "Threatening punishment.", "Taking over without listening."]).map(esc).join("<br>")}</p></div></div><button class="breath-launch" id="breathe"><span class="breath-icon">${icon("leaf")}</span><span><strong>Take a breath first</strong><small>30 seconds</small></span><span aria-hidden="true">↗</span></button><button class="primary full-width" id="begin">I’m ready <span aria-hidden="true">→</span></button></section></div>`;
 }
 function practice() {
   const last = lastTurn();
   const mood = moodFor(score, last?.kind);
-  return `${step(2)}<div class="practice-heading"><div><div class="eyebrow">A FEW WORDS CAN OPEN A DOOR</div><h1>A moment with <em>${esc(c().name)}.</em></h1></div><button class="secondary" id="restart">↺ Start over</button></div><div class="practice-shell"><aside class="character-panel theme-${c().characterIndex}"><div class="character-top"><span class="pill">${esc(c().topic)}</span></div><div class="live-character">${childArt(c().characterIndex, mood)}<span class="mood-label">${mood === "happy" ? "Feeling more connected" : mood === "calm" ? "Finding some ease" : mood === "sad" ? "Needing some space" : "Taking a little time"}</span></div><div class="character-name">${esc(c().name)}<span>Age ${c().age} · Fictional character</span></div><div class="feeling"><strong>IN THIS STORY</strong><span>${last ? esc(last.feeling) : esc(c().feeling)}</span></div><div class="openness"><span>Conversation openness</span><b>${zone()}</b><div class="meter"><span class="marker" style="left:calc(${score}% - 2px)"></span></div><div class="zones"><span>Guarded</span><span>More open</span></div></div><button class="text-button small" data-rules>How this simulation works ↗</button><p class="sim-label">Expressions and openness are illustrative. Real children respond differently.</p></aside><section class="conversation-area"><div class="deck-progress"><span><b>${Math.min(count + 1, 3)}</b> / 3 moments <span class="progress-hint">· your own pace</span></span><div class="progress-dots" aria-label="${count} of 3 moments explored">${[0, 1, 2].map((i) => `<span class="${i < count ? "done" : i === count ? "current" : ""}"></span>`).join("")}</div></div><div class="flashcard ${revealed ? "feedback-side" : ""}" id="flashcard" tabindex="-1">${revealed ? feedbackCard(last) : questionCard()}</div><div class="under-card"><button class="text-button" id="reflect">Finish & reflect</button><span>There’s room to try again. Always.</span></div>${messages.length > 1 ? `<details class="transcript"><summary>Your conversation so far <span>${turns.length} ${turns.length === 1 ? "response" : "responses"}</span></summary><div class="chatlog" id="chatlog">${messages.map((m) => `<div class="bubble ${m.who === "You" ? "parent" : ""}"><span class="speaker">${esc(m.who)}</span>${esc(m.text)}</div>`).join("")}</div></details>` : ""}</section></div>`;
+  return `${step(2)}<div class="practice-heading"><div><h1>Talking with <em>${esc(c().name)}.</em></h1></div><button class="secondary" id="restart">↺ Start over</button></div><div class="practice-shell"><aside class="character-panel theme-${c().characterIndex}"><div class="character-top"><span class="pill">${esc(c().topic)}</span></div><div class="live-character">${childArt(c().characterIndex, mood)}<span class="mood-label">${mood === "happy" ? `${icon("happy")} Feeling closer` : mood === "calm" ? `${icon("calm")} Calmer` : mood === "sad" ? `${icon("sad")} Needs space` : `${icon("worried")} Worried`}</span></div><div class="character-name">${esc(c().name)}<span>Age ${c().age}</span></div><div class="feeling"><strong>${icon("thought")}</strong><span>${last ? esc(last.feeling) : esc(c().feeling)}</span></div><div class="openness" role="img" aria-label="How open ${esc(c().name)} feels: ${zone()}"><div class="face-scale">${icon("worried")}<div class="meter"><span class="marker" style="left:calc(${score}% - 2px)"></span></div>${icon("happy")}</div></div><button class="text-button small" data-rules>ⓘ How this works</button></aside><section class="conversation-area"><div class="deck-progress"><span><b>${Math.min(count + 1, 3)}</b> / 3</span><div class="progress-dots" aria-label="${count} of 3 moments explored">${[0, 1, 2].map((i) => `<span class="${i < count ? "done" : i === count ? "current" : ""}"></span>`).join("")}</div></div><div class="flashcard ${revealed ? "feedback-side" : ""}" id="flashcard" tabindex="-1">${revealed ? feedbackCard(last) : questionCard()}</div><div class="under-card"><button class="text-button" id="reflect">Finish ✓</button></div>${messages.length > 1 ? `<details class="transcript"><summary>Chat so far <span>${turns.length}</span></summary><div class="chatlog" id="chatlog">${messages.map((m) => `<div class="bubble ${m.who === "You" ? "parent" : ""}"><span class="speaker">${esc(m.who)}</span>${esc(m.text)}</div>`).join("")}</div></details>` : ""}</section></div>`;
 }
 function questionCard() {
-  return `<div class="flashcard-top"><span class="eyebrow">${repairMode ? "A CHANCE TO BEGIN AGAIN" : "LISTEN TO THE MOMENT"}</span><button class="voice-button" id="listen" aria-pressed="false">◖ Listen</button></div><p id="voice-error" class="inline-error" role="status" hidden></p><p class="voice-caption">Optional audio · no microphone</p><blockquote class="child-quote">“${esc(currentLine())}”</blockquote><div class="choice-header"><h2>${repairMode ? "How could you reconnect?" : "What would you say?"}</h2><span>Choose a card to explore</span></div><div class="replies" role="group" aria-label="Response choices">${options()
+  return `<div class="flashcard-top"><span class="eyebrow">${repairMode ? "↺ MAKE IT RIGHT" : ""}</span><button class="voice-button" id="listen" aria-pressed="false">${icon("speaker")} Listen</button></div><p id="voice-error" class="inline-error" role="status" hidden></p><blockquote class="child-quote">“${esc(currentLine())}”</blockquote><div class="choice-header"><h2>${repairMode ? "How can you make it right?" : "What would you say?"}</h2></div><div class="replies" role="group" aria-label="Response choices">${options()
     .map(
       (o, i) =>
         `<button class="reply ${picked === i ? "selected" : ""}" data-reply="${i}" data-kind="${o.kind}" aria-pressed="${picked === i}"><span class="choice-letter">${String.fromCharCode(65 + i)}</span><span>${esc(o.text)}</span><span class="choice-mark" aria-hidden="true">${picked === i ? "✓" : "↗"}</span></button>`,
     )
     .join(
       "",
-    )}</div><p class="inline-error" id="choice-error" role="alert" hidden></p><button class="primary full-width" id="reveal">Explore this response <span aria-hidden="true">↗</span></button><details class="custom-entry" ${customDraft ? "open" : ""}><summary>Or try your own words <span>Experimental</span></summary><form id="custom-form" novalidate><label class="formlabel" for="custom">Use a fictional reply. Avoid names or identifying details.</label><textarea id="custom" maxlength="500" aria-describedby="custom-help custom-error" placeholder="What would you say in this moment?">${esc(customDraft)}</textarea><div class="custom-meta"><span id="custom-help">Simple phrase feedback; may miss context.</span><span id="character-count">${customDraft.length}/500</span></div><p id="custom-error" class="inline-error" role="alert" hidden></p><button class="secondary" type="submit">Try my words →</button></form></details><button class="text-button repair-link" id="repair">↺ Practice repairing a reaction</button>`;
+    )}</div><p class="inline-error" id="choice-error" role="alert" hidden></p><button class="primary full-width" id="reveal">See what happens <span aria-hidden="true">→</span></button><details class="custom-entry" ${customDraft ? "open" : ""}><summary>${icon("pencil")} Or type your own</summary><form id="custom-form" novalidate><label class="formlabel" for="custom">What would you say?</label><textarea id="custom" maxlength="500" aria-describedby="custom-help custom-error" placeholder="Type here…">${esc(customDraft)}</textarea><div class="custom-meta"><span id="custom-help">No real names, please.</span><span id="character-count">${customDraft.length}/500</span></div><p id="custom-error" class="inline-error" role="alert" hidden></p><button class="secondary" type="submit">Try it →</button></form></details><button class="text-button repair-link" id="repair">↺ Practice making it right</button>`;
 }
+const RESULT_ICONS = {
+  good: "star",
+  repair: "sprout",
+  neutral: "question",
+  unknown: "question",
+  promise: "alert",
+  harmful: "broken",
+};
+const resultIcon = (kind) =>
+  icon(RESULT_ICONS[kind] || "question", `result-${kind}`);
 function feedbackCard(last) {
-  return `<div class="flashcard-top"><span class="eyebrow">TURN THE MOMENT OVER</span><span class="feedback-symbol" aria-hidden="true">${last.kind === "good" || last.kind === "repair" ? "✧" : "↺"}</span></div><p class="your-choice">You tried: “${esc(last.text)}”</p><h2 class="feedback-title">${esc(last.title)}<span>.</span></h2><p class="feedback-copy">${esc(last.feedback)}</p><div class="tag-list">${last.values.map((v) => `<span class="tag">${v}</span>`).join("")}</div><div class="next-line"><span class="eyebrow">${esc(c().name.toUpperCase())} IN THIS STORY</span><blockquote>“${esc(currentLine())}”</blockquote><button class="voice-button" id="listen" aria-pressed="false">◖ Listen</button><p id="voice-error" class="inline-error" role="status" hidden></p></div><div class="another-line"><strong>Another line to keep</strong><p>“${esc(last.alternative)}”</p></div><button class="primary full-width" id="continue">${count >= 3 ? "See my reflection" : "Continue the conversation"} <span aria-hidden="true">→</span></button>${last.kind === "harmful" || last.kind === "promise" ? '<button class="secondary full-width repair-now" id="repair">↺ Try a repair now</button>' : ""}<p class="sim-label">Authored learning feedback · Professional review pending</p>`;
+  return `<div class="flashcard-top"><span class="feedback-emoji">${resultIcon(last.kind)}</span></div><p class="your-choice">You said: “${esc(last.text)}”</p><h2 class="feedback-title">${esc(last.title)}<span>.</span></h2><p class="feedback-copy">${esc(last.feedback)}</p><div class="tag-list">${last.values.map((v) => `<span class="tag">${v}</span>`).join("")}</div><div class="next-line"><span class="eyebrow">${esc(c().name.toUpperCase())}</span><blockquote>“${esc(currentLine())}”</blockquote><button class="voice-button" id="listen" aria-pressed="false">${icon("speaker")} Listen</button><p id="voice-error" class="inline-error" role="status" hidden></p></div><div class="another-line"><strong>${icon("bulb")} Also try</strong><p>“${esc(last.alternative)}”</p></div><button class="primary full-width" id="continue">${count >= 3 ? "See how it went" : "Keep going"} <span aria-hidden="true">→</span></button>${last.kind === "harmful" || last.kind === "promise" ? '<button class="secondary full-width repair-now" id="repair">↺ Try making it right</button>' : ""}`;
 }
 function respond(text, kind, choice = {}) {
   stopVoice();
@@ -242,17 +286,17 @@ function chart() {
       (s, i) => `${35 + i * (430 / Math.max(scores.length - 1, 1))},${130 - s}`,
     )
     .join(" ");
-  return `<svg class="chart" viewBox="0 0 500 160" role="img" aria-label="Illustrative conversation openness across ${turns.length} practice responses"><path d="M35 35H465M35 80H465M35 125H465" stroke="#dde4d5"/><polyline points="${pts}" fill="none" stroke="#48745b" stroke-width="3"/>${scores.map((s, i) => `<circle cx="${35 + i * (430 / Math.max(scores.length - 1, 1))}" cy="${130 - s}" r="4" fill="#48745b"/>`).join("")}<text x="35" y="149" font-size="9" fill="#73816f">Start</text><text x="430" y="149" font-size="9" fill="#73816f">Last turn</text></svg>`;
+  return `<svg class="chart" viewBox="0 0 500 160" role="img" aria-label="Illustrative conversation openness across ${turns.length} practice responses"><path d="M35 35H465M35 80H465M35 125H465" stroke="#dde4d5"/><polyline points="${pts}" fill="none" stroke="#48745b" stroke-width="3"/>${scores.map((s, i) => `<circle cx="${35 + i * (430 / Math.max(scores.length - 1, 1))}" cy="${130 - s}" r="4" fill="#48745b"/>`).join("")}<text x="35" y="149" font-size="14" fill="#73816f">Start</text><text x="440" y="149" font-size="14" fill="#73816f">End</text></svg>`;
 }
 function reflect() {
   let vals = [...new Set(turns.flatMap((t) => t.values))];
-  return `${step(3)}<div class="eyebrow">Practice, reflect, carry it with you</div><h1 style="font-size:43px;margin:12px 0">You don’t need perfect words.<br><em>You need room to listen.</em></h1><p class="muted">Here’s what you explored with ${c().name}. This summary evaluates the exercise, not your parenting.</p><div class="summary"><section class="panel"><h3>Your conversation journey</h3>${chart()}${compare()}<p class="sim-label">This chart shows authored simulation changes. It does not measure real-world trust.</p>${turns.length ? turns.map((t, i) => `<div class="turn"><strong>${i + 1}. ${esc(t.text)}</strong><p>${t.feedback}</p></div>`).join("") : '<p class="muted">No replies yet. You can return to practice whenever you’re ready.</p>'}</section><aside><section class="panel"><div class="eyebrow">Humanity 101 in practice</div><h3 style="margin-top:12px">Small choices. Human values.</h3><p class="sim-label">Values explored in this exercise</p>${content.principles.map((v) => `<span class="tag ${vals.includes(v) ? "" : "off"}">${vals.includes(v) ? "✓ " : ""}${esc(v)}</span>`).join("")}<p class="muted" style="margin-top:17px">Recognizing an unhelpful reaction is a chance to practice self-reflection, too.</p><h3>For your next conversation</h3>${["Thank them for telling you.", "Listen before deciding what happens next.", "Ask what support they need.", "Explain any next steps and additional help.", "Agree on a time to check in again."].map((s) => `<label class="check"><input type="checkbox">${s}</label>`).join("")}<button class="primary" id="plan-button">See next steps →</button><button class="text-button" id="resources-button">Browse support resources ↗</button></section><div style="display:flex;gap:10px;margin-top:15px"><button class="secondary" id="again">Practice again</button><button class="secondary" id="new">Try another situation</button></div></aside></div>`;
+  return `${step(3)}<h1 style="font-size:47px;margin:12px 0">Well <em>done!</em></h1><p class="muted">Here’s how it went with ${esc(c().name)}.</p><div class="summary"><section class="panel"><h3>How ${esc(c().name)} opened up</h3>${chart()}${compare()}${turns.length ? turns.map((t, i) => `<div class="turn"><strong>${resultIcon(t.kind)} “${esc(t.text)}”</strong><p>${esc(t.title)}</p></div>`).join("") : '<p class="muted">No replies yet.</p>'}</section><aside><section class="panel"><h3>Values you showed</h3>${content.principles.map((v) => `<span class="tag ${vals.includes(v) ? "" : "off"}">${vals.includes(v) ? "✓ " : ""}${esc(v)}</span>`).join("")}<h3>Next time</h3>${[["heart", "Say thank you"], ["ear", "Listen first"], ["people", "Decide together"], ["calendar", "Check in later"]].map(([n, s]) => `<label class="check"><input type="checkbox">${icon(n)} ${s}</label>`).join("")}<button class="primary" id="plan-button">Next steps →</button><button class="text-button" id="resources-button">Get help ↗</button></section><div style="display:flex;gap:10px;margin-top:15px"><button class="secondary" id="again">↺ Try again</button><button class="secondary" id="new">Pick another</button></div></aside></div>`;
 }
 function resources() {
-  return `<button class="back" id="back-prev">← Back to where you were</button><div class="eyebrow">For parents & caregivers</div><h1 style="font-size:43px">Start with listening.<br><em>Then find support.</em></h1><div class="summary"><section class="panel"><h3>A short conversation starter</h3><div class="script">“Thank you for telling me. You’re not in trouble for asking for help. I’m here to listen. Can you tell me what you need right now? We can work out the next steps together.”</div><p class="muted">Adapt these words to your child’s age and the situation. A real child may need time, silence, or a different trusted adult.</p><div class="notice">This app does not receive reports, contact professionals, or provide emergency assistance. The links open external services with their own privacy policies.</div></section><section><a class="resource" target="_blank" rel="noopener noreferrer" href="https://parents.thorn.org/"><strong>Thorn for Parents ↗</strong><span>Conversation guides about online safety.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.missingkids.org/gethelpnow/cybertipline"><strong>NCMEC CyberTipline ↗</strong><span>Reporting suspected online child sexual exploitation.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.stopbullying.gov/cyberbullying/what-is-it"><strong>StopBullying.gov ↗</strong><span>Information about cyberbullying and linked reporting resources.</span></a><p class="sim-label">Resources listed are U.S.-focused. A school counselor or trusted local professional may help identify appropriate support.</p></section></div>`;
+  return `<button class="back" id="back-prev">← Back</button><h1 style="font-size:47px">Get <em>help.</em></h1><div class="summary"><section class="panel"><h3>${icon("chat")} What to say</h3><div class="script">“Thank you for telling me. You’re not in trouble. I’m here. What do you need right now?”</div><div class="notice">This site can’t send reports or call anyone. The links open other websites.</div></section><section><a class="resource" target="_blank" rel="noopener noreferrer" href="https://parents.thorn.org/"><strong>Thorn for Parents ↗</strong><span>Guides for talking about online safety.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.missingkids.org/gethelpnow/cybertipline"><strong>NCMEC CyberTipline ↗</strong><span>Report online sexual exploitation of a child.</span></a><a class="resource" target="_blank" rel="noopener noreferrer" href="https://www.stopbullying.gov/cyberbullying/what-is-it"><strong>StopBullying.gov ↗</strong><span>Help with cyberbullying.</span></a><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
 }
 function about() {
-  return `<button class="back" id="back-home">← Back to situations</button><div class="eyebrow">Our approach</div><h1 style="font-size:43px">Prepare the adult.<br><em>Keep space for the child.</em></h1><div class="summary"><section class="panel"><h3>From advice to rehearsal</h3><p class="muted">The Talk Kit combines fictional scenarios, authored branching responses, conversation feedback, and repair practice. It is designed to help adults prepare for difficult online-safety conversations.</p><h3>Transparent simulation</h3><p class="muted">Suggested replies use predefined learning feedback. Optional typed replies use a small phrase-based checker, not AI. It may miss context, negation, sarcasm, or wording; uncertain replies receive no score change.</p><h3>What the meter means</h3><p class="muted">Conversation openness is an illustrative story device. It is not validated, diagnostic, or a prediction of a real child’s response. The app does not guarantee an outcome.</p></section><section class="panel"><h3>Privacy by design</h3><p class="muted">No accounts, file uploads, child profiles, or outgoing chat messages. Typed practice replies remain in this tab’s memory and clear on reload. Hosting providers may maintain standard access logs.</p><button class="review-badge" data-review>◇ View professional review process ↗</button><h3 style="margin-top:20px">Before real-world rollout</h3><p class="muted">Scenario content and feedback need review by qualified child-development and safeguarding professionals. Parent usability studies should evaluate the clarity and usefulness of the practice.</p><a href="https://parents.thorn.org/guides/getting-aligned-on-social-media-platforms/" target="_blank" rel="noopener noreferrer">Explore a source conversation guide ↗</a></section></div>`;
+  return `<button class="back" id="back-home">← Back</button><h1 style="font-size:47px">About <em>this site.</em></h1><div class="summary"><section class="panel about-list"><p>${icon("book")} Made-up stories, for practice only.</p><p>${icon("lock")} No sign-up. Nothing is saved or sent.</p><p>${icon("happy")} The face and meter are a story, not a grade.</p><p>${icon("pencil")} Typed replies use a simple word check, not AI.</p></section><section class="panel about-list"><p>${icon("shield")} Not therapy or emergency help.</p><button class="review-badge" data-review>◇ Expert review pending ↗</button><p><a href="https://parents.thorn.org/guides/getting-aligned-on-social-media-platforms/" target="_blank" rel="noopener noreferrer">Source guide ↗</a></p></section></div>`;
 }
 function render() {
   stopVoice();
@@ -324,14 +368,14 @@ function bind() {
   on("#calm", showCalm);
   on("#restart", () => {
     openModal(
-      `<span class="modal-kicker">A FRESH START</span><h2 id="modal-title">Make room to begin again?</h2><p>Your current practice responses will clear. You can also keep going at your own pace.</p><div class="modal-actions"><button class="primary" id="confirm-restart">Start fresh</button><button class="secondary" data-close>Keep practicing</button></div>`,
+      `<h2 id="modal-title">Start over?</h2><p>Your answers will be cleared.</p><div class="modal-actions"><button class="primary" id="confirm-restart">↺ Start over</button><button class="secondary" data-close>Keep going</button></div>`,
     );
     on("#confirm-restart", () => {
       closeModal();
       reset();
       render();
       $("#flashcard").focus();
-      toast("A fresh start. Take your time.");
+      toast("Starting fresh.");
     });
   });
   document.querySelectorAll("[data-reply]").forEach(
@@ -350,7 +394,7 @@ function bind() {
   on("#reveal", () => {
     if (picked === null) {
       $("#choice-error").textContent =
-        "Choose a response card first, or try your own words below.";
+        "Pick an answer first.";
       $("#choice-error").hidden = false;
       return;
     }
@@ -396,7 +440,7 @@ function bind() {
         $("#custom-error").textContent =
           text.length > 500
             ? "Keep your reply under 500 characters."
-            : "Write a few words first. You can also choose one of the response cards.";
+            : "Type a few words first.";
         $("#custom-error").hidden = false;
         $("#custom").setAttribute("aria-invalid", "true");
         $("#custom").focus();
@@ -416,9 +460,10 @@ function bind() {
 }
 const motion = () =>
   matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth";
-function openModal(html) {
+function openModal(html, variant = "") {
   stopVoice();
   modalReturn = document.activeElement;
+  $("#modal").className = variant;
   $("#modal-content").innerHTML =
     `<button class="modal-close" data-close aria-label="Close dialog">×</button>${html}`;
   decorate($("#modal-content"));
@@ -453,7 +498,8 @@ $("#modal").addEventListener("click", (e) => {
 });
 function showCalm() {
   openModal(
-    `<span class="modal-kicker">A LITTLE SPACE FOR YOU</span><h2 id="modal-title">It’s okay to take a pause.</h2><p>This moment is just for you. Your conversation and any unfinished words will be here when you return.</p><div class="breathing-orbit breathing"><div class="breathing-circle"><span id="calm-seconds" role="timer" aria-label="Seconds remaining">30</span><small>seconds of space</small></div></div><h3 id="calm-cue" class="calm-cue" aria-live="polite">Breathe in gently…</h3><p id="calm-status" role="status">Follow the circle if comfortable, or breathe at your own pace.</p><div class="modal-actions"><button class="primary" id="calm-return" data-close>End pause</button><button class="secondary" id="calm-start" hidden>Take another moment</button></div>`,
+    `<div class="calm-scene" aria-hidden="true"><div class="calm-picture"></div><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span><span class="calm-mote"></span></div><div class="calm-panel"><h2 id="modal-title">Take a pause.</h2><p>Your progress is saved.</p><div class="breathing-orbit breathing"><div class="breathing-circle"><span id="calm-seconds" role="timer" aria-label="Seconds remaining">30</span><small>seconds</small></div></div><h3 id="calm-cue" class="calm-cue" aria-live="polite">Breathe in gently…</h3><p id="calm-status" role="status">Follow the circle.</p><div class="modal-actions"><button class="primary" id="calm-return" data-close>End pause</button><button class="secondary" id="calm-start" hidden>↺ Again</button></div></div>`,
+    "calm-fullscreen",
   );
   const start = () => {
     clearInterval(breathTimer);
@@ -461,7 +507,7 @@ function showCalm() {
     $("#calm-start").hidden = true;
     $("#calm-return").textContent = "End pause";
     $("#calm-status").textContent =
-      "Follow the circle if comfortable, or breathe at your own pace.";
+      "Follow the circle.";
     $(".breathing-orbit").classList.add("breathing");
     const tick = () => {
       const left = Math.max(0, Math.ceil((breathDeadline - Date.now()) / 1000));
@@ -478,8 +524,8 @@ function showCalm() {
         breathTimer = null;
         $(".breathing-orbit").classList.remove("breathing");
         $("#calm-status").textContent =
-          "Continue when you’re ready. You can take another moment, too.";
-        $("#calm-return").textContent = "I’m ready to continue →";
+          "Go on when you’re ready.";
+        $("#calm-return").textContent = "I’m ready →";
         $("#calm-start").hidden = false;
       }
     };
@@ -491,21 +537,21 @@ function showCalm() {
 }
 function showReview() {
   openModal(
-    `<span class="modal-kicker">TRANSPARENCY, BEFORE TRUST</span><h2 id="modal-title">A place for professional care.</h2><span class="status-pending">◇ Awaiting professional review</span><p>We’re designing a curation process with licensed therapists and psychologists. No reviewer credentials or approvals have been verified for this demo.</p><div class="review-process"><div><b>01 · Verify the professional</b><p>Check an active license with the issuing board and record the jurisdiction and date.</p></div><div><b>02 · Review the whole moment</b><p>Review the scenario, response options, feedback, and illustrative weights for a specific content version.</p></div><div><b>03 · Publish with a record</b><p>Show who reviewed it, their scope, the review date, and when re-review is due. Content edits need a new review.</p></div></div><p class="sim-label">All current decks: version ${esc(content.contentVersion)} · pending review. Professional review would not guarantee outcomes or replace individual care.</p><button class="primary full-width" data-close>Back to the conversation</button>`,
+    `<h2 id="modal-title">Expert review</h2><span class="status-pending">◇ Pending</span><p>We plan to have licensed therapists check every story. No reviewer credentials or approvals have been verified yet.</p><div class="review-process"><div><b>1 · Check the expert’s license</b></div><div><b>2 · Review each story</b></div><div><b>3 · Show who reviewed it</b></div></div><p class="sim-label">Version ${esc(content.contentVersion)}</p><button class="primary full-width" data-close>Got it</button>`,
   );
 }
 function showRules() {
   openModal(
-    `<span class="modal-kicker">A STORY, NOT A SCORECARD</span><h2 id="modal-title">What changes the expression?</h2><p>The original authored rules move an illustrative openness meter, starting at 50 and staying between 5 and 95. It never grades your parenting.</p><dl class="rule-list">${Object.entries(
+    `<h2 id="modal-title">How the face changes</h2><p>Each answer moves the meter. It’s a story, not a grade.</p><dl class="rule-list">${Object.entries(
       RULES,
     )
       .map(
         ([k, v]) =>
-          `<div><dt>${{ good: "Supportive reply", repair: "Repair", harmful: "Blame or dismissal", promise: "Absolute secrecy promise", neutral: "Information seeking", unknown: "Uncertain wording" }[k]}</dt><dd>${v > 0 ? "+" : ""}${v}</dd></div>`,
+          `<div><dt>${`${resultIcon(k)} ${{ good: "Kind, supportive", repair: "Making it right", harmful: "Blaming", promise: "Promising secrecy", neutral: "Asking questions", unknown: "Unclear" }[k]}`}</dt><dd>${v > 0 ? "+" : ""}${v}</dd></div>`,
       )
       .join(
         "",
-      )}</dl><p>Three main responses complete the deck, regardless of their score. Optional repairs leave room to try again without advancing the story. You can finish and reflect at any time.</p><p class="sim-label">Typed words use a limited phrase checker. It can miss meaning, negation, and sarcasm. These weights and expressions are not clinically validated.</p><button class="primary full-width" data-close>Got it</button>`,
+      )}</dl><p class="sim-label">Just a practice tool. Not clinically validated.</p><button class="primary full-width" data-close>Got it</button>`,
   );
 }
 function speak() {
@@ -535,7 +581,7 @@ function speak() {
         if (token === voiceToken) stopVoice();
       };
       activeAudio.onerror = fail;
-      button.textContent = "■ Stop audio";
+      button.textContent = "■ Stop";
       button.setAttribute("aria-pressed", "true");
       activeAudio.play().catch(fail);
     } catch {
@@ -568,7 +614,7 @@ function speak() {
   utterance.lang = utterance.voice.lang;
   utterance.rate = [0.9, 0.94, 0.85][c().characterIndex];
   utterance.pitch = [1.05, 0.95, 1.12][c().characterIndex];
-  button.textContent = "■ Stop audio";
+  button.textContent = "■ Stop";
   button.setAttribute("aria-pressed", "true");
   utterance.onend = () => {
     if (token === voiceToken) stopVoice();
@@ -620,7 +666,7 @@ async function init() {
   } catch {
     content = null;
     $("#app").innerHTML =
-      '<section class="panel load-error" role="alert"><span class="coach-icon">↺</span><h1>We couldn’t load the conversation cards.</h1><p>Please refresh to try again. If you opened this as a file, use the local server command in README.md.</p><button class="primary" id="reload">Try again</button><p>Need support now? <a href="https://parents.thorn.org/" target="_blank" rel="noopener noreferrer">Visit Thorn for Parents ↗</a></p></section>';
+      '<section class="panel load-error" role="alert"><span class="coach-icon">↺</span><h1>We couldn’t load the conversation cards.</h1><p>Please try again.</p><button class="primary" id="reload">Try again</button><p>Need support now? <a href="https://parents.thorn.org/" target="_blank" rel="noopener noreferrer">Visit Thorn for Parents ↗</a></p></section>';
     on("#reload", init);
   }
 }
@@ -659,7 +705,7 @@ function decorate(root) {
 function compare() {
   const history = attempts[c().id] || [];
   if (history.length < 2) return "";
-  return `<div class="feedback"><strong>Room to practice again</strong>Illustrative openness: ${history[0]} on your first try, ${history.at(-1)} this time. This is a story state, not a parenting grade.</div>`;
+  return `<div class="feedback"><strong>${icon("trend")} Compared to last time</strong>First try: ${history[0]} · This time: ${history.at(-1)}</div>`;
 }
 function plan() {
   const pl = c().plan || {
@@ -677,5 +723,5 @@ function plan() {
       ],
     ],
   };
-  return `${step(3)}<button class="back" id="back-reflect">← Back to reflection</button><div class="eyebrow">BRING THE PRACTICE WITH YOU</div><h1 style="font-size:43px">A next step.<br><em>A little more connection.</em></h1><p class="muted">Ideas for a situation like ${esc(c().name)}’s. Adapt them to your child and circumstances.</p><div class="summary"><section class="panel"><h2>One step at a time.</h2><ol class="now-steps">${pl.steps.map((x) => `<li>${esc(x).replace(/&lt;(\/?strong)&gt;/g, "<$1>")}</li>`).join("")}</ol>${reviewBadge()}</section><section><h3>Helpful resources</h3>${pl.links.map(([title, description, url]) => `<a class="resource" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(title)} ↗</strong><span>${esc(description)}</span></a>`).join("")}<button class="secondary" id="resources-button">Find support now ↗</button><p class="sim-label">U.S.-focused resources. If anyone is in immediate danger, contact local emergency services.</p></section></div>`;
+  return `${step(3)}<button class="back" id="back-reflect">← Back</button><h1 style="font-size:47px">Next <em>steps.</em></h1><div class="summary"><section class="panel"><ol class="now-steps">${pl.steps.map((x) => `<li>${esc(x).replace(/&lt;(\/?strong)&gt;/g, "<$1>")}</li>`).join("")}</ol>${reviewBadge()}</section><section><h3>Helpful links</h3>${pl.links.map(([title, description, url]) => `<a class="resource" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(title)} ↗</strong><span>${esc(description)}</span></a>`).join("")}<button class="secondary" id="resources-button">Get help now ↗</button><p class="sim-label">${icon("alert")} In danger right now? Call 911 (US) or your local emergency number.</p></section></div>`;
 }
