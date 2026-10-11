@@ -6243,3 +6243,18 @@ footer > span:last-child {
     height: 34px;
   }
 }
+
+/* ---------- Comfortable default scale: wide screens render at 90%, like browser zoom ---------- */
+/* Phones and small tablets stay at 100%. The full-screen pause cancels the zoom so it
+   still fills the screen, and the home page's first screen is measured in the zoomed units. */
+@media (min-width: 1024px) {
+  html {
+    zoom: 0.9;
+  }
+  dialog.calm-fullscreen {
+    zoom: calc(1 / 0.9);
+  }
+  .hero.new-hero {
+    min-height: calc(100svh / 0.9 - 84px - 44px);
+  }
+}

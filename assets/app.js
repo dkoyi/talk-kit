@@ -434,9 +434,11 @@ function respond(text, kind, choice = {}) {
   const box = result?.getBoundingClientRect();
   const headerBottom = $("header").getBoundingClientRect().bottom;
   if (result && (box.top < headerBottom || box.top > innerHeight * 0.55)) {
-    // Layout position (ignores the pop-in animation's transform).
-    let top = -$("header").offsetHeight - 16;
-    for (let el = result; el; el = el.offsetParent) top += el.offsetTop;
+    // Measure the card that holds the result (it never animates), in the same on-screen
+    // units as the scroll position, so this stays right when the page is zoomed.
+    const anchor = result.closest(".flashcard") || result;
+    const header = $("header").getBoundingClientRect().height;
+    const top = anchor.getBoundingClientRect().top + window.scrollY - header - 16;
     window.scrollTo({ top: Math.max(0, top), behavior: motion() });
   }
   speak({ automatic: true });
