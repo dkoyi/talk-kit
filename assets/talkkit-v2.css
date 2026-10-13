@@ -500,3 +500,20 @@ main[data-stage="practice"] .steps { margin-bottom: 26px; }
 .practice-heading #restart:hover .restart-icon { transform: rotate(-60deg); }
 .practice-heading #restart:active { transform: translateY(2px); box-shadow: 0 1px 0 #dbe7d5; }
 .practice-heading #restart:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+
+/* ---------- Phones ---------- */
+/* iPhone Safari: skip the two heaviest scene filters (paint texture, grain) so the dawn paints fast. */
+@media (max-width: 767px) {
+  .pz-scene [filter="url(#pz-paint)"], .pz-scene [filter="url(#pz-grain)"] { filter: none; }
+  .pz-scene rect[filter="url(#pz-grain)"] { display: none; }
+  .pz { contain: none; will-change: auto; }
+}
+/* Smaller background greenery on phones (desktop unchanged). */
+@media (max-width: 720px) {
+  .bg-blob-a { width: 190px; height: 190px; left: -110px; }
+  .bg-blob-b { width: 200px; height: 200px; right: -100px; top: -60px; }
+  .bg-blob-c { width: 170px; height: 170px; right: -80px; bottom: -60px; }
+  .fern { width: 110px; height: 110px; }
+  .bg-fern-b { width: 90px; height: 90px; }
+  .bg-sprig-a { transform: scale(.7); transform-origin: 0 100%; }
+}

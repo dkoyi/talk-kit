@@ -126,16 +126,28 @@
     pz.style.setProperty('--wash', btn.getAttribute('data-wash') || '#265c4c');
     resetBreathing();
     placeBelowHeader();
+    el.wash.style.opacity = '1';
+    pz.style.clipPath = pz.style.webkitClipPath = 'inset(50%)';   /* nothing visible until measured */
     pz.hidden = false;
+    pz.style.clipPath = pz.style.webkitClipPath = rectOf(btn);    /* show only the button's shape at first */
     document.documentElement.classList.add('pz-open');
     var done = function () { busy = false; el.end.focus({ preventScroll: true }); if (!window.__pzNoAutoStart) startBreathing(); };
     if (reduce.matches) {
+      pz.style.clipPath = pz.style.webkitClipPath = ''; el.wash.style.opacity = '';
       pz.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' }).finished.then(done, function () {});
       return;
     }
+    /* iPhone Safari paints the dawn scene slowly the first time; wait for that paint (two
+       frames) so the grow animation is actually seen instead of finishing before it shows. */
+    void pz.offsetWidth;
+    requestAnimationFrame(function () { requestAnimationFrame(function () { grow(btn, done); }); });
+  }
+  function grow(btn, done) {
     var from = rectOf(btn), sun = sunFrom(btn);
+    pz.style.clipPath = pz.style.webkitClipPath = '';
+    el.wash.style.opacity = '';
     /* 1. the button's shape grows to fill the screen                    0–700ms  */
-    pz.animate([{ clipPath: from }, { clipPath: 'inset(0px 0px 0px 0px round 0px)' }], { duration: 820, easing: EASE_OUT });
+    pz.animate([{ clipPath: from, webkitClipPath: from }, { clipPath: 'inset(0px 0px 0px 0px round 0px)', webkitClipPath: 'inset(0px 0px 0px 0px round 0px)' }], { duration: 820, easing: EASE_OUT });
     /* 2. its colour washes away into the dawn sky                        0–650ms  */
     el.wash.animate([{ opacity: 1 }, { opacity: 1, offset: .15 }, { opacity: 0 }], { duration: 780, easing: 'cubic-bezier(.4, 0, .2, 1)' });
     /* 3. the sky and hills fade up under the wash                       80–580ms  */
@@ -170,7 +182,7 @@
     [el.title, el.close, el.lake, el.amb].forEach(function (n) { n.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, easing: 'ease-in', fill: 'forwards' }); });
     el.breath.animate([{ transform: 'none' }, { transform: sun }], { duration: 680, delay: 60, easing: 'cubic-bezier(.55, 0, .7, .2)', fill: 'forwards' });
     el.wash.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 460, delay: 260, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' });
-    pz.animate([{ clipPath: 'inset(0px 0px 0px 0px round 0px)' }, { clipPath: to }], { duration: 760, delay: 160, easing: EASE_INOUT, fill: 'forwards' })
+    pz.animate([{ clipPath: 'inset(0px 0px 0px 0px round 0px)', webkitClipPath: 'inset(0px 0px 0px 0px round 0px)' }, { clipPath: to, webkitClipPath: to }], { duration: 760, delay: 160, easing: EASE_INOUT, fill: 'forwards' })
       .finished.then(done, function () {});
     setTimeout(done, 960);                        /* backup if animations are paused (background tab) */
   }
