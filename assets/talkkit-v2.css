@@ -437,9 +437,9 @@ main[data-stage="home"] { padding-top: 10px; }
 }
 
 /* ---------- Round 7 ---------- */
-/* The conversation page renders at 90% overall (the page's own 90%, no extra shrink). */
+/* The conversation page renders at 80% overall: the page's own 90% x 0.889. */
 @media (min-width: 1024px) {
-  main[data-stage="practice"] { zoom: 1; }
+  main[data-stage="practice"] { zoom: 0.889; }
 }
 /* Answer reaction pills ("Nice! Maya opened up."): larger and easier to see. */
 .burst-banner { font-size: 24px; gap: 14px; padding: 14px 30px 14px 18px; }
