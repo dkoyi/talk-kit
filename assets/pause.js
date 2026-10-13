@@ -140,7 +140,9 @@
     /* iPhone Safari paints the dawn scene slowly the first time; wait for that paint (two
        frames) so the grow animation is actually seen instead of finishing before it shows. */
     void pz.offsetWidth;
-    requestAnimationFrame(function () { requestAnimationFrame(function () { grow(btn, done); }); });
+    var started = false, go = function () { if (!started) { started = true; grow(btn, done); } };
+    requestAnimationFrame(function () { requestAnimationFrame(go); });
+    setTimeout(go, 120);                                   /* backup if frames are paused (background tab) */
   }
   function grow(btn, done) {
     var from = rectOf(btn), sun = sunFrom(btn);

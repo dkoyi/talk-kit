@@ -517,3 +517,21 @@ main[data-stage="practice"] .steps { margin-bottom: 26px; }
   .bg-fern-b { width: 90px; height: 90px; }
   .bg-sprig-a { transform: scale(.7); transform-origin: 0 100%; }
 }
+
+/* Phones: raise the horizon (65.5% -> 58%) so the breathing words and "End pause" always fit on screen. */
+@media (max-width: 767px) {
+  .pz { grid-template-rows: 58% 42%; }
+  /* stretch the painted scene upward so its horizon lands at 58% */
+  .pz-scene { top: -21.7%; height: 121.7%; }
+  .pz-reflect { top: 58%; }
+  .pz-ripple { top: 60%; }
+  .pz-sky { padding-top: 14px; }
+  .pz-title { font-size: 24px; }
+  .pz { --D: min(52vw, 30vh); }
+  .pz-lake { padding: 14px 16px calc(16px + env(safe-area-inset-bottom)); gap: 8px; }
+  .pz-cue-word { font-size: 30px; }
+  .pz-cue-count { font-size: 16px; padding: 4px 9px; }
+  .pz-hint { font-size: 15px; min-height: calc(2 * 1.35em); line-height: 1.35; }
+  .pz-btn { min-height: 50px; }
+  .pz-done-title { font-size: 26px; }
+}
