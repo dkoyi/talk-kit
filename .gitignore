@@ -1,10 +1,28 @@
-docs/
+# ---- Talk Kit .gitignore ----
+# Keeps secrets, local tests, notes and build output out of the public repo.
+
+# Secrets and environment files
+.env
+.env.*
+*.pem
+*.key
+
+# Local test suite and build output (kept on your machine, not in the repo)
+tests/
 node_modules/
 test-results/
-tests/
 playwright-report/
+venv/
 __pycache__/
 *.pyc
-.env
-venv
-tests/
+
+# Internal notes, hackathon docs and design handoffs
+docs/
+
+# Deployment and editor clutter
+.vercel/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

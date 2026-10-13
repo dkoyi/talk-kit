@@ -19,7 +19,7 @@ A free website where parents and caregivers rehearse the tough conversations abo
 
 ---
 
-## 💬 Why it exists
+## Why it exists
 
 When a child finally says *"Can I tell you something?"*, a parent gets one chance. A panicked *"Why would you do that?"* can close the door for a long time.
 
@@ -29,15 +29,9 @@ You can read advice anywhere, but you can't **practise** it. Talk Kit is a safe 
 
 ---
 
-## 🌱 How it works
+## How it works
 
-```mermaid
-flowchart LR
-    A["🗂️ Choose<br/>a real moment"] --> B["📝 Prepare<br/>Try saying · Avoid"]
-    B --> C["💬 Practice<br/>3 questions, 2 tries each"]
-    C --> D["📈 Reflect<br/>how they opened up"]
-    D --> E["🧭 Next steps<br/>+ real help"]
-```
+<div align="center"><img src=".github/readme/flow.svg" width="860" alt="How it works: Choose a real moment, Prepare, Practice, Reflect, Next steps"></div>
 
 | | |
 |---|---|
@@ -51,7 +45,7 @@ flowchart LR
 
 ---
 
-## 🎯 The openness meter
+## The openness meter
 
 Every child starts in the middle. Your words move them.
 
@@ -69,31 +63,31 @@ Every child starts in the middle. Your words move them.
 
 ---
 
-## ✨ Things we're proud of
+## Things we're proud of
 
 <table>
 <tr>
 <td width="50%">
 
-**🧒 Living characters**<br>
+**Living characters**<br>
 Vector kids that blink, breathe, talk in sync with their recorded lines and react: jump for joy, droop under a rain cloud, peek out from behind the *Next steps* card.
 
-**🌅 Take a pause**<br>
+**Take a pause**<br>
 A golden button that *grows* into a painted dawn lake. A sun guides you through three breaths (4s in, 6s out) with a filling ring and countdown, then folds back into the button.
 
-**🍃 Loading screen**<br>
+**Loading screen**<br>
 The logo draws itself, fills in, and flies into the header while Maya, Jayden and Lucía bounce like a typing indicator.
 
 </td>
 <td width="50%">
 
-**📈 Reflection that teaches**<br>
+**Reflection that teaches**<br>
 A chart of how the child opened up, answer by answer; better wording for anything hurtful; and the **Humanity 101 values** you showed: empathy, compassion, respect, forgiveness, integrity, kindness, self-reflection.
 
-**🛡️ Built for expert review**<br>
+**Built for expert review**<br>
 Every story is designed to pass a five-step review by licensed child-care professionals: verify the license, read every line, check the advice, fix what's flagged, and show who signed off.
 
-**♿ For every parent**<br>
+**For every parent**<br>
 Big text, plain words, keyboard support, screen-reader labels, reduced-motion support, and phone to desktop layouts.
 
 </td>
@@ -107,7 +101,7 @@ Big text, plain words, keyboard support, screen-reader labels, reduced-motion su
 
 ---
 
-## 🔒 Privacy and safety
+## Privacy and safety
 
 - **No accounts, no tracking, no database.** Nothing a parent taps leaves their device.
 - **Practice, not therapy.** Every help page points to real support: the NCMEC CyberTipline, StopBullying.gov, and 911 or local emergency numbers.
@@ -116,7 +110,7 @@ Big text, plain words, keyboard support, screen-reader labels, reduced-motion su
 
 ---
 
-## 🛠️ Under the hood
+## Under the hood
 
 ```text
 index.html            page shell, header, loading screen, pause overlay
@@ -144,7 +138,7 @@ Serve the folder rather than opening `index.html` directly, because the app load
 
 ---
 
-## 🚀 What's next
+## What's next
 
 - [ ] Onboard licensed child-care professionals to review every story
 - [ ] Pilot with 20 parents, then schools and libraries
@@ -155,8 +149,7 @@ Serve the folder rather than opening `index.html` directly, because the app load
 
 ---
 
-**Team13 · Humanity.exe**
+**talk kit.**
 
-*Small words. Big openings.* 🌱
-
+*Small words. Big openings.* 
 </div>

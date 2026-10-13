@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 190" width="1000" height="190" role="img" aria-label="How Talk Kit works: Choose a real moment, Prepare, Practice, Reflect, Next steps">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1l8 4-8 4" fill="none" stroke="#9ab894" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <filter id="s" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#233e38" flood-opacity=".12"/></filter>
+  </defs>
+  <rect width="1000" height="190" rx="22" fill="#f7f5ef"/>
+  <g font-family="DM Sans, Segoe UI, Helvetica, Arial, sans-serif" text-anchor="middle">
+    <g fill="none" stroke="#9ab894" stroke-width="2.5" stroke-linecap="round" marker-end="url(#a)">
+      <path d="M182 95h28"/><path d="M372 95h28"/><path d="M562 95h28"/><path d="M752 95h28"/>
+    </g>
+    <!-- 1 Choose -->
+    <g transform="translate(26 30)" filter="url(#s)">
+      <rect width="154" height="130" rx="18" fill="#fffdf8" stroke="#dfe3d9"/>
+      <circle cx="77" cy="36" r="20" fill="#e3eedb"/>
+      <text x="77" y="42" font-size="17" font-weight="700" fill="#265c4c">1</text>
+      <text x="77" y="84" font-size="18" font-weight="700" fill="#233e38">Choose</text>
+      <text x="77" y="106" font-size="13" fill="#55635b">a real moment</text>
+    </g>
+    <!-- 2 Prepare -->
+    <g transform="translate(216 30)" filter="url(#s)">
+      <rect width="154" height="130" rx="18" fill="#fffdf8" stroke="#dfe3d9"/>
+      <circle cx="77" cy="36" r="20" fill="#e3eedb"/>
+      <text x="77" y="42" font-size="17" font-weight="700" fill="#265c4c">2</text>
+      <text x="77" y="84" font-size="18" font-weight="700" fill="#233e38">Prepare</text>
+      <text x="77" y="106" font-size="13" fill="#55635b">Try saying · Avoid</text>
+    </g>
+    <!-- 3 Practice (highlighted) -->
+    <g transform="translate(406 30)" filter="url(#s)">
+      <rect width="154" height="130" rx="18" fill="#265c4c"/>
+      <circle cx="77" cy="36" r="20" fill="#fffdf8"/>
+      <text x="77" y="42" font-size="17" font-weight="700" fill="#265c4c">3</text>
+      <text x="77" y="84" font-size="18" font-weight="700" fill="#fffdf8">Practice</text>
+      <text x="77" y="106" font-size="13" fill="#d8e6d3">3 questions,</text>
+      <text x="77" y="122" font-size="13" fill="#d8e6d3">2 tries each</text>
+    </g>
+    <!-- 4 Reflect -->
+    <g transform="translate(596 30)" filter="url(#s)">
+      <rect width="154" height="130" rx="18" fill="#fffdf8" stroke="#dfe3d9"/>
+      <circle cx="77" cy="36" r="20" fill="#e3eedb"/>
+      <text x="77" y="42" font-size="17" font-weight="700" fill="#265c4c">4</text>
+      <text x="77" y="84" font-size="18" font-weight="700" fill="#233e38">Reflect</text>
+      <text x="77" y="106" font-size="13" fill="#55635b">how they opened up</text>
+    </g>
+    <!-- 5 Next steps -->
+    <g transform="translate(786 30)" filter="url(#s)">
+      <rect width="188" height="130" rx="18" fill="#fdf0d0" stroke="#efd28a"/>
+      <circle cx="94" cy="36" r="20" fill="#f7cc63"/>
+      <text x="94" y="42" font-size="17" font-weight="700" fill="#43300a">5</text>
+      <text x="94" y="84" font-size="18" font-weight="700" fill="#233e38">Next steps</text>
+      <text x="94" y="106" font-size="13" fill="#6b4a0e">plus real help</text>
+    </g>
+  </g>
+</svg>
