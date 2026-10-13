@@ -29,7 +29,7 @@ test("authored weights and bounds preserve the original behavior", () => {
     repair: 10,
     harmful: -20,
     promise: -5,
-    neutral: 0,
+    neutral: 5,
     unknown: 0,
   });
   const s = content.scenarios[0];

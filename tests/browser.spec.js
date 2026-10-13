@@ -103,23 +103,26 @@ test("each question allows two attempts, then moves on", async ({ page }) => {
   await expect(page.locator(".deck-progress b")).toHaveText("2");
   await expect(page.locator(".attempt-pill")).toHaveText("Attempt 1 of 2");
 });
-test("relaxation timer finishes, can repeat, and cancels on Escape", async ({
+test("pause: three guided breaths, can repeat, and closes on Escape", async ({
   page,
 }) => {
   await page.clock.install();
   await enter(page);
   await page.locator("#pause-session").click();
-  await expect(page.locator("#calm-seconds")).toHaveText("30");
-  await page.clock.fastForward(30000);
-  await expect(page.locator("#calm-seconds")).toHaveText("0");
-  await expect(page.locator("#calm-cue")).toContainText("complete");
-  await page.locator("#calm-start").click();
+  await expect(page.locator(".pz")).toBeVisible();
+  await expect(page.locator(".pz-end")).toBeFocused();
+  await page.clock.fastForward(1500);
+  await expect(page.locator(".pz-live")).toHaveText("Breathe in");
+  await expect(page.locator(".pz-progress-label")).toHaveText("Breath 1 of 3");
+  await page.clock.fastForward(31000);
+  await expect(page.locator(".pz-live")).toContainText("complete");
+  await page.locator(".pz-again").click();
   await page.clock.fastForward(1000);
-  await expect(page.locator("#calm-seconds")).toHaveText("29");
+  await expect(page.locator(".pz-progress-label")).toHaveText("Breath 1 of 3");
   await page.keyboard.press("Escape");
-  await page.clock.fastForward(35000);
-  await page.locator("#pause-session").click();
-  await expect(page.locator("#calm-seconds")).toHaveText("30");
+  await page.clock.fastForward(2000);
+  await expect(page.locator(".pz")).toBeHidden();
+  await expect(page.locator("#pause-session")).toBeFocused();
 });
 test("review status, rule explanation, keyboard dialog behavior", async ({
   page,
@@ -249,17 +252,23 @@ test("pause: card button on Get ready, pill on every other screen, feedback pres
   await page.locator('[data-select="0"]').click();
   await expect(page.locator("#pause-session")).toBeHidden();
   await page.locator("#breathe").click();
-  await expect(page.locator("#calm-cue")).toContainText("Breathe in");
+  await page.clock.fastForward(1500);
+  await expect(page.locator(".pz-live")).toHaveText("Breathe in");
   await page.clock.fastForward(4000);
-  await expect(page.locator("#calm-cue")).toContainText("Breathe out");
-  await page.locator("#calm-return").click();
+  await expect(page.locator(".pz-live")).toHaveText("Breathe out");
+  await page.locator(".pz-end").click();
+  await page.clock.fastForward(2000);
+  await expect(page.locator(".pz")).toBeHidden();
   await page.locator("#begin").click();
   await expect(page.locator("#pause-session")).toBeVisible();
   await page.locator('[data-kind="good"]').click();
   const feedback = await page.locator(".feedback-title").innerText();
   await page.locator("#pause-session").click();
-  await page.clock.fastForward(30000);
-  await page.locator("#calm-return").click();
+  await page.clock.fastForward(1500);
+  await page.clock.fastForward(31000);
+  await page.locator(".pz-ready").click();
+  await page.clock.fastForward(2000);
+  await expect(page.locator(".pz")).toBeHidden();
   await expect(page.locator(".feedback-title")).toHaveText(feedback);
   await page.locator('[data-kind="good"]').click();
   await page.locator('[data-kind="good"]').click();

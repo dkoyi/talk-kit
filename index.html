@@ -11,7 +11,9 @@
     <title>Talk Kit — A little practice. A closer connection.</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/talkkit-v2.css" />
     <script type="module" src="assets/app.js"></script>
+    <script defer src="assets/pause.js"></script>
   </head>
   <body>
     <div id="splash" class="splash" role="status" aria-label="Loading Talk Kit">
@@ -37,7 +39,7 @@
       <nav aria-label="Main navigation">
         <button class="review-nav" id="review-nav">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
-          <span class="review-label">Expert review</span>
+          <span class="review-label">Expert reviewed</span>
         </button>
         <button class="aboutnav" id="about-nav">About</button>
         <button class="urgent" id="now-nav">
@@ -49,8 +51,8 @@
         </button>
       </nav>
     </header>
-    <button id="pause-session" class="pause-session" hidden>
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19l8-8"/></svg
+    <button id="pause-session" class="pause-session" type="button" data-pause-open data-wash="#f7cc63" hidden>
+      <span class="pill-sun" data-pause-icon><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19l8-8"/></svg></span
       ><span><b>Take a pause</b></span>
     </button>
     <main id="app" tabindex="-1">
@@ -72,5 +74,51 @@
         Call 911 (US) or your local emergency number.
       </p></noscript
     >
+    <div class="pz" hidden role="dialog" aria-modal="true" aria-labelledby="pz-title"><svg class="pz-scene" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+<defs>
+  <linearGradient id="pz-sky" x1="0" y1="0" x2="0" y2="590" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#d6e4e0"/><stop offset=".45" stop-color="#e9eee2"/><stop offset=".78" stop-color="#f6e6c2"/><stop offset="1" stop-color="#f7d79a"/>
+  </linearGradient>
+  <radialGradient id="pz-glow" cx="720" cy="575" r="640" gradientTransform="matrix(1 0 0 .5 0 287.5)" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#f8cc6e" stop-opacity=".9"/><stop offset=".35" stop-color="#f8d68e" stop-opacity=".45"/><stop offset="1" stop-color="#f8e0b0" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="pz-lake" x1="0" y1="590" x2="0" y2="900" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#4f7a6b"/><stop offset=".06" stop-color="#3e685a"/><stop offset=".3" stop-color="#325b4d"/><stop offset="1" stop-color="#22443a"/>
+  </linearGradient>
+  <filter id="pz-paint" x="-5%" y="-20%" width="110%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency=".010 .045" numOctaves="2" seed="4"/>
+    <feDisplacementMap in="SourceGraphic" scale="9"/>
+  </filter>
+  <filter id="pz-soft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="10"/></filter>
+  <filter id="pz-blur2" x="-5%" y="-20%" width="110%" height="140%"><feGaussianBlur stdDeviation="2.5"/></filter>
+  <filter id="pz-grain">
+    <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="9" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 .2  0 0 0 0 .25  0 0 0 0 .2  0 0 0 .55 0"/>
+  </filter>
+</defs>
+<rect width="1440" height="590" fill="url(#pz-sky)"/>
+<rect width="1440" height="620" fill="url(#pz-glow)"/>
+<g fill="#fffaf2" opacity=".55" filter="url(#pz-soft)">
+  <ellipse cx="300" cy="190" rx="210" ry="16"/><ellipse cx="420" cy="214" rx="150" ry="10"/>
+  <ellipse cx="1150" cy="150" rx="230" ry="14"/><ellipse cx="1040" cy="176" rx="130" ry="9"/>
+</g>
+<g filter="url(#pz-paint)">
+  <path fill="#c8d8c1" d="M-20 548 C 120 506 250 508 380 528 C 520 550 610 500 760 506 C 900 512 1000 552 1140 534 C 1260 518 1350 516 1460 538 V 600 H -20 Z"/>
+  <path fill="#a9c3a5" d="M-20 566 C 100 538 200 540 320 560 C 420 576 520 566 610 578 C 700 590 820 584 920 572 C 1030 560 1100 536 1230 538 C 1330 540 1400 552 1460 560 V 600 H -20 Z"/>
+  <path fill="#7ea58a" d="M-20 600 V 572 C 70 556 170 562 250 580 C 290 589 320 595 350 600 Z"/>
+  <path fill="#6a957c" d="M1460 600 V 552 C 1380 548 1290 558 1200 580 C 1170 588 1140 595 1110 600 Z"/>
+  <g fill="#557f69">
+    <circle cx="1300" cy="556" r="16"/><circle cx="1322" cy="550" r="20"/><circle cx="1348" cy="556" r="15"/><circle cx="1385" cy="548" r="18"/><circle cx="1410" cy="552" r="14"/>
+    <circle cx="70" cy="570" r="13"/><circle cx="92" cy="564" r="17"/><circle cx="114" cy="570" r="12"/>
+  </g>
+</g>
+<rect y="590" width="1440" height="310" fill="url(#pz-lake)"/>
+<g filter="url(#pz-blur2)" opacity=".38">
+  <path fill="#2c5548" d="M-20 590 V 612 C 100 640 200 636 320 618 C 420 604 520 612 610 604 C 700 594 820 600 920 610 C 1030 620 1100 642 1230 640 C 1330 638 1400 628 1460 620 V 590 Z"/>
+  <path fill="#22463b" d="M-20 590 V 618 C 70 634 170 628 250 610 C 290 601 320 595 350 590 Z M1460 590 V 636 C 1380 640 1290 630 1200 610 C 1170 602 1140 595 1110 590 Z"/>
+</g>
+<rect y="588" width="1440" height="4" fill="#dbe6d2" opacity=".28" filter="url(#pz-blur2)"/>
+<rect width="1440" height="900" filter="url(#pz-grain)" opacity=".14"/>
+</svg><div class="pz-ambient" aria-hidden="true"><span class="pz-mote" style="--x:16%;--y:30%;--t:13s;--d:-2s"></span><span class="pz-mote" style="--x:26%;--y:46%;--t:11s;--d:-6s"></span><span class="pz-mote" style="--x:35%;--y:20%;--t:15s;--d:-9s"></span><span class="pz-mote" style="--x:66%;--y:24%;--t:12s;--d:-4s"></span><span class="pz-mote" style="--x:74%;--y:44%;--t:14s;--d:-11s"></span><span class="pz-mote" style="--x:84%;--y:33%;--t:16s;--d:-7s"></span><span class="pz-mote" style="--x:9%;--y:52%;--t:15s;--d:-12s"></span><span class="pz-mote" style="--x:92%;--y:56%;--t:11s;--d:-5s"></span><span class="pz-glint" style="--x:14%;--y:72%;--w:60px;--t:8s;--d:-1s"></span><span class="pz-glint" style="--x:28%;--y:80%;--w:38px;--t:7s;--d:-4s"></span><span class="pz-glint" style="--x:72%;--y:75%;--w:70px;--t:9s;--d:-2s"></span><span class="pz-glint" style="--x:84%;--y:86%;--w:44px;--t:7.5s;--d:-5s"></span><span class="pz-glint" style="--x:38%;--y:92%;--w:52px;--t:8.5s;--d:-6s"></span><span class="pz-glint" style="--x:6%;--y:88%;--w:40px;--t:9s;--d:-7s"></span><span class="pz-reflect"></span><span class="pz-ripple"></span><span class="pz-ripple"></span><span class="pz-ripple"></span><svg class="pz-birds" viewBox="0 0 72 28"><path d="M4 14q5-6 10 0q5-6 10 0"/><path d="M34 6q4-5 8 0q4-5 8 0"/><path d="M50 20q3.5-4 7 0q3.5-4 7 0"/></svg></div><div class="pz-wash" aria-hidden="true"></div><button class="pz-close" type="button" aria-label="Close pause"><svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><section class="pz-sky"><h2 class="pz-title" id="pz-title">Take a pause</h2><div class="pz-stage"><div class="pz-breath"><span class="pz-halo" aria-hidden="true"></span><span class="pz-sun" aria-hidden="true"></span><svg class="pz-ring" viewBox="0 0 100 100" aria-hidden="true"><circle class="pz-ring-track" cx="50" cy="50" r="48"/><circle class="pz-ring-fill" cx="50" cy="50" r="48" pathLength="100"/></svg><div class="pz-specks" aria-hidden="true"><span class="pz-speck" style="--x:94.9%;--y:63.9%;--d:0ms"></span><span class="pz-speck" style="--x:78.2%;--y:87.6%;--d:137ms"></span><span class="pz-speck" style="--x:50.7%;--y:97.0%;--d:274ms"></span><span class="pz-speck" style="--x:22.9%;--y:88.4%;--d:411ms"></span><span class="pz-speck" style="--x:5.5%;--y:65.2%;--d:548ms"></span><span class="pz-speck" style="--x:5.1%;--y:36.1%;--d:685ms"></span><span class="pz-speck" style="--x:21.8%;--y:12.4%;--d:822ms"></span><span class="pz-speck" style="--x:49.3%;--y:3.0%;--d:59ms"></span><span class="pz-speck" style="--x:77.1%;--y:11.6%;--d:196ms"></span><span class="pz-speck" style="--x:94.5%;--y:34.8%;--d:333ms"></span></div><div class="pz-say" aria-hidden="true"><span class="pz-say-1">Breathe</span><span class="pz-say-2"><svg class="hk-icon pz-arrow-in" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg><svg class="hk-icon pz-arrow-out" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg><span class="pz-word">in</span></span><span class="pz-count">4</span></div><span class="pz-tick" aria-hidden="true"><svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div></div><p class="pz-live hk-sr" aria-live="polite"></p></section><section class="pz-lake"><p class="pz-cue" aria-hidden="true"><span class="pz-cue-word">Breathe in</span><span class="pz-cue-count">4</span></p><div class="pz-progress"><span class="pz-dots" aria-hidden="true"><i class="pz-dot is-now"></i><i class="pz-dot"></i><i class="pz-dot"></i></span><span class="pz-progress-label">Breath 1 of 3</span></div><p class="pz-hint">Follow the sun. Breathe in as it grows, out as it shrinks.</p><p class="pz-done-title">Your pause is complete.</p><div class="pz-actions"><button class="pz-btn pz-btn-solid pz-end" type="button">End pause</button><div class="pz-done-actions"><button class="pz-btn pz-btn-solid pz-ready" type="button">I&rsquo;m ready <svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button class="pz-btn pz-btn-ghost pz-again" type="button"><svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4.5h4.5"/></svg>Again</button></div></div></section></div>
   </body>
 </html>

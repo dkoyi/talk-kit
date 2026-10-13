@@ -1,11 +1,12 @@
-// Story weights: kind answers +20, making it right +10, blame -20. They are not
+// Story weights: kind answers +20, making it right +10, asking a question +5, blame -20.
+// On the second ("make it right") attempt, positive answers earn half. They are not
 // clinically validated scores or measurements of a child's trust.
 export const RULES = Object.freeze({
   good: 20,
   repair: 10,
   harmful: -20,
   promise: -5,
-  neutral: 0,
+  neutral: 5,
   unknown: 0,
 });
 export const clampScore = (score) => Math.max(5, Math.min(95, score));

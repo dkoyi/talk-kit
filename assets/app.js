@@ -33,7 +33,6 @@ let content,
 let activeAudio = null;
 let recordings = {};
 let breathTimer = null,
-  breathDeadline = 0,
   toastTimer = null,
   voiceToken = 0,
   modalReturn = null;
@@ -320,26 +319,17 @@ const CATEGORY_ICONS = {
   boundaries: "clock",
 };
 function home() {
-  return `<section class="hero new-hero"><div class="hero-copy"><h1>Practice the<br><em>hard talks.</em></h1><p>Kids face tricky things online. Practice what to say before it happens.</p><div class="hero-actions"><button class="primary" id="start">Let’s start <span aria-hidden="true">↓</span></button><button class="text-button" id="how-button">How it works <span aria-hidden="true">↓</span></button></div><div class="privacy">${icon("lock")} Free · No sign-up</div></div><div class="hero-stage" aria-label="An example practice card"><span class="blob blob-one" aria-hidden="true"></span><span class="blob blob-two" aria-hidden="true"></span>${sprig("sprig-left")}${sprig("sprig-right", true)}${twinkle("tw-one")}${twinkle("tw-two")}${twinkle("tw-three")}<span class="floating-tag top-tag">${icon("happy")} Safe to try</span><span class="spark spark-one" aria-hidden="true">✳</span><div class="back-card one"></div><div class="back-card two"></div><div class="hero-demo"><div class="demo-top"><span class="pill">MAYA, 14</span></div><div class="demo-character">${childArt(0, "happy")}</div><blockquote>“Can I tell you<br>something?”</blockquote><div class="demo-response"><span aria-hidden="true">♡</span> “Of course. I’m listening.”</div></div><span class="floating-tag bottom-tag"><span aria-hidden="true">↺</span> Try again anytime</span></div></section><section id="situations" class="situation-section"><div class="section-head"><div><h2>Pick a moment</h2></div>${sprig("sprig-head")}${twinkle("tw-head")}</div><div class="category-tabs" role="group" aria-label="Conversation topics">${content.categories.map((cat) => `<button data-category="${esc(cat.id)}" aria-pressed="${cat.id === activeCategory}">${icon(CATEGORY_ICONS[cat.id] || "chat", "cat-icon")} ${esc(cat.label)}</button>`).join("")}</div><div class="cards">${scenarios
+  return `<div class="hk-scope"><section class="hk-hero" aria-labelledby="hk-h1"><div class="hk-copy"><p class="hk-aud"><svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="6" r="2.6"/><path d="M3.5 20v-4.5a4.5 4.5 0 0 1 9 0V20"/><circle cx="17" cy="10.2" r="2"/><path d="M13.6 20v-2.6a3.4 3.4 0 0 1 6.8 0V20"/></svg>For parents &amp; caregivers</p><h1 class="hk-h1" id="hk-h1">Practice the <span class="hk-key">hard talks</span>, before your child needs you to.</h1><p class="hk-sub">Short, guided practice for the tough talks about your child’s life online. Built with licensed child-care professionals.</p><div class="hk-ctas"><button class="hk-btn" id="start" type="button">Try a practice conversation <svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button><button class="hk-link" id="how-button" type="button">How it works <svg class="hk-icon hk-icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button></div><ul class="hk-trust"><li><svg class="hk-icon hk-icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Built with licensed child-care professionals</li><li><svg class="hk-icon hk-icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.6"/><path d="M5.7 5.7l3.8 3.8M14.5 14.5l3.8 3.8M18.3 5.7l-3.8 3.8M9.5 14.5l-3.8 3.8"/></svg>Practice only &middot; not therapy &middot; always points to real help</li><li><svg class="hk-icon hk-icon-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9.5" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Free &middot; No sign-up &middot; Nothing saved</li></ul></div><figure class="hk-demo" aria-label="Example rehearsal with Maya, 14"><span class="hk-back hk-back-2" aria-hidden="true"></span><span class="hk-back hk-back-1" aria-hidden="true"></span><svg class="hk-sprout" viewBox="0 0 92 96" aria-hidden="true"><path class="stem" d="M46 96C46 72 44 52 50 30"/><path class="l1" d="M47 66C30 68 15 58 11 43C29 41 44 50 47 66Z"/><path class="l2" d="M48 50C63 48 77 37 80 21C62 22 50 32 48 50Z"/><path class="l3" d="M50 31C42 22 42 10 49 1C58 9 59 21 50 31Z"/></svg><div class="hk-card"><span class="hk-chip">MAYA, 14</span><div class="hk-portrait">${childArt(0, "happy")}</div><p class="hk-label">Your child says:</p><p class="hk-quote">&ldquo;Can I tell you something?&rdquo;</p><p class="hk-label">You reply:</p><p class="hk-reply"><svg class="hk-icon hk-icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7.5-4.4-7.5-10A4.5 4.5 0 0 1 12 6.6 4.5 4.5 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg>&ldquo;Of course. I&rsquo;m listening.&rdquo;</p><div class="hk-meter" role="img" aria-label="Openness meter: Maya is opening up"><div class="hk-meter-track"><span class="hk-meter-thumb"><svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14q3.5 3.5 7 0"/><path d="M9 9.5h.01M15 9.5h.01"/></svg></span></div><p class="hk-meter-cap"><span>See how your words might land</span><strong>Opening up</strong></p></div></div><span class="hk-tag hk-tag-1"><svg class="hk-icon hk-icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14q3.5 3.5 7 0"/><path d="M9 9.5h.01M15 9.5h.01"/></svg>Safe to try</span><span class="hk-tag hk-tag-2"><svg class="hk-icon hk-icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4.5h4.5"/></svg>Try again anytime</span></figure></section><p class="hk-bond"><svg viewBox="0 0 92 96" aria-hidden="true"><path d="M46 96C46 72 44 52 50 30" fill="none" stroke="#4f8a63" stroke-width="6" stroke-linecap="round"/><path d="M47 66C30 68 15 58 11 43C29 41 44 50 47 66Z" fill="#6aa47b"/><path d="M48 50C63 48 77 37 80 21C62 22 50 32 48 50Z" fill="#4f8a63"/><path d="M50 31C42 22 42 10 49 1C58 9 59 21 50 31Z" fill="#8cc08c"/></svg>Every bond grows with small words.</p><ol class="hk-steps" id="how" aria-label="How it works"><li class="hk-step"><span class="hk-step-ic"><svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15a2 2 0 0 1-2 2H8l-4 3.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M12 8v3.5"/><path d="M12 14h.01"/></svg><span class="hk-step-n">1</span></span><div><h3>Pick a real moment</h3><p>A stranger asks for photos</p></div></li><li class="hk-step"><span class="hk-step-ic"><svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4.5h4.5"/></svg><span class="hk-step-n">2</span></span><div><h3>Practice what you&rsquo;d say</h3><p>Try it, and try again</p></div></li><li class="hk-step"><span class="hk-step-ic"><svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20v-8"/><path d="M12 12c0-3.3-2.7-6-6-6H4v1c0 3.3 2.7 6 6 6h2"/><path d="M12 10c0-2.8 2.2-5 5-5h3v1c0 2.8-2.2 5-5 5h-3"/></svg><span class="hk-step-n">3</span></span><div><h3>Reflect</h3><p>See how it might land, and what to do next</p></div></li></ol></div><section id="situations" class="situation-section"><div class="section-head"><div><h2>Pick a moment</h2></div>${sprig("sprig-head")}${twinkle("tw-head")}</div><div class="category-tabs" role="group" aria-label="Conversation topics">${content.categories.map((cat) => `<button data-category="${esc(cat.id)}" aria-pressed="${cat.id === activeCategory}">${icon(CATEGORY_ICONS[cat.id] || "chat", "cat-icon")} ${esc(cat.label)}</button>`).join("")}</div><div class="cards">${scenarios
     .map((s, i) => ({ s, i }))
     .filter(({ s }) => s.categoryId === activeCategory)
     .map(
       ({ s, i }) =>
         `<article class="card scenario-card theme-${s.characterIndex}"><div class="portrait"><span class="topic">${esc(s.topic)}</span>${twinkle("tw-card")}${childArt(s.characterIndex)}</div><div class="card-content"><div class="character-meta"><span>${esc(s.name)} <span class="age">Age ${s.age}</span></span></div><h3>${esc(s.headline)}</h3><button class="deck-button" data-select="${i}">Start <span aria-hidden="true">↗</span></button></div></article>`,
     )
-    .join("")}</div></section><section class="how" id="how" aria-label="How it works">${[
-    ["eye", "Pick a moment"],
-    ["chat", "Choose what to say"],
-    ["happy", "See how they feel"],
-  ]
-    .map(
-      (x) =>
-        `<div><span class="how-number">${icon(x[0])}</span><strong>${x[1]}</strong></div>`,
-    )
-    .join("")}</section>`;
+    .join("")}</div></section>`;
 }
 function prep() {
-  return `${step(1)}<div class="prep-title"><h1>Get <em>ready.</em></h1></div><div class="prep-layout"><section class="panel scenario-intro theme-${c().characterIndex}"><div class="intro-hero"><div class="portrait">${childArt(c().characterIndex)}</div><div class="intro-name">${esc(c().name)}<span>Age ${c().age}</span></div></div><blockquote>“${esc(c().open)}”</blockquote><p class="muted">${esc(c().context)}</p><button class="text-button small rules-link" data-rules>ⓘ How this works</button></section><section class="panel preparation"><div class="tips"><div class="tip"><strong>${icon("check", "good-icon")} Try saying</strong><p>${(c().say || ["“Thank you for telling me.”", "“You’re not to blame.”", "“What would help right now?”"]).map(esc).join("<br>")}</p></div><div class="tip avoid"><strong>${icon("cross", "bad-icon")} Avoid</strong><p>${(c().avoid || ["Blaming or dismissing.", "Threatening punishment.", "Taking over without listening."]).map(esc).join("<br>")}</p></div></div><button class="breath-launch" id="breathe"><span class="breath-icon">${icon("leaf")}</span><span><strong>Take a breath first</strong><small>30 seconds</small></span><span aria-hidden="true">↗</span></button><button class="primary full-width" id="begin">I’m ready <span aria-hidden="true">→</span></button></section></div>`;
+  return `${step(1)}<div class="prep-title"><h1>Get <em>ready.</em></h1></div><div class="prep-layout"><section class="panel scenario-intro theme-${c().characterIndex}"><div class="intro-hero"><div class="portrait">${childArt(c().characterIndex)}</div><div class="intro-name">${esc(c().name)}<span>Age ${c().age}</span></div></div><blockquote>“${esc(c().open)}”</blockquote><p class="muted">${esc(c().context)}</p><button class="text-button small rules-link prep-rules" data-rules>ⓘ How this works</button></section><section class="panel preparation"><div class="tips"><div class="tip"><strong>${icon("check", "good-icon")} Try saying</strong><p>${(c().say || ["“Thank you for telling me.”", "“You’re not to blame.”", "“What would help right now?”"]).map(esc).join("<br>")}</p></div><div class="tip avoid"><strong>${icon("cross", "bad-icon")} Avoid</strong><p>${(c().avoid || ["Blaming or dismissing.", "Threatening punishment.", "Taking over without listening."]).map(esc).join("<br>")}</p></div></div><button class="gr-breath" id="breathe" type="button" data-pause-open data-wash="#f7cc63"><span class="gr-breath-ic" data-pause-icon><svg class="hk-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19h18"/><path class="sun" d="M7 19a5 5 0 0 1 10 0"/><path class="sun" d="M12 8.5v2.5M6.3 11.3l1.6 1.6M17.7 11.3l-1.6 1.6"/></svg></span><span><span class="gr-breath-t">Take a breath first</span><span class="gr-breath-s">30 seconds · follow the sun</span></span><span class="gr-breath-go" aria-hidden="true"><svg class="hk-icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button><button class="primary full-width" id="begin">I’m ready <span aria-hidden="true">→</span></button></section></div>`;
 }
 function practice() {
   const last = lastTurn();
@@ -401,6 +391,9 @@ const resultIcon = (kind) =>
   icon(RESULT_ICONS[kind] || "question", `result-${kind}`);
 function respond(text, kind, choice = {}) {
   stopVoice();
+  // On the second attempt, positive answers earn half ("making it right" is already +10).
+  if (repairMode && kind !== "repair" && RULES[kind] > 0 && !Number.isFinite(choice.delta))
+    choice = { ...choice, delta: Math.ceil(RULES[kind] / 2) };
   const turn = evaluate(text, kind, c(), score, choice);
   score = turn.after;
   turns.push(turn);
@@ -569,13 +562,12 @@ function bind() {
     .querySelectorAll("[data-rules]")
     .forEach((b) => (b.onclick = showRules));
   on("#start", () => $("#situations").scrollIntoView({ behavior: motion() }));
-  on("#how-button", () => $("#how").scrollIntoView({ behavior: motion() }));
+  // Scroll just far enough that all three steps are in view.
+  on("#how-button", () => $("#how").scrollIntoView({ behavior: motion(), block: "end" }));
   on("#begin", () => {
     reset();
     go("practice");
   });
-  on("#breathe", showCalm);
-  on("#calm", showCalm);
   on("#restart", () => {
     openModal(
       `<h2 id="modal-title">Start over?</h2><p>Your answers will be cleared.</p><div class="modal-actions"><button class="primary" id="confirm-restart">↺ Start over</button><button class="secondary" data-close>Keep going</button></div>`,
@@ -649,74 +641,56 @@ $("#modal").addEventListener("click", (e) => {
   }
 });
 // The pause: a painted dawn lake with a sun that breathes (4s in, 6s out, three times).
-const PAUSE_SCENE = `<svg class="pause-scene" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><defs><linearGradient id="pz-sky" x1="0" y1="0" x2="0" y2="590" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#d6e4e0"/><stop offset=".45" stop-color="#e9eee2"/><stop offset=".78" stop-color="#f4e4cd"/><stop offset="1" stop-color="#f5d4b0"/></linearGradient><radialGradient id="pz-glow" cx="720" cy="575" r="640" gradientTransform="matrix(1 0 0 .5 0 287.5)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f7c493" stop-opacity=".9"/><stop offset=".35" stop-color="#f6cfa6" stop-opacity=".45"/><stop offset="1" stop-color="#f6d8b8" stop-opacity="0"/></radialGradient><linearGradient id="pz-lake" x1="0" y1="590" x2="0" y2="900" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4f7a6b"/><stop offset=".06" stop-color="#3e685a"/><stop offset=".3" stop-color="#325b4d"/><stop offset="1" stop-color="#22443a"/></linearGradient><filter id="pz-paint" x="-5%" y="-20%" width="110%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".010 .045" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="9"/></filter><filter id="pz-soft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="10"/></filter><filter id="pz-blur2" x="-5%" y="-20%" width="110%" height="140%"><feGaussianBlur stdDeviation="2.5"/></filter><filter id="pz-grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="9" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 .2  0 0 0 0 .25  0 0 0 0 .2  0 0 0 .55 0"/></filter></defs><rect width="1440" height="590" fill="url(#pz-sky)"/><rect width="1440" height="620" fill="url(#pz-glow)"/><g fill="#fffaf2" opacity=".55" filter="url(#pz-soft)"><ellipse cx="300" cy="190" rx="210" ry="16"/><ellipse cx="420" cy="214" rx="150" ry="10"/><ellipse cx="1150" cy="150" rx="230" ry="14"/><ellipse cx="1040" cy="176" rx="130" ry="9"/></g><g filter="url(#pz-paint)"><path fill="#c8d8c1" d="M-20 548 C 120 506 250 508 380 528 C 520 550 610 500 760 506 C 900 512 1000 552 1140 534 C 1260 518 1350 516 1460 538 V 600 H -20 Z"/><path fill="#a9c3a5" d="M-20 566 C 100 538 200 540 320 560 C 420 576 520 566 610 578 C 700 590 820 584 920 572 C 1030 560 1100 536 1230 538 C 1330 540 1400 552 1460 560 V 600 H -20 Z"/><path fill="#7ea58a" d="M-20 600 V 572 C 70 556 170 562 250 580 C 290 589 320 595 350 600 Z"/><path fill="#6a957c" d="M1460 600 V 552 C 1380 548 1290 558 1200 580 C 1170 588 1140 595 1110 600 Z"/><g fill="#557f69"><circle cx="1300" cy="556" r="16"/><circle cx="1322" cy="550" r="20"/><circle cx="1348" cy="556" r="15"/><circle cx="1385" cy="548" r="18"/><circle cx="1410" cy="552" r="14"/><circle cx="70" cy="570" r="13"/><circle cx="92" cy="564" r="17"/><circle cx="114" cy="570" r="12"/></g></g><rect y="590" width="1440" height="310" fill="url(#pz-lake)"/><g filter="url(#pz-blur2)" opacity=".38"><path fill="#2c5548" d="M-20 590 V 612 C 100 640 200 636 320 618 C 420 604 520 612 610 604 C 700 594 820 600 920 610 C 1030 620 1100 642 1230 640 C 1330 638 1400 628 1460 620 V 590 Z"/><path fill="#22463b" d="M-20 590 V 618 C 70 634 170 628 250 610 C 290 601 320 595 350 590 Z M1460 590 V 636 C 1380 640 1290 630 1200 610 C 1170 602 1140 595 1110 590 Z"/></g><rect y="588" width="1440" height="4" fill="#dbe6d2" opacity=".28" filter="url(#pz-blur2)"/><rect width="1440" height="900" filter="url(#pz-grain)" opacity=".14"/></svg>`;
-const PAUSE_AMBIENT = `<div class="pause-ambient" aria-hidden="true"><span class="speck" style="--x:16%;--y:30%;--s:4px;--d:13s;--delay:-2s"></span><span class="speck" style="--x:26%;--y:46%;--s:3px;--d:11s;--delay:-6s"></span><span class="speck" style="--x:35%;--y:22%;--s:3px;--d:15s;--delay:-9s"></span><span class="speck" style="--x:64%;--y:26%;--s:4px;--d:12s;--delay:-4s"></span><span class="speck" style="--x:72%;--y:44%;--s:3px;--d:14s;--delay:-11s"></span><span class="speck" style="--x:83%;--y:34%;--s:5px;--d:16s;--delay:-7s"></span><span class="speck" style="--x:44%;--y:54%;--s:3px;--d:12s;--delay:-3s"></span><span class="speck" style="--x:57%;--y:52%;--s:4px;--d:13s;--delay:-8s"></span><span class="speck" style="--x:9%;--y:52%;--s:3px;--d:15s;--delay:-12s"></span><span class="speck" style="--x:92%;--y:56%;--s:3px;--d:11s;--delay:-5s"></span><span class="shimmer" style="--x:14%;--y:72%;--w:60px;--d:8s;--delay:-1s"></span><span class="shimmer" style="--x:28%;--y:80%;--w:38px;--d:7s;--delay:-4s"></span><span class="shimmer" style="--x:70%;--y:74%;--w:70px;--d:9s;--delay:-2s"></span><span class="shimmer" style="--x:82%;--y:84%;--w:44px;--d:7.5s;--delay:-5s"></span><span class="shimmer" style="--x:40%;--y:90%;--w:52px;--d:8.5s;--delay:-6s"></span><span class="shimmer" style="--x:60%;--y:93%;--w:34px;--d:7s;--delay:-3s"></span><span class="shimmer" style="--x:6%;--y:88%;--w:40px;--d:9s;--delay:-7s"></span><span class="shimmer" style="--x:90%;--y:70%;--w:36px;--d:8s;--delay:-0.5s"></span><span class="breath-reflection"></span><span class="ripples"><span class="ripple"></span><span class="ripple"></span><span class="ripple"></span></span><svg class="birds" viewBox="0 0 72 28"><path d="M4 14q5-6 10 0q5-6 10 0"/><path d="M34 6q4-5 8 0q4-5 8 0"/><path d="M50 20q3.5-4 7 0q3.5-4 7 0"/></svg></div>`;
-const CUE_IN = "Breathe in gently…";
-const CUE_OUT = "Breathe out slowly…";
-function showCalm() {
-  openModal(
-    `<div class="pause is-running">${PAUSE_SCENE}${PAUSE_AMBIENT}<section class="pause-sky"><h2 class="pause-title" id="modal-title">Take a pause</h2><div class="breath"><span class="breath-halo" aria-hidden="true"></span><span class="breath-ring" aria-hidden="true"></span><span class="breath-core" aria-hidden="true"></span><p class="countdown" role="timer" aria-atomic="true"><span class="countdown-num" id="calm-seconds">30</span><span class="sr-only"> seconds left</span></p><span class="breath-done" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div></section><section class="pause-lake"><p class="cue-line" id="calm-cue" aria-live="polite" aria-atomic="true">${CUE_IN}</p><p class="status-line" id="calm-status">Follow the circle. Your progress is saved.</p><div class="pause-actions"><button class="pause-btn btn-end" id="calm-return" data-close>End pause</button><button class="pause-btn btn-again" id="calm-start" hidden>${icon("retry")} Again</button></div></section></div>`,
-    "calm-fullscreen",
-  );
-  const root = $(".pause");
-  const cueEl = $("#calm-cue");
-  // Which words belong at a moment of the 10-second breath.
-  const cueAt = (t) => (t % 10 < 4 ? CUE_IN : CUE_OUT);
-  const start = () => {
-    clearInterval(breathTimer);
-    breathDeadline = Date.now() + 30000;
-    // Restart the CSS breath so the sun, halo and ripples begin together.
-    root.classList.remove("is-running", "is-done");
-    void root.offsetWidth;
-    root.classList.add("is-running");
-    $("#calm-start").hidden = true;
-    $("#calm-return").className = "pause-btn btn-end";
-    $("#calm-return").textContent = "End pause";
-    $("#calm-status").textContent = "Follow the circle. Your progress is saved.";
-    cueEl.classList.remove("is-fading");
-    cueEl.textContent = CUE_IN;
-    const tick = () => {
-      const msLeft = Math.max(0, breathDeadline - Date.now());
-      const left = Math.ceil(msLeft / 1000);
-      $("#calm-seconds").textContent = left;
-      if (left === 0) {
-        clearInterval(breathTimer);
-        breathTimer = null;
-        root.classList.remove("is-running");
-        root.classList.add("is-done");
-        cueEl.classList.remove("is-fading");
-        cueEl.textContent = "Your pause is complete.";
-        $("#calm-status").textContent = "Your progress is saved.";
-        $("#calm-return").className = "pause-btn btn-ready";
-        $("#calm-return").innerHTML = `I’m ready ${icon("arrow")}`;
-        $("#calm-start").hidden = false;
-        return;
-      }
-      // The words fade out just before the breath turns, swap, then fade back in.
-      const elapsed = 30 - msLeft / 1000;
-      const shown = cueAt(elapsed + 0.05);
-      if (cueEl.textContent !== shown) cueEl.textContent = shown;
-      cueEl.classList.toggle("is-fading", cueAt(elapsed + 0.4) !== shown);
-    };
-    tick();
-    breathTimer = setInterval(tick, 100);
-  };
-  on("#calm-start", start);
-  start();
-}
+// "How this works": a live meter that steps through each kind of answer, moving the
+// knob right or left by its points and back, so parents see the mechanic in seconds.
+const RULE_DEMO = [
+  ["good", "Kind, supportive", "happy"],
+  ["repair", "Making it right", "calm"],
+  ["neutral", "Asking a question", "calm"],
+  ["promise", "Promising secrecy", "worried"],
+  ["harmful", "Blaming", "sad"],
+];
+const signed = (v) => (v > 0 ? `+${v}` : `${v}`);
+// Points on the second ("make it right") attempt: positive answers count half.
+const secondTry = (k) => (k === "repair" ? RULES.repair : RULES[k] > 0 ? Math.ceil(RULES[k] / 2) : RULES[k]);
 function showRules() {
+  const name = esc(c()?.name || "your child");
   openModal(
-    `<h2 id="modal-title">How the face changes</h2><p>Each answer moves the meter. It’s a story, not a grade.</p><dl class="rule-list">${Object.entries(
-      RULES,
-    )
-      .map(
-        ([k, v]) =>
-          `<div><dt>${`${resultIcon(k)} ${{ good: "Kind, supportive", repair: "Making it right", harmful: "Blaming", promise: "Promising secrecy", neutral: "Asking questions", unknown: "Unclear" }[k]}`}</dt><dd>${v > 0 ? "+" : ""}${v}</dd></div>`,
-      )
-      .join(
-        "",
-      )}</dl><button class="primary full-width" data-close>Got it</button>`,
+    `<h2 id="modal-title">How this works</h2><p class="rules-lead">Your words move how open ${name} feels.</p><div class="rules-demo" aria-hidden="true"><div class="openness-head"><span>How open ${name} feels</span><b id="demo-zone">Opening up</b></div><div class="meter-track demo-meter" id="demo-meter" style="--to:50%"><div class="meter-fill"></div><div class="meter-knob" id="demo-knob">${icon("calm")}</div><span class="meter-delta" id="demo-delta" hidden></span></div></div><dl class="rule-list rule-table"><div class="rule-head"><dt>Your answer</dt><dd>1st try</dd><dd>2nd try</dd></div>${RULE_DEMO.map(
+      ([k, label]) => `<div data-rule="${k}"><dt>${resultIcon(k)} ${label}</dt><dd>${k === "repair" ? "–" : signed(RULES[k])}</dd><dd>${signed(secondTry(k))}</dd></div>`,
+    ).join("")}</dl><ul class="rules-points"><li>Start in the middle. Kind words move right, blame moves left.</li><li>Blame or a risky promise? You get a 2nd try to make it right.</li><li>On the 2nd try, good answers count half.</li></ul><button class="primary full-width" data-close>Got it</button>`,
   );
+  const meter = $("#demo-meter"), knob = $("#demo-knob"), delta = $("#demo-delta"), zone = $("#demo-zone");
+  // Paint the colour scale across the whole bar, so the fill is green on the right.
+  meter.querySelector(".meter-fill").style.backgroundSize = `${meter.offsetWidth}px 100%`;
+  if (motion() === "instant") return;
+  const zoneFor = (v) => (v < 25 ? "Shut down" : v < 50 ? "Guarded" : v < 75 ? "Opening up" : "Talking with you");
+  let i = 0, out = false;
+  const step = () => {
+    if (!meter.isConnected) return clearInterval(breathTimer);
+    const [k, , mood] = RULE_DEMO[i];
+    const v = k === "repair" ? RULES.repair : RULES[k];
+    document.querySelectorAll(".rule-list [data-rule]").forEach((row) => row.classList.toggle("active", row.dataset.rule === k && !out));
+    if (!out) {
+      const to = 50 + v;
+      meter.style.setProperty("--to", `${to}%`);
+      knob.innerHTML = icon(mood);
+      delta.hidden = false;
+      delta.className = `meter-delta ${v > 0 ? "up" : v < 0 ? "down" : "flat"}`;
+      delta.textContent = signed(v);
+      zone.textContent = zoneFor(to);
+    } else {
+      meter.style.setProperty("--to", "50%");
+      knob.innerHTML = icon("calm");
+      delta.hidden = true;
+      zone.textContent = zoneFor(50);
+      i = (i + 1) % RULE_DEMO.length;
+    }
+    out = !out;
+  };
+  clearInterval(breathTimer);
+  breathTimer = setInterval(step, 1100);
+  setTimeout(step, 350);
 }
 function speak({ automatic = false } = {}) {
   const button = $("#listen");
@@ -809,8 +783,27 @@ function speak({ automatic = false } = {}) {
     error.hidden = false;
   }
 }
-$("#home").onclick = () => content && go("home");
-$("#nav-home").onclick = () => content && go("home");
+// Going Home from inside the app replays the loading screen briefly, then shows the home page.
+const splashTemplate = $("#splash")?.cloneNode(true);
+function goHome() {
+  if (!content) return;
+  if (stage === "home" || !splashTemplate || motion() === "instant") return go("home");
+  document.querySelector(".splash")?.remove();
+  const el = splashTemplate.cloneNode(true);
+  el.classList.remove("leaving");
+  el.removeAttribute("id");
+  el.style.animationDelay = "";
+  document.body.append(el);
+  go("home");
+  setTimeout(() => {
+    el.style.animationDelay = "0ms";
+    el.classList.add("leaving");
+    el.addEventListener("animationend", (e) => e.target === el && el.remove());
+    setTimeout(() => el.remove(), 900);
+  }, 950);
+}
+$("#home").onclick = goHome;
+$("#nav-home").onclick = goHome;
 $("#nav-back").onclick = () => {
   if (!content) return;
   const to = stage === "resources" ? returnStage : BACK[stage] || "home";
@@ -824,7 +817,8 @@ $("#about-nav").onclick = () => content && go("about");
 $("#now-nav").onclick = () => {
   if (content) go("resources");
 };
-$("#pause-session").onclick = showCalm;
+// The pause overlay (assets/pause.js) opens from any [data-pause-open] button.
+document.addEventListener("talkkit:pause-open", () => stopVoice());
 window.addEventListener("pagehide", () => {
   stopVoice();
   closeModal();
