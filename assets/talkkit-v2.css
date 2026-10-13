@@ -461,3 +461,42 @@ main[data-stage="home"] { padding-top: 10px; }
   .brand { gap: 7px; font-size: 28px; }
   .brand .brand-icon { width: 38px; height: 38px; }
 }
+
+/* ---------- Conversation heading: one row ---------- */
+/* "Talking with Maya" on the left; the question number, progress lines and Start over on the right. */
+.practice-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; margin-bottom: 18px; }
+.practice-heading h1 em { background: none; padding-bottom: 0; animation: none; }
+.heading-tools { display: flex; align-items: center; gap: 22px; }
+.heading-tools .deck-progress { display: flex; align-items: center; gap: 12px; margin: 0; font-size: 18px; font-weight: 700; color: var(--ink); }
+.heading-tools .deck-progress b { font-size: 22px; font-weight: 800; }
+@media (max-width: 720px) {
+  .heading-tools { width: 100%; justify-content: space-between; gap: 12px; }
+}
+
+/* ---------- Conversation: a little more air at the top, a more compact child card ---------- */
+main[data-stage="practice"] { padding-top: 26px; }
+main[data-stage="practice"] .steps { margin-bottom: 26px; }
+/* Child card: tighter, still clearly separated sections. */
+.character-panel .character-name { margin-top: 14px; }
+.character-panel .character-age { margin: 6px 0 10px; }
+.character-panel .feeling { margin: 0 0 12px; padding: 12px 14px; }
+.character-panel .openness { margin: 8px 0 4px; }
+.character-panel > .text-button.rules-link { margin-top: 10px; }
+@media (max-width: 720px) {
+  main[data-stage="practice"] { padding-top: 14px; }
+  main[data-stage="practice"] .steps { margin-bottom: 18px; }
+}
+/* The heading row lines up with the cards below it. */
+.practice-heading { max-width: 1080px; margin-left: auto; margin-right: auto; }
+/* Start over: a clean outlined pill with a line icon. */
+.practice-heading #restart {
+  gap: 8px; min-height: 44px; padding: 9px 18px 9px 14px;
+  background: #fffdf8; color: var(--green); font-size: 17px; font-weight: 700;
+  border: 1.5px solid #c9dcc4; border-radius: 999px;
+  box-shadow: 0 3px 0 #dbe7d5, 0 8px 18px -12px rgba(38, 92, 76, .45);
+}
+.practice-heading #restart .restart-icon { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .35s ease; }
+.practice-heading #restart:hover { background: #eef5ea; border-color: #b5cfae; }
+.practice-heading #restart:hover .restart-icon { transform: rotate(-60deg); }
+.practice-heading #restart:active { transform: translateY(2px); box-shadow: 0 1px 0 #dbe7d5; }
+.practice-heading #restart:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
