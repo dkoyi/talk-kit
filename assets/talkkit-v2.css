@@ -535,3 +535,8 @@ main[data-stage="practice"] .steps { margin-bottom: 26px; }
   .pz-btn { min-height: 50px; }
   .pz-done-title { font-size: 26px; }
 }
+/* Phones: a little more air between the lines, ending just above the bottom edge; no lake glints behind the words. */
+@media (max-width: 767px) {
+  .pz-lake { padding-top: clamp(16px, 4.2vh, 34px); gap: clamp(10px, 2.9vh, 22px); padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .pz-glint { display: none; }
+}
