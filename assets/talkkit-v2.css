@@ -551,3 +551,8 @@ main[data-stage="practice"] .steps { margin-bottom: 26px; }
 @media (max-width: 767px) {
   .pz.is-done .pz-lake { padding-top: clamp(12px, 3vh, 30px); }
 }
+/* Phones: a bigger sun, sitting lower (closer to the horizon). */
+@media (max-width: 767px) {
+  .pz { --D: min(58vw, 31vh); }
+  .pz-stage { place-items: end center; padding-top: 0; padding-bottom: clamp(10px, 3vh, 26px); }
+}
