@@ -435,3 +435,29 @@ main[data-stage="home"] { padding-top: 10px; }
 @media (max-width: 767px) {
   .hk-scope .hk-hero { min-height: 0; }
 }
+
+/* ---------- Round 7 ---------- */
+/* The conversation page sits a step smaller (85% of before) so the child's panel always fits. */
+@media (min-width: 1024px) {
+  main[data-stage="practice"] { zoom: 0.756; }
+}
+/* Answer reaction pills ("Nice! Maya opened up."): larger and easier to see. */
+.burst-banner { font-size: 24px; gap: 14px; padding: 14px 30px 14px 18px; }
+.burst-banner .icon { width: 34px; height: 34px; }
+@media (max-width: 720px) {
+  .burst-banner { font-size: 19px; padding: 11px 22px 11px 14px; }
+  .burst-banner .icon { width: 28px; height: 28px; }
+}
+/* "Starting fresh." and other short messages slide in, then slide down and fade out. */
+.toast:not([hidden]) { animation: toast-in 320ms cubic-bezier(.2, .8, .3, 1) both; }
+.toast.toast-out { animation: toast-out 380ms ease-in forwards; }
+@keyframes toast-in { from { opacity: 0; transform: translate(-50%, 16px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes toast-out { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, 24px); } }
+@media (prefers-reduced-motion: reduce) { .toast:not([hidden]), .toast.toast-out { animation: none; } }
+/* Nav logo: a larger mark and wordmark, a little closer together. */
+.brand { gap: 8px; font-size: 32px; }
+.brand .brand-icon { width: 46px; height: 46px; }
+@media (max-width: 720px) {
+  .brand { gap: 7px; font-size: 28px; }
+  .brand .brand-icon { width: 38px; height: 38px; }
+}

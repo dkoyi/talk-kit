@@ -276,11 +276,20 @@ function stopVoice() {
     button.setAttribute("aria-pressed", "false");
   }
 }
+// Short messages slide up, stay briefly, then slide down and fade away.
 function toast(text) {
+  const el = $("#toast");
   clearTimeout(toastTimer);
-  $("#toast").textContent = text;
-  $("#toast").hidden = false;
-  toastTimer = setTimeout(() => ($("#toast").hidden = true), 5000);
+  el.textContent = text;
+  el.classList.remove("toast-out");
+  el.hidden = false;
+  toastTimer = setTimeout(() => {
+    el.classList.add("toast-out");
+    toastTimer = setTimeout(() => {
+      el.hidden = true;
+      el.classList.remove("toast-out");
+    }, 380);
+  }, 2200);
 }
 function go(next, anchor = null) {
   if (next === "resources" && stage !== "resources") returnStage = stage;
