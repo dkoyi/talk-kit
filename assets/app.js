@@ -806,7 +806,20 @@ $("#nav-back").onclick = () => {
   if (!content) return;
   const to = stage === "resources" ? returnStage : BACK[stage] || "home";
   // Leaving a scenario lands back on the scenario cards, not the top of the page.
-  go(to, to === "home" && !["about", "review"].includes(stage) ? "#situations" : null);
+  const leave = () => go(to, to === "home" && !["about", "review"].includes(stage) ? "#situations" : null);
+  // Mid-conversation (or finished but before "See how it went"), going back clears the answers: warn first.
+  if (stage === "practice" && turns.length) {
+    openModal(
+      `<h2 id="modal-title">Go back?</h2><p>Your answers will be cleared.</p><div class="modal-actions"><button class="primary" id="confirm-back">← Go back</button><button class="secondary" data-close>Keep going</button></div>`,
+    );
+    on("#confirm-back", () => {
+      closeModal();
+      reset();
+      leave();
+    });
+    return;
+  }
+  leave();
 };
 $("#review-nav").onclick = () => content && go("review");
 $("#footer-review").onclick = () => content && go("review");
