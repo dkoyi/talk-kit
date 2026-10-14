@@ -556,3 +556,30 @@ main[data-stage="practice"] .steps { margin-bottom: 26px; }
   .pz { --D: min(58vw, 31vh); }
   .pz-stage { place-items: end center; padding-top: 0; padding-bottom: clamp(10px, 3vh, 26px); }
 }
+
+/* The nav bar always stays above page content when scrolling (the results card was rising over it). */
+body > header { z-index: 40; }
+
+/* Next steps peek: slide out smoothly (no overshoot), lean steeper, and sway from the resting angle so nothing jumps. */
+.peek { animation-timing-function: cubic-bezier(.22, 1, .36, 1); }
+@media (min-width: 951px) {
+  .peek-kid { transform: rotate(-34deg); animation: peek-lean-steep 6s ease-in-out 1.7s infinite; }
+}
+@keyframes peek-lean-steep {
+  0%, 100% { transform: rotate(-34deg); }
+  25%      { transform: rotate(-38deg); }
+  75%      { transform: rotate(-30deg); }
+}
+@media (max-width: 950px) {
+  .peek-kid { transform: rotate(0deg); animation: peek-sway-smooth 6s ease-in-out 1.7s infinite; }
+}
+@keyframes peek-sway-smooth {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-6deg); }
+  75%      { transform: rotate(6deg); }
+}
+/* Room on the left for the steeper lean, so the child's hair is never clipped (the child stays put). */
+@media (min-width: 951px) {
+  .peek { left: -182px; width: 260px; }
+  .peek-kid { width: 200px; margin-left: 60px; }
+}
