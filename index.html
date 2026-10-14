@@ -10,9 +10,13 @@
     />
     <title>Talk Kit - For Parents</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="assets/styles.css" />
-    <link rel="stylesheet" href="assets/talkkit-v2.css" />
+    <!-- The loading screen paints first; the rest of the styling loads behind it. -->
+    <link rel="preload" href="assets/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="assets/loading.css" />
+    <link rel="preload" href="assets/styles.css" as="style" data-page-css />
+    <link rel="preload" href="assets/talkkit-v2.css" as="style" data-page-css />
+    <noscript><link rel="stylesheet" href="assets/styles.css" /><link rel="stylesheet" href="assets/talkkit-v2.css" /></noscript>
     <script type="module" src="assets/app.js"></script>
     <script defer src="assets/pause.js"></script>
     <script defer src="assets/loading.js"></script>

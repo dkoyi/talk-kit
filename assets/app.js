@@ -665,7 +665,7 @@ const secondTry = (k) => (k === "repair" ? RULES.repair : RULES[k] > 0 ? Math.ce
 function showRules() {
   const name = esc(c()?.name || "your child");
   openModal(
-    `<h2 id="modal-title">How this works</h2><p class="rules-lead">Your words move how open ${name} feels.</p><div class="rules-demo" aria-hidden="true"><div class="openness-head"><span>How open ${name} feels</span><b id="demo-zone">Opening up</b></div><div class="meter-track demo-meter" id="demo-meter" style="--to:50%"><div class="meter-fill"></div><div class="meter-knob" id="demo-knob">${icon("calm")}</div><span class="meter-delta" id="demo-delta" hidden></span></div></div><dl class="rule-list rule-table"><div class="rule-head"><dt>Your answer</dt><dd>1st try</dd><dd>2nd try</dd></div>${RULE_DEMO.map(
+    `<h2 id="modal-title">How this works</h2><p class="rules-lead">Your words move how open ${name} feels.</p><div class="rules-demo" aria-hidden="true"><div class="openness-head"><span>How open ${name} feels</span><b id="demo-zone">Opening up</b></div><div class="meter-track demo-meter" id="demo-meter" style="--to:50%"><div class="demo-clip"><div class="meter-fill"></div><div class="demo-cover"></div></div><div class="demo-rail"><div class="meter-knob" id="demo-knob">${icon("calm")}</div><span class="meter-delta" id="demo-delta" hidden></span></div></div></div><dl class="rule-list rule-table"><div class="rule-head"><dt>Your answer</dt><dd>1st try</dd><dd>2nd try</dd></div>${RULE_DEMO.map(
       ([k, label]) => `<div data-rule="${k}"><dt>${resultIcon(k)} ${label}</dt><dd>${k === "repair" ? "–" : signed(RULES[k])}</dd><dd>${signed(secondTry(k))}</dd></div>`,
     ).join("")}</dl><ul class="rules-points"><li>Start in the middle. Kind words move right, blame moves left.</li><li>Blame or a risky promise? You get a 2nd try to make it right.</li><li>On the 2nd try, good answers count half.</li></ul><button class="primary full-width" data-close>Got it</button>`,
   );
@@ -838,11 +838,21 @@ window.addEventListener("pagehide", () => {
 // The loading screen (assets/loading.js) plays on page load; its logo flies into the header
 // once the content is ready and the intro has played.
 const pageStart = performance.now();
+// The page's stylesheets are preloaded in index.html and switched on here, behind the loading screen.
+function applyPageStyles() {
+  document.querySelectorAll("link[data-page-css]").forEach((l) => (l.rel = "stylesheet"));
+}
 // While the loading screen is up, the page's animations wait (html.tk-loading pauses them),
 // so Maya's reply, the meter and the sprout play once the screen has gone.
 const releasePage = () => document.documentElement.classList.remove("tk-loading");
 function hideSplash() {
-  const exit = () => (window.TalkKitLoading ? window.TalkKitLoading.exit().then(releasePage) : releasePage());
+  const stylesReady = () =>
+    new Promise((ok) => {
+      const check = () => ([...document.querySelectorAll("link[data-page-css]")].every((l) => l.rel === "stylesheet" && l.sheet) ? ok() : setTimeout(check, 50));
+      check();
+    });
+  const exit = () =>
+    stylesReady().then(() => (window.TalkKitLoading ? window.TalkKitLoading.exit().then(releasePage) : releasePage()));
   const wait = Math.max(0, 2500 - (performance.now() - pageStart));
   if (window.TalkKitLoading) setTimeout(exit, wait);
   else window.addEventListener("load", () => setTimeout(exit, wait), { once: true });
@@ -863,6 +873,10 @@ async function init() {
       // A missing manifest must not prevent reading/practicing the conversation.
       console.warn("Saved voices unavailable; using device voices as fallback.", error);
     }
+    // Build and style the page once the loading logo has finished drawing its outline (~1.15s),
+    // so that heavy work never interrupts the drawing; the rest of the intro runs on the GPU.
+    await new Promise((ok) => setTimeout(ok, Math.max(0, 1150 - (performance.now() - pageStart))));
+    applyPageStyles();
     render();
     hideSplash();
   } catch {
@@ -870,6 +884,7 @@ async function init() {
     $("#app").innerHTML =
       '<section class="panel load-error" role="alert"><span class="coach-icon">↺</span><h1>We couldn’t load the conversation cards.</h1><p>Please try again.</p><button class="primary" id="reload">Try again</button><p>In danger right now? Call 911 (US) or your local emergency number.</p></section>';
     on("#reload", init);
+    applyPageStyles();
     hideSplash();
   }
 }

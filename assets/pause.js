@@ -130,7 +130,7 @@
     pz.style.clipPath = pz.style.webkitClipPath = 'inset(50%)';   /* nothing visible until measured */
     pz.hidden = false;
     pz.style.clipPath = pz.style.webkitClipPath = rectOf(btn);    /* show only the button's shape at first */
-    document.documentElement.classList.add('pz-open');
+    var pill = document.getElementById('pause-session'); if (pill) pill.style.visibility = 'hidden';   /* the pill waits underneath */
     var done = function () { busy = false; el.end.focus({ preventScroll: true }); if (!window.__pzNoAutoStart) startBreathing(); };
     if (reduce.matches) {
       pz.style.clipPath = pz.style.webkitClipPath = ''; el.wash.style.opacity = '';
@@ -145,23 +145,38 @@
     setTimeout(go, 120);                                   /* backup if frames are paused (background tab) */
   }
   function grow(btn, done) {
-    var from = rectOf(btn), sun = sunFrom(btn);
+    var sun = sunFrom(btn);
+    var P = pz.getBoundingClientRect(), r = btn.getBoundingClientRect();
+    /* A golden circle grows out of the button until it covers the screen. Only transform and
+       opacity animate, so the GPU does the work and it stays smooth on phones. */
+    var cx = r.left + r.width / 2 - P.left, cy = r.top + r.height / 2 - P.top;
+    var R = Math.ceil(Math.hypot(Math.max(cx, P.width - cx), Math.max(cy, P.height - cy))) + 2;
+    var w = el.wash.style;
+    w.inset = 'auto'; w.left = (cx - R) + 'px'; w.top = (cy - R) + 'px'; w.width = w.height = (2 * R) + 'px';
+    w.borderRadius = '50%'; w.opacity = '1'; w.willChange = 'transform, opacity';
+    pz.style.background = 'transparent';
     pz.style.clipPath = pz.style.webkitClipPath = '';
-    el.wash.style.opacity = '';
-    /* 1. the button's shape grows to fill the screen                    0–700ms  */
-    pz.animate([{ clipPath: from, webkitClipPath: from }, { clipPath: 'inset(0px 0px 0px 0px round 0px)', webkitClipPath: 'inset(0px 0px 0px 0px round 0px)' }], { duration: 820, easing: EASE_OUT });
-    /* 2. its colour washes away into the dawn sky                        0–650ms  */
-    el.wash.animate([{ opacity: 1 }, { opacity: 1, offset: .15 }, { opacity: 0 }], { duration: 780, easing: 'cubic-bezier(.4, 0, .2, 1)' });
-    /* 3. the sky and hills fade up under the wash                       80–580ms  */
-    el.scene.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 620, delay: 80, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'backwards' });
-    /* 4. the sun rises from the button's icon to its place              60–900ms  */
+    var s0 = Math.max(r.width, r.height) / (2 * R);
+    /* 1. the circle grows from the button to fill the screen           0–620ms  */
+    el.wash.animate([{ transform: 'scale(' + s0 + ')' }, { transform: 'scale(1)' }], { duration: 620, easing: EASE_OUT, fill: 'both' });
+    /* 2. the dawn fades in beneath it, then the gold dissolves         300–1000ms */
+    el.scene.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 360, delay: 260, easing: 'ease-out', fill: 'backwards' });
+    el.wash.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 460, delay: 430, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' });
+    /* 3. the sun rises from the button's icon to its place              60–1040ms */
     el.breath.animate([{ transform: sun }, { transform: 'none' }], { duration: 980, delay: 60, easing: EASE_OUT, fill: 'backwards' });
-    /* 5. lake, details and words settle in                             320–1000ms */
-    el.lake.animate([{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }], { duration: 520, delay: 320, easing: 'ease-out', fill: 'backwards' });
-    el.amb.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, delay: 360, fill: 'backwards' });
-    [el.title, el.close].forEach(function (n) { n.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 520, easing: 'ease-out', fill: 'backwards' }); });
-    startTimer = setTimeout(done, 1040);                    /* the first breath starts at 900ms */
+    /* 4. lake, details and words settle in                             420–1080ms */
+    el.lake.animate([{ opacity: 0, transform: 'translateY(18px)' }, { opacity: 1, transform: 'none' }], { duration: 480, delay: 600, easing: 'ease-out', fill: 'backwards' });
+    el.amb.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, delay: 520, fill: 'backwards' });
+    [el.title, el.close].forEach(function (n) { n.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 640, easing: 'ease-out', fill: 'backwards' }); });
+    startTimer = setTimeout(function () {
+      /* put the wash back to full-screen for the closing animation */
+      el.wash.getAnimations().forEach(function (a) { a.cancel(); });
+      ['inset', 'left', 'top', 'width', 'height', 'borderRadius', 'opacity', 'willChange'].forEach(function (k) { w[k] = ''; });
+      pz.style.background = '';
+      done();
+    }, 1100);
   }
+
 
   /* ---------- close: the scene folds back into the button ---------- */
   function close() {
@@ -172,7 +187,7 @@
     var done = function () {
       if (closed) return; closed = true;          /* runs once: animation end or the timer backup */
       cancelAll(); pz.hidden = true; pz.classList.remove('is-running', 'is-done', 'is-in', 'is-out');
-      document.documentElement.classList.remove('pz-open'); busy = false;
+      var pill = document.getElementById('pause-session'); if (pill) pill.style.visibility = ''; busy = false;
       if (btn) btn.focus({ preventScroll: true });
     };
     if (reduce.matches || !btn) {
@@ -217,5 +232,25 @@
   window.addEventListener('resize', function () { if (!pz.hidden) placeBelowHeader(); });
 
   if (pz.hasAttribute('data-static')) showStatic(pz.getAttribute('data-static'), +pz.getAttribute('data-t') || 0);
+  /* Pre-paint the dawn scene into a bitmap image while the browser is idle. Its SVG filters
+     are expensive to compute; done once up front, the first "Take a pause" opens smoothly. */
+  function prepaintScene() {
+    var svg = el.scene; if (!svg || svg.tagName.toLowerCase() !== 'svg' || !window.Blob) return;
+    var copy = svg.cloneNode(true);
+    copy.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    if (matchMedia('(max-width: 767px)').matches) {             /* phones skip the two heaviest filters */
+      copy.querySelectorAll('[filter="url(#pz-paint)"], [filter="url(#pz-grain)"]').forEach(function (n) { n.removeAttribute('filter'); });
+      var grain = copy.querySelector('rect[width="1440"][height="900"]'); if (grain) grain.remove();
+    }
+    var url = URL.createObjectURL(new Blob([copy.outerHTML], { type: 'image/svg+xml' }));
+    var img = new Image(); img.className = 'pz-scene'; img.alt = ''; img.setAttribute('aria-hidden', 'true'); img.decoding = 'async'; img.src = url;
+    (img.decode ? img.decode() : Promise.resolve()).then(function () {
+      if (!pz.hidden) return;                                     /* never swap while it is showing */
+      svg.replaceWith(img); el.scene = img;
+    }, function () { URL.revokeObjectURL(url); });
+  }
+  var idle = window.requestIdleCallback || function (fn) { return setTimeout(fn, 1); };
+  window.addEventListener('load', function () { setTimeout(function () { idle(prepaintScene, { timeout: 2500 }); }, 1800); });
+
   window.TalkKitPause = { open: open, close: close, start: startBreathing };
 })();

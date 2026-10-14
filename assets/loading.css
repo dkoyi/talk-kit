@@ -1,3 +1,5 @@
+@font-face { font-family: "DM Sans"; src: url("./fonts/dm-sans.woff2") format("woff2"); font-style: normal; font-weight: 100 1000; font-display: swap; }
+@font-face { font-family: Fraunces; src: url("./fonts/fraunces.woff2") format("woff2"); font-style: normal; font-weight: 100 900; font-display: swap; }
 /* ==========================================================================
    Talk Kit loading screen: big cream logo + three faces as the loader.
    Animates only transform, opacity and stroke-dashoffset.
@@ -110,4 +112,5 @@
 @media (min-width: 1024px) { .tk-load { zoom: calc(1 / 0.9); } }
 
 /* While the loading screen is showing, the page underneath holds its animations at their start. */
-html.tk-loading #app *, html.tk-loading #app *::before, html.tk-loading #app *::after { animation-play-state: paused !important; }
+html.tk-loading #app *, html.tk-loading #app *::before, html.tk-loading #app *::after,
+html.tk-loading .bg-decor * { animation-play-state: paused !important; }
