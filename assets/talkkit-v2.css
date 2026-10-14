@@ -599,3 +599,6 @@ body > header { z-index: 40; }
    no style or layout work at tap time. Its motion is paused while hidden. */
 .pz[hidden] { display: grid !important; visibility: hidden; pointer-events: none; }
 .pz[hidden] *, .pz[hidden] *::before, .pz[hidden] *::after { animation-play-state: paused !important; }
+/* The sliding knob layer must never widen the popup (it caused a horizontal scrollbar). */
+.demo-meter { overflow-x: clip; overflow-clip-margin: 24px; }
+#modal, #modal-content { overflow-x: hidden; }
