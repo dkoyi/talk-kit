@@ -792,10 +792,10 @@ function speak({ automatic = false } = {}) {
     error.hidden = false;
   }
 }
-// Going Home from inside the app replays the quick loading screen, then shows the home page.
+// The logo and Home always replay the quick loading screen, then show the home page.
 function goHome() {
   if (!content) return;
-  if (stage === "home" || !window.TalkKitLoading || motion() === "instant") return go("home");
+  if (!window.TalkKitLoading || motion() === "instant") return go("home");
   document.documentElement.classList.add("tk-loading");
   const intro = window.TalkKitLoading.play("quick");
   go("home");
@@ -838,21 +838,12 @@ window.addEventListener("pagehide", () => {
 // The loading screen (assets/loading.js) plays on page load; its logo flies into the header
 // once the content is ready and the intro has played.
 const pageStart = performance.now();
-// The page's stylesheets are preloaded in index.html and switched on here, behind the loading screen.
-function applyPageStyles() {
-  document.querySelectorAll("link[data-page-css]").forEach((l) => (l.rel = "stylesheet"));
-}
+
 // While the loading screen is up, the page's animations wait (html.tk-loading pauses them),
 // so Maya's reply, the meter and the sprout play once the screen has gone.
 const releasePage = () => document.documentElement.classList.remove("tk-loading");
 function hideSplash() {
-  const stylesReady = () =>
-    new Promise((ok) => {
-      const check = () => ([...document.querySelectorAll("link[data-page-css]")].every((l) => l.rel === "stylesheet" && l.sheet) ? ok() : setTimeout(check, 50));
-      check();
-    });
-  const exit = () =>
-    stylesReady().then(() => (window.TalkKitLoading ? window.TalkKitLoading.exit().then(releasePage) : releasePage()));
+  const exit = () => (window.TalkKitLoading ? window.TalkKitLoading.exit().then(releasePage) : releasePage());
   const wait = Math.max(0, 2500 - (performance.now() - pageStart));
   if (window.TalkKitLoading) setTimeout(exit, wait);
   else window.addEventListener("load", () => setTimeout(exit, wait), { once: true });
@@ -873,10 +864,9 @@ async function init() {
       // A missing manifest must not prevent reading/practicing the conversation.
       console.warn("Saved voices unavailable; using device voices as fallback.", error);
     }
-    // Build and style the page once the loading logo has finished drawing its outline (~1.15s),
-    // so that heavy work never interrupts the drawing; the rest of the intro runs on the GPU.
+    // Build the page once the loading logo has finished drawing its outline (~1.15s), so that
+    // heavy work never interrupts the drawing; the rest of the intro runs on the GPU.
     await new Promise((ok) => setTimeout(ok, Math.max(0, 1150 - (performance.now() - pageStart))));
-    applyPageStyles();
     render();
     hideSplash();
   } catch {
@@ -884,7 +874,6 @@ async function init() {
     $("#app").innerHTML =
       '<section class="panel load-error" role="alert"><span class="coach-icon">↺</span><h1>We couldn’t load the conversation cards.</h1><p>Please try again.</p><button class="primary" id="reload">Try again</button><p>In danger right now? Call 911 (US) or your local emergency number.</p></section>';
     on("#reload", init);
-    applyPageStyles();
     hideSplash();
   }
 }

@@ -113,18 +113,18 @@
 .hk-sprout .l1 { fill: #6aa47b; }
 .hk-sprout .l2 { fill: #4f8a63; }
 .hk-sprout .l3 { fill: #8cc08c; }
-.hk-sprout .l3 { transform-box: fill-box; transform-origin: 0% 100%; animation: hk-unfurl 900ms 1700ms cubic-bezier(.3, 1.45, .5, 1) both; }
+.hk-sprout .l3 { transform-box: fill-box; transform-origin: 0% 100%; animation: hk-unfurl 700ms 800ms cubic-bezier(.3, 1.45, .5, 1) both; }
 .hk-card { position: relative; z-index: 1; background: var(--card); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow-card); padding: 22px 24px 24px; }
 .hk-chip { display: inline-block; padding: 6px 12px; border-radius: 999px; background: #eef2e8; color: #4f5f57; font-weight: 700; font-size: 15px; letter-spacing: .06em; line-height: 1.2; }
 .hk-portrait { margin: 10px auto 0; width: 236px; height: 168px; border-radius: 118px 118px 22px 22px; background: var(--brand-soft); overflow: hidden; display: flex; align-items: flex-end; justify-content: center; }
 .hk-portrait svg { width: 248px; height: auto; display: block; margin-bottom: -6px; }
 .hk-label { margin-top: 16px !important; font-size: 16px; font-weight: 700; color: var(--ink-soft); }
 .hk-quote { margin-top: 2px !important; font-family: var(--font-serif); font-weight: 500; font-size: 32px; line-height: 1.12; color: var(--ink); }
-.hk-reply { display: flex; align-items: center; gap: 10px; margin-top: 6px; padding: 12px 16px; border-radius: 14px; background: var(--brand-soft-2); border: 1px solid #d6e5cd; font-size: 18px; line-height: 1.3; color: var(--ink); animation: hk-in 520ms 900ms cubic-bezier(.2, .7, .3, 1) both; }
+.hk-reply { display: flex; align-items: center; gap: 10px; margin-top: 6px; padding: 12px 16px; border-radius: 14px; background: var(--brand-soft-2); border: 1px solid #d6e5cd; font-size: 18px; line-height: 1.3; color: var(--ink); animation: hk-in 420ms 250ms cubic-bezier(.2, .7, .3, 1) both; }
 .hk-reply .hk-icon { color: var(--brand); }
 .hk-meter { margin-top: 18px; }
 .hk-meter-track { position: relative; height: 10px; border-radius: 999px; background: linear-gradient(90deg, #e0452c 0%, #e8a317 50%, #2fa84f 100%); }
-.hk-meter-thumb { position: absolute; top: 50%; left: 72%; width: 32px; height: 32px; margin: -16px 0 0 -16px; border-radius: 50%; background: var(--card); border: 3px solid var(--brand); color: var(--brand); display: grid; place-items: center; box-shadow: var(--shadow-soft); animation: hk-thumb 1000ms 1400ms cubic-bezier(.3, 1.3, .5, 1) both; }
+.hk-meter-thumb { position: absolute; top: 50%; left: 72%; width: 32px; height: 32px; margin: -16px 0 0 -16px; border-radius: 50%; background: var(--card); border: 3px solid var(--brand); color: var(--brand); display: grid; place-items: center; box-shadow: var(--shadow-soft); animation: hk-thumb 750ms 550ms cubic-bezier(.3, 1.3, .5, 1) both; }
 .hk-meter-thumb .hk-icon { width: 18px; height: 18px; stroke-width: 2.4; }
 .hk-meter-cap { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px !important; font-size: 16px; line-height: 1.3; color: var(--ink-soft); }
 .hk-meter-cap strong { color: var(--good-ink); font-weight: 700; }
