@@ -108,3 +108,6 @@
 
 /* In the app: desktop renders at 90%, so the overlay cancels that to match the screen exactly. */
 @media (min-width: 1024px) { .tk-load { zoom: calc(1 / 0.9); } }
+
+/* While the loading screen is showing, the page underneath holds its animations at their start. */
+html.tk-loading #app *, html.tk-loading #app *::before, html.tk-loading #app *::after { animation-play-state: paused !important; }

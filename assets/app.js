@@ -796,9 +796,10 @@ function speak({ automatic = false } = {}) {
 function goHome() {
   if (!content) return;
   if (stage === "home" || !window.TalkKitLoading || motion() === "instant") return go("home");
+  document.documentElement.classList.add("tk-loading");
   const intro = window.TalkKitLoading.play("quick");
   go("home");
-  intro.then(() => window.TalkKitLoading.exit());
+  intro.then(() => window.TalkKitLoading.exit()).then(releasePage);
 }
 $("#home").onclick = goHome;
 $("#nav-home").onclick = goHome;
@@ -837,11 +838,15 @@ window.addEventListener("pagehide", () => {
 // The loading screen (assets/loading.js) plays on page load; its logo flies into the header
 // once the content is ready and the intro has played.
 const pageStart = performance.now();
+// While the loading screen is up, the page's animations wait (html.tk-loading pauses them),
+// so Maya's reply, the meter and the sprout play once the screen has gone.
+const releasePage = () => document.documentElement.classList.remove("tk-loading");
 function hideSplash() {
-  const exit = () => window.TalkKitLoading?.exit();
+  const exit = () => (window.TalkKitLoading ? window.TalkKitLoading.exit().then(releasePage) : releasePage());
   const wait = Math.max(0, 2500 - (performance.now() - pageStart));
   if (window.TalkKitLoading) setTimeout(exit, wait);
   else window.addEventListener("load", () => setTimeout(exit, wait), { once: true });
+  setTimeout(releasePage, wait + 3000);
 }
 async function init() {
   try {
