@@ -118,7 +118,7 @@ assets/app.js         every screen and interaction
 assets/engine.js      scoring, moods and content checks
 assets/pause.js       grow-from-button transition + guided breathing
 assets/loading.js     logo intro and fly-into-header exit
-assets/*.css          styles (styles.css, talkkit-v2.css, loading.css)
+assets/*.css          styles (styles.css, talkkit-v2.css; the loading screen's styles are inline in index.html)
 data/scenarios.json   all 12 stories, replies, tips and next steps
 assets/audio/         recorded voice lines for each child
 ```

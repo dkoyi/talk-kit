@@ -12,9 +12,133 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="assets/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="assets/styles.css" />
-    <link rel="stylesheet" href="assets/talkkit-v2.css" />
-    <link rel="stylesheet" href="assets/loading.css" />
+    <meta name="color-scheme" content="light" />
+    <!-- First paint: the loading screen's styles are inline so it shows (green) on the very first frame. -->
+    <style id="tk-critical">
+html.tk-loading { background: #1f4a3e; }
+@media (min-width: 1024px) { html { zoom: 0.9; } }
+@font-face { font-family: "DM Sans"; src: url("assets/fonts/dm-sans.woff2") format("woff2"); font-style: normal; font-weight: 100 1000; font-display: swap; }
+@font-face { font-family: Fraunces; src: url("assets/fonts/fraunces.woff2") format("woff2"); font-style: normal; font-weight: 100 900; font-display: swap; }
+/* ==========================================================================
+   Talk Kit loading screen: big cream logo + three faces as the loader.
+   Animates only transform, opacity and stroke-dashoffset.
+   Every timing is in "full" ms and multiplied by --k:
+     full  --k: 1    intro about 1.4s, then the waiting loop
+     quick --k: .5   intro about 0.7s
+   ========================================================================== */
+
+.tk-load {
+  --k: 1;
+  --mark: 180px;
+  --face: 56px;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-spring: cubic-bezier(.3, 1.45, .5, 1);
+  --cream: #f7f5ef; --orange: #edb586; --tag: #e3eedb;
+  position: fixed; inset: 0; z-index: 1000;
+  display: grid; place-items: center;
+  font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--cream);
+}
+.tk-load[hidden] { display: none; }
+.tk-load--contained { position: absolute; }
+
+/* the green, with two soft glows and a faint paper grain */
+.tk-load-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(55% 48% at 28% 20%, rgba(60, 117, 100, .62), rgba(60, 117, 100, 0) 72%),
+    radial-gradient(42% 40% at 76% 80%, rgba(60, 117, 100, .38), rgba(60, 117, 100, 0) 72%),
+    linear-gradient(165deg, #1f4a3e 0%, #1a4135 100%);
+}
+.tk-load-bg::after {
+  content: ""; position: absolute; inset: 0; opacity: .07; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.tk-load-logo { position: relative; display: grid; justify-items: center; text-align: center; }
+.tk-load-mark { display: block; width: var(--mark); height: var(--mark); overflow: visible; transform-origin: 50% 50%; }
+.tk-load-word { margin: 22px 0 0; font-weight: 700; font-size: 56px; line-height: 1; letter-spacing: -.03em; white-space: nowrap; transform-origin: 50% 50%; }
+.tk-load-word .dot { display: inline-block; color: var(--orange); }
+.tk-load-tag { margin: 14px 0 0; font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 400; font-size: 22px; line-height: 1.3; color: var(--tag); }
+
+/* the three faces: the loading indicator, like someone typing */
+.tk-load-faces { display: flex; gap: 14px; margin: 34px 0 0; padding: 0; list-style: none; }
+.tk-load-face { display: block; }
+.tk-load-bubble { transform-origin: 50% 100%; display: block; width: var(--face); height: var(--face); border-radius: 50%; background: var(--cream); overflow: hidden; box-shadow: 0 6px 16px -6px rgba(10, 30, 24, .5); }
+.tk-load-bubble svg { display: block; width: 100%; height: 100%; }
+
+/* ---------- SVG parts ---------- */
+.tk-load-mark g, .tk-load-mark path { transform-box: view-box; }
+.tkl-fill path { fill: var(--cream); }
+.tkl-line { opacity: 0; }
+.tkl-line path { fill: none; stroke: var(--cream); stroke-width: .9; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1 1; }
+.tkl-float { transform-origin: 20px 20px; }
+
+/* ---------- the intro (runs while .is-playing) ---------- */
+/* 1. The logo writes itself: both bubbles draw as a cream line        0–750ms   */
+.is-playing .tkl-line            { animation: tk-load-line calc(1050ms * var(--k)) linear calc(0ms * var(--k)) both; }
+.is-playing .tkl-line .big       { animation: tk-load-draw calc(620ms * var(--k)) var(--ease-out) calc(0ms * var(--k)) both; }
+.is-playing .tkl-line .small     { animation: tk-load-draw calc(560ms * var(--k)) var(--ease-out) calc(180ms * var(--k)) both; }
+/* 2. ...then fills in, with a small settle                            550–950ms */
+.is-playing .tkl-fill            { animation: tk-load-fill calc(420ms * var(--k)) var(--ease-out) calc(540ms * var(--k)) both; }
+.is-playing .tk-load-mark        { animation: tk-load-settle calc(520ms * var(--k)) var(--ease-spring) calc(520ms * var(--k)) both; }
+/* 3. Hello: "talk kit." rises in, the full stop lands, the tagline follows   750–1300ms */
+.is-playing .tk-load-word        { animation: tk-load-rise calc(420ms * var(--k)) var(--ease-out) calc(760ms * var(--k)) both; }
+.is-playing .tk-load-word .dot   { animation: tk-load-dot calc(380ms * var(--k)) linear calc(1000ms * var(--k)) both; }
+.is-playing .tk-load-tag         { animation: tk-load-rise calc(420ms * var(--k)) var(--ease-out) calc(900ms * var(--k)) both; }
+/* 4. The three faces pop in, one after another                        1000–1560ms */
+.is-playing .tk-load-face        { animation: tk-load-pop calc(380ms * var(--k)) var(--ease-spring) calc((1000ms + var(--i) * 90ms) * var(--k)) both; }
+/* 5. Waiting loop: the faces hop in turn like a typing indicator (1.4s); the logo floats very gently (4s) */
+.is-playing .tk-load-bubble      { animation: tk-load-hop 1.5s linear calc((1250ms + var(--i) * 170ms) * var(--k)) infinite; }
+.is-playing .tkl-float           { animation: tk-load-float 4s ease-in-out calc(1500ms * var(--k)) infinite; }
+
+/* ---------- keyframes ---------- */
+@keyframes tk-load-line   { 0% { opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes tk-load-draw   { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes tk-load-fill   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tk-load-settle { 0% { transform: scale(.94); } 60% { transform: scale(1.03); } 100% { transform: none; } }
+@keyframes tk-load-rise   { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes tk-load-dot {
+  0%   { opacity: 0; transform: translateY(-.9em) scale(.6); animation-timing-function: cubic-bezier(.55, 0, .75, .45); }
+  45%  { opacity: 1; transform: translateY(0) scale(1.25, .75); animation-timing-function: ease-out; }
+  70%  { transform: translateY(-.16em) scale(.95, 1.08); animation-timing-function: ease-in; }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes tk-load-pop    { from { opacity: 0; transform: translateY(10px) scale(.6); } to { opacity: 1; transform: none; } }
+/* a real bounce: crouch, spring up with a stretch, land with a squash, two small rebounds */
+@keyframes tk-load-hop {
+  0%   { transform: none; animation-timing-function: ease-out; }
+  8%   { transform: translateY(2px) scale(1.1, .88); animation-timing-function: cubic-bezier(.2, .7, .3, 1); }
+  30%  { transform: translateY(-26px) scale(.92, 1.1); animation-timing-function: cubic-bezier(.6, 0, .9, .5); }
+  46%  { transform: translateY(0) scale(1.14, .84); animation-timing-function: ease-out; }
+  56%  { transform: translateY(-8px) scale(.97, 1.04); animation-timing-function: ease-in; }
+  64%  { transform: translateY(0) scale(1.05, .95); animation-timing-function: ease-out; }
+  70%  { transform: translateY(-2px); animation-timing-function: ease-in; }
+  76%, 100% { transform: none; }
+}
+@keyframes tk-load-float  { 0%, 100% { transform: none; } 50% { transform: translateY(-1px) scale(1.012); } }
+
+/* ---------- sizes ---------- */
+@media (min-width: 1700px) { .tk-load { --mark: 200px; --face: 62px; } .tk-load-word { font-size: 62px; } .tk-load-tag { font-size: 24px; } }
+@media (max-width: 600px)  { .tk-load { --mark: 128px; --face: 46px; } .tk-load-word { font-size: 40px; margin-top: 16px; } .tk-load-tag { font-size: 20px; margin-top: 10px; } .tk-load-faces { gap: 12px; margin-top: 28px; } }
+
+/* ---------- reduced motion: everything simply appears ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .tk-load *, .tk-load *::before, .tk-load *::after { animation: none !important; }
+}
+
+/* In the app: desktop renders at 90%, so the overlay cancels that to match the screen exactly. */
+@media (min-width: 1024px) { .tk-load { zoom: calc(1 / 0.9); } }
+
+/* While the loading screen is showing, the page underneath holds its animations at their start. */
+html.tk-loading #app *, html.tk-loading #app *::before, html.tk-loading #app *::after,
+html.tk-loading .bg-decor * { animation-play-state: paused !important; }
+
+    </style>
+    <!-- The page's own styles load behind the loading screen and are switched on by app.js. -->
+    <link rel="preload" href="assets/styles.css" as="style" data-page-css />
+    <link rel="preload" href="assets/talkkit-v2.css" as="style" data-page-css />
+    <noscript><link rel="stylesheet" href="assets/styles.css" /><link rel="stylesheet" href="assets/talkkit-v2.css" /></noscript>
     <script type="module" src="assets/app.js"></script>
     <script defer src="assets/pause.js"></script>
     <script defer src="assets/loading.js"></script>

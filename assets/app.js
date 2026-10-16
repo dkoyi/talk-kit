@@ -840,12 +840,25 @@ window.addEventListener("pagehide", () => {
 // The loading screen (assets/loading.js) plays on page load; its logo flies into the header
 // once the content is ready and the intro has played.
 const pageStart = performance.now();
+// The page's stylesheets are preloaded and switched on once the loading logo has drawn its
+// outline (~0.75s), so that work never stutters the drawing. A timer is the safety net.
+function applyPageStyles() {
+  document.querySelectorAll("link[data-page-css]").forEach((l) => (l.rel = "stylesheet"));
+}
+const stylesApplied = new Promise((ok) => {
+  const go = () => { applyPageStyles(); ok(); };
+  setTimeout(go, Math.max(0, 760 - (performance.now() - pageStart)));
+});
 
 // While the loading screen is up, the page's animations wait (html.tk-loading pauses them),
 // so Maya's reply, the meter and the sprout play once the screen has gone.
 const releasePage = () => document.documentElement.classList.remove("tk-loading");
 function hideSplash() {
-  const exit = () => (window.TalkKitLoading ? window.TalkKitLoading.exit().then(releasePage) : releasePage());
+  const cssReady = () => new Promise((ok) => {
+    const check = () => ([...document.querySelectorAll("link[data-page-css]")].every((l) => l.rel === "stylesheet" && l.sheet) ? ok() : setTimeout(check, 40));
+    check();
+  });
+  const exit = () => cssReady().then(() => (window.TalkKitLoading ? window.TalkKitLoading.exit().then(releasePage) : releasePage()));
   const wait = Math.max(0, 2500 - (performance.now() - pageStart));
   if (window.TalkKitLoading) setTimeout(exit, wait);
   else window.addEventListener("load", () => setTimeout(exit, wait), { once: true });
@@ -868,6 +881,7 @@ async function init() {
     }
     // Build the page once the loading logo has finished drawing its outline (~1.15s), so that
     // heavy work never interrupts the drawing; the rest of the intro runs on the GPU.
+    await stylesApplied;
     await new Promise((ok) => setTimeout(ok, Math.max(0, 1150 - (performance.now() - pageStart))));
     render();
     hideSplash();
@@ -876,6 +890,7 @@ async function init() {
     $("#app").innerHTML =
       '<section class="panel load-error" role="alert"><span class="coach-icon">↺</span><h1>We couldn’t load the conversation cards.</h1><p>Please try again.</p><button class="primary" id="reload">Try again</button><p>In danger right now? Call 911 (US) or your local emergency number.</p></section>';
     on("#reload", init);
+    applyPageStyles();
     hideSplash();
   }
 }
