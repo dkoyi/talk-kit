@@ -12,11 +12,11 @@
     <!-- Link previews (LinkedIn, Facebook, X, WhatsApp, Slack) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Talk Kit" />
-    <meta property="og:url" content="https://talk-kit.vercel.app/" />
+    <meta property="og:url" content="https://dkoyi.github.io/talk-kit/" />
     <meta property="og:title" content="Talk Kit: Practice the hard talks" />
     <meta property="og:description" content="Free practice for the tough conversations about your child's online life. Try your words on a child who reacts, before it's real." />
-    <meta property="og:image" content="https://talk-kit.vercel.app/assets/og-image.jpg" />
-    <meta property="og:image:secure_url" content="https://talk-kit.vercel.app/assets/og-image.jpg" />
+    <meta property="og:image" content="https://dkoyi.github.io/talk-kit/assets/og-image.jpg" />
+    <meta property="og:image:secure_url" content="https://dkoyi.github.io/talk-kit/assets/og-image.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="627" />
@@ -24,8 +24,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Talk Kit: Practice the hard talks" />
     <meta name="twitter:description" content="Free practice for the tough conversations about your child's online life." />
-    <meta name="twitter:image" content="https://talk-kit.vercel.app/assets/og-image.jpg" />
-    <link rel="canonical" href="https://talk-kit.vercel.app/" />
+    <meta name="twitter:image" content="https://dkoyi.github.io/talk-kit/assets/og-image.jpg" />
+    <link rel="canonical" href="https://dkoyi.github.io/talk-kit/" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="assets/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
@@ -101,7 +101,7 @@ html.tk-noscroll { background: #1f4a3e; overflow: hidden; }
 .is-playing .tkl-line .small     { animation: tk-load-draw calc(560ms * var(--k)) var(--ease-out) calc(180ms * var(--k)) both; }
 /* 2. ...then fills in, with a small settle                            550–950ms */
 .is-playing .tkl-fill            { animation: tk-load-fill calc(420ms * var(--k)) var(--ease-out) calc(540ms * var(--k)) both; }
-.is-playing .tk-load-mark        { animation: tk-load-settle calc(520ms * var(--k)) var(--ease-spring) calc(520ms * var(--k)) both; }
+.is-playing .tk-load-mark        { animation: tk-load-settle calc(520ms * var(--k)) var(--ease-out) calc(520ms * var(--k)) both; }
 /* 3. Hello: "talk kit." rises in, the full stop lands, the tagline follows   750–1300ms */
 .is-playing .tk-load-word        { animation: tk-load-rise calc(420ms * var(--k)) var(--ease-out) calc(760ms * var(--k)) both; }
 .is-playing .tk-load-word .dot   { animation: tk-load-dot calc(380ms * var(--k)) linear calc(1000ms * var(--k)) both; }
@@ -116,7 +116,7 @@ html.tk-noscroll { background: #1f4a3e; overflow: hidden; }
 @keyframes tk-load-line   { 0% { opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes tk-load-draw   { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes tk-load-fill   { from { opacity: 0; } to { opacity: 1; } }
-@keyframes tk-load-settle { 0% { transform: scale(.94); } 60% { transform: scale(1.03); } 100% { transform: none; } }
+@keyframes tk-load-settle { 0% { transform: translateY(4px); } 100% { transform: none; } }
 @keyframes tk-load-rise   { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes tk-load-dot {
   0%   { opacity: 0; transform: translateY(-.9em) scale(.6); animation-timing-function: cubic-bezier(.55, 0, .75, .45); }
@@ -136,7 +136,7 @@ html.tk-noscroll { background: #1f4a3e; overflow: hidden; }
   70%  { transform: translateY(-2px); animation-timing-function: ease-in; }
   76%, 100% { transform: none; }
 }
-@keyframes tk-load-float  { 0%, 100% { transform: none; } 50% { transform: translateY(-1px) scale(1.012); } }
+@keyframes tk-load-float  { 0%, 100% { transform: none; } 50% { transform: translateY(-2px); } }
 
 /* ---------- sizes ---------- */
 @media (min-width: 1700px) { .tk-load { --mark: 200px; --face: 62px; } .tk-load-word { font-size: 62px; } .tk-load-tag { font-size: 24px; } }
