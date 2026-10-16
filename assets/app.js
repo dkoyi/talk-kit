@@ -839,16 +839,21 @@ window.addEventListener("pagehide", () => {
 });
 // The loading screen (assets/loading.js) plays on page load; its logo flies into the header
 // once the content is ready and the intro has played.
-const pageStart = performance.now();
+// Every loading-screen timing counts from the moment its animation really started (set by the
+// small script after the loading screen in index.html), so each visit behaves the same.
+const introStarted = () =>
+  new Promise((ok) => {
+    const check = () => (window.__tkStart !== undefined ? ok(window.__tkStart) : setTimeout(check, 16));
+    check();
+  });
+const afterIntro = (ms) =>
+  introStarted().then((t0) => new Promise((ok) => setTimeout(ok, Math.max(0, t0 + ms - performance.now()))));
 // The page's stylesheets are preloaded and switched on once the loading logo has drawn its
 // outline (~0.75s), so that work never stutters the drawing. A timer is the safety net.
 function applyPageStyles() {
   document.querySelectorAll("link[data-page-css]").forEach((l) => (l.rel = "stylesheet"));
 }
-const stylesApplied = new Promise((ok) => {
-  const go = () => { applyPageStyles(); ok(); };
-  setTimeout(go, Math.max(0, 760 - (performance.now() - pageStart)));
-});
+const stylesApplied = afterIntro(760).then(applyPageStyles);
 
 // While the loading screen is up, the page's animations wait (html.tk-loading pauses them),
 // so Maya's reply, the meter and the sprout play once the screen has gone.
@@ -869,10 +874,10 @@ function hideSplash() {
     cssReady()
       .then(restoreScroll)
       .then(() => (window.TalkKitLoading ? window.TalkKitLoading.exit().then(releasePage) : releasePage()));
-  const wait = Math.max(0, 2500 - (performance.now() - pageStart));
-  if (window.TalkKitLoading) setTimeout(exit, wait);
-  else window.addEventListener("load", () => setTimeout(exit, wait), { once: true });
-  setTimeout(() => { document.documentElement.classList.remove("tk-noscroll"); releasePage(); }, wait + 3000);
+  const ready = window.TalkKitLoading ? Promise.resolve() : new Promise((ok) => window.addEventListener("load", ok, { once: true }));
+  Promise.all([afterIntro(2500), ready]).then(exit);
+  // Safety net: never leave the page covered or frozen.
+  afterIntro(6000).then(() => { document.documentElement.classList.remove("tk-noscroll"); releasePage(); });
 }
 async function init() {
   try {
@@ -892,7 +897,7 @@ async function init() {
     // Build the page once the loading logo has finished drawing its outline (~1.15s), so that
     // heavy work never interrupts the drawing; the rest of the intro runs on the GPU.
     await stylesApplied;
-    await new Promise((ok) => setTimeout(ok, Math.max(0, 1150 - (performance.now() - pageStart))));
+    await afterIntro(1150);
     render();
     hideSplash();
   } catch {
