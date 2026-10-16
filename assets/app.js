@@ -798,10 +798,10 @@ function speak({ automatic = false } = {}) {
 function goHome() {
   if (!content) return;
   if (!window.TalkKitLoading || motion() === "instant") return go("home");
-  document.documentElement.classList.add("tk-loading");
+  document.documentElement.classList.add("tk-loading", "tk-noscroll");
   const intro = window.TalkKitLoading.play("quick");
   go("home");
-  intro.then(() => window.TalkKitLoading.exit()).then(releasePage);
+  intro.then(restoreScroll).then(() => window.TalkKitLoading.exit()).then(releasePage);
 }
 $("#home").onclick = goHome;
 $("#nav-home").onclick = goHome;
@@ -853,16 +853,26 @@ const stylesApplied = new Promise((ok) => {
 // While the loading screen is up, the page's animations wait (html.tk-loading pauses them),
 // so Maya's reply, the meter and the sprout play once the screen has gone.
 const releasePage = () => document.documentElement.classList.remove("tk-loading");
+// Scrolling comes back while the loading screen still covers everything, so the scrollbar
+// appearing (and any width change) is never seen; then the logo flies into the header.
+const restoreScroll = () =>
+  new Promise((ok) => {
+    document.documentElement.classList.remove("tk-noscroll");
+    requestAnimationFrame(() => requestAnimationFrame(ok));
+  });
 function hideSplash() {
   const cssReady = () => new Promise((ok) => {
     const check = () => ([...document.querySelectorAll("link[data-page-css]")].every((l) => l.rel === "stylesheet" && l.sheet) ? ok() : setTimeout(check, 40));
     check();
   });
-  const exit = () => cssReady().then(() => (window.TalkKitLoading ? window.TalkKitLoading.exit().then(releasePage) : releasePage()));
+  const exit = () =>
+    cssReady()
+      .then(restoreScroll)
+      .then(() => (window.TalkKitLoading ? window.TalkKitLoading.exit().then(releasePage) : releasePage()));
   const wait = Math.max(0, 2500 - (performance.now() - pageStart));
   if (window.TalkKitLoading) setTimeout(exit, wait);
   else window.addEventListener("load", () => setTimeout(exit, wait), { once: true });
-  setTimeout(releasePage, wait + 3000);
+  setTimeout(() => { document.documentElement.classList.remove("tk-noscroll"); releasePage(); }, wait + 3000);
 }
 async function init() {
   try {

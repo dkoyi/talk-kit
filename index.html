@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="tk-loading">
+<html lang="en" class="tk-loading tk-noscroll">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,7 +15,10 @@
     <meta name="color-scheme" content="light" />
     <!-- First paint: the loading screen's styles are inline so it shows (green) on the very first frame. -->
     <style id="tk-critical">
-html.tk-loading { background: #1f4a3e; }
+/* No page scrolling (and no scrollbar) while the loading screen is up; its space stays reserved. */
+/* Green first frame and no scrollbar while the loading screen is up. Both are removed just
+   before it leaves (still fully covered), so the background leaves are already in place. */
+html.tk-noscroll { background: #1f4a3e; overflow: hidden; }
 @media (min-width: 1024px) { html { zoom: 0.9; } }
 @font-face { font-family: "DM Sans"; src: url("assets/fonts/dm-sans.woff2") format("woff2"); font-style: normal; font-weight: 100 1000; font-display: swap; }
 @font-face { font-family: Fraunces; src: url("assets/fonts/fraunces.woff2") format("woff2"); font-style: normal; font-weight: 100 900; font-display: swap; }
