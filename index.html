@@ -12,11 +12,11 @@
     <!-- Link previews (LinkedIn, Facebook, X, WhatsApp, Slack) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Talk Kit" />
-    <meta property="og:url" content="https://dkoyi.github.io/talk-kit/" />
+    <meta property="og:url" content="https://talk-kit.vercel.app/" />
     <meta property="og:title" content="Talk Kit: Practice the hard talks" />
     <meta property="og:description" content="Free practice for the tough conversations about your child's online life. Try your words on a child who reacts, before it's real." />
-    <meta property="og:image" content="https://dkoyi.github.io/talk-kit/assets/og-image.jpg" />
-    <meta property="og:image:secure_url" content="https://dkoyi.github.io/talk-kit/assets/og-image.jpg" />
+    <meta property="og:image" content="https://talk-kit.vercel.app/assets/og-image.jpg" />
+    <meta property="og:image:secure_url" content="https://talk-kit.vercel.app/assets/og-image.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="627" />
@@ -24,8 +24,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Talk Kit: Practice the hard talks" />
     <meta name="twitter:description" content="Free practice for the tough conversations about your child's online life." />
-    <meta name="twitter:image" content="https://dkoyi.github.io/talk-kit/assets/og-image.jpg" />
-    <link rel="canonical" href="https://dkoyi.github.io/talk-kit/" />
+    <meta name="twitter:image" content="https://talk-kit.vercel.app/assets/og-image.jpg" />
+    <link rel="canonical" href="https://talk-kit.vercel.app/" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="assets/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
@@ -60,6 +60,9 @@ html.tk-noscroll { background: #1f4a3e; overflow: hidden; }
   color: var(--cream);
 }
 .tk-load[hidden] { display: none; }
+/* Always the full window width (scrollbar area included), so the logo's centre never moves
+   when the page reserves or shows its scrollbar. */
+.tk-load:not(.tk-load--contained) { left: 0; right: auto; width: 100vw; }
 .tk-load--contained { position: absolute; }
 
 /* the green, with two soft glows and a faint paper grain */
